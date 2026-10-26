@@ -9,7 +9,7 @@
    =================================================================== */
 window.TWCG_CONFIG = {
   // Supabase > Project Settings > API > Project URL
-  SUPABASE_URL: "rjqszqfiwetgoufcpeir",
+  SUPABASE_URL: "https://rjqszqfiwetgoufcpeir.supabase.co",
 
   // Supabase > Project Settings > API > "anon" public key (or the "publishable" key)
   SUPABASE_ANON_KEY: "sb_publishable_lneiGb8X2-ZxcC16jB7StA_X_lQa8mE",
