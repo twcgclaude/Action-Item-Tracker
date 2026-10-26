@@ -1,0 +1,23 @@
+# Netlify settings for the TWCG Action Item Tracker (a static site - no build step).
+# Your DATA is not on Netlify: it lives in Supabase, so deploying never touches it.
+
+[build]
+  publish = "."
+  # no build command needed
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Always fetch the newest app and settings after you publish an update
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/config.js"
+  [headers.values]
+    Cache-Control = "no-cache"
