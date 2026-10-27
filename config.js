@@ -21,7 +21,11 @@ window.TWCG_CONFIG = {
   // Optional: if your company network blocks cdn.jsdelivr.net, save supabase.js
   // in this folder (README, Troubleshooting) and uncomment:
   // , SUPABASE_LIB_URL: "supabase.js"
-   (function () {
+};   // <-- the settings end here. Nothing may be pasted above this line.
+
+
+/* ====== Menu fix (keeps the Columns / Download / More menus on screen) - this part goes BELOW the settings ====== */
+(function () {
   var M = 8;
   function place(pop) {
     if (!pop || !pop.classList.contains('show') || !pop.parentElement) return;
@@ -47,5 +51,3 @@ window.TWCG_CONFIG = {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
-
-};

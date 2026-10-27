@@ -826,7 +826,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const H_LABEL = { upload: 'Upload', add: 'Item added', edit: 'Edit', update: 'Update', status: 'Status change', close: 'Closed', reopen: 'Reopened', delete: 'Deleted', restore: 'Restored', meeting: 'Meeting', admin: 'Admin' };
   const DRAFT_KEY = 'twcg-live-drafts-v1';
   const ONGOING_RE = /^\s*(ongoing|continuous|continual)\b/i;
-  const CATEGORY_SUGGESTIONS = ['RFI', 'Submittal', 'Permit', 'Inspection', 'Coordination', 'Procurement', 'Schedule', 'Safety', 'Design', 'Field Install', 'Closeout'];
+  const CATEGORY_SUGGESTIONS = ['RFI', 'Submittal', 'Permit', 'Inspection', 'Coordination', 'Meetings', 'Procurement', 'Schedule', 'Safety', 'Miscellaneous', 'Field', 'Closeout'];
   const H_FROM_ITEM = { created: 'add', update: 'update', status: 'status', close: 'close', reopen: 'reopen', edit: 'edit' };
   let state = { items: [], meetings: [], history: [], trash: { items: [], meetings: [] } };   // loaded from Supabase after sign-in
   let profile = null;        // { first, last, dept } - remembered per device (the password is checked by Supabase, never stored here)
