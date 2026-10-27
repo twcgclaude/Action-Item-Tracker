@@ -178,7 +178,7 @@ ul.att{list-style:none;margin:8px 0 0;padding:0}
 .none{color:var(--mut);padding:8px 0}
 
 /* ===== tabs / toolbar ===== */
-.tabs{display:flex;gap:2px;margin:20px 0 0;border-bottom:1px solid var(--line2)}
+.tabs{display:flex;flex-wrap:wrap;gap:2px;margin:20px 0 0;border-bottom:1px solid var(--line2)}
 .tab{border:0;background:none;padding:10px 18px;font:700 12px var(--fh);letter-spacing:.13em;text-transform:uppercase;color:var(--mut);border-bottom:3px solid transparent;margin-bottom:-1px}
 .tab:hover{color:#fff}
 .tab.on{color:#fff;border-bottom-color:var(--red);background:linear-gradient(180deg,transparent,rgba(225,37,43,.09))}
@@ -437,6 +437,72 @@ a.brand:hover .wm{text-shadow:0 0 18px rgba(225,37,43,.65)}
 a.brand:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 a.brand .mark{transition:transform .15s}a.brand:hover .mark{transform:translateY(-1px)}
 
+/* ===== meeting checklist filter ===== */
+.msel{position:relative;display:inline-block}
+.msbtn{display:inline-flex;align-items:center;gap:8px;min-width:150px;max-width:230px;border:1px solid var(--line2);border-radius:6px;padding:7px 10px;background:var(--panel2);color:var(--txt);font:inherit;text-align:left;cursor:pointer}
+.msbtn .msl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msbtn .caret{font-style:normal;font-size:10px;color:var(--mut);flex:none}
+.msbtn:hover{border-color:#5b5f67}
+.msbtn.on{border-color:var(--red);background:var(--redbg);color:#fff}
+.msbtn[aria-expanded=true],.msbtn:focus-visible{outline:none;border-color:var(--red);box-shadow:0 0 0 2px rgba(225,37,43,.22)}
+.mspop{position:absolute;left:0;top:calc(100% + 6px);z-index:60;width:380px;max-width:calc(100vw - 16px);background:var(--panel);border:1px solid var(--line2);border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.75);overflow:hidden;text-align:left;color:var(--txt)}
+.mspop::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--red)}
+.mshead{padding:12px 14px 4px;font:700 10px var(--fh);letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.mslist{max-height:340px;overflow:auto;padding:4px 6px 6px}
+.msrow{display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer}
+.msrow:hover{background:var(--raise)}
+.msrow:has(input:checked){background:rgba(225,37,43,.10)}
+.msrow input[type=checkbox]{margin:3px 0 0;flex:none;padding:0;width:auto;background:none;border:0}
+.msrow .mst{display:flex;flex-direction:column;min-width:0}
+.msrow .mst b{font-weight:600;color:#fff;overflow-wrap:anywhere}
+.msrow .mst em{font-style:normal;font-size:11.5px;color:var(--mut)}
+.msrow.all{border-bottom:1px solid var(--line);border-radius:6px 6px 0 0;margin-bottom:4px}
+.msempty{padding:12px 8px;color:var(--mut)}
+.msfoot{display:flex;align-items:center;gap:10px;padding:9px 12px;border-top:1px solid var(--line);background:#101113}
+.msfoot .msn{flex:1;color:var(--mut);font-size:12px}
+
+/* ===== meeting date dropdown + merge ===== */
+.mmeta{margin:2px 0}
+.mdwrap{position:relative;display:inline-block}
+.mdate{display:inline-flex;align-items:center;gap:6px;border:1px solid transparent;background:none;color:inherit;border-radius:6px;padding:1px 6px 1px 4px;margin-left:-5px;font:inherit;cursor:pointer}
+.mdate:hover,.mdate.open{border-color:var(--line2);background:var(--field)}
+.mdate svg{width:14px;height:14px;opacity:.85;flex:none}
+.mdate .caret{font-style:normal;font-size:10px;color:var(--mut)}
+.mdate .chip{margin:0}
+.mdpop{position:absolute;left:0;top:calc(100% + 6px);z-index:70;width:296px;max-width:calc(100vw - 24px);background:var(--panel);border:1px solid var(--line2);border-radius:10px;padding:14px 14px 12px;box-shadow:0 14px 40px rgba(0,0,0,.75);text-align:left;color:var(--txt);cursor:default}
+.mdpop::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--red);border-radius:10px 10px 0 0}
+.mdpop .fl{margin-top:2px}
+.mdweekly{align-items:flex-start;margin-top:12px;font-weight:400;color:var(--g1)}.mdweekly b{color:#fff}
+.mdwarn{font-size:11.5px;color:#ffb3b3;margin-top:8px;line-height:1.4}
+.mdfoot{display:flex;align-items:center;gap:8px;margin-top:12px}
+.mact{flex-wrap:wrap}
+.mgprev ul{margin:14px 0 0;padding:10px 14px 10px 30px;background:#0f1012;border:1px solid var(--line);border-radius:8px;color:var(--g1);font-size:12.5px;line-height:1.7}
+.mgprev b{color:#fff}
+.frow label.chk{flex-direction:row;align-items:flex-start;gap:8px;font-weight:400;color:var(--g1);font-size:12.5px}.frow label.chk b{color:#fff}.frow label.chk input{margin-top:2px}
+.mgweekly{margin-top:22px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ===== User Access tab ===== */
+.acards{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0 12px}
+.acard{background:linear-gradient(180deg,#151618,#0f1012);border:1px solid var(--line);border-radius:10px;padding:12px 18px;min-width:170px;position:relative}
+.acard::before{content:"";position:absolute;left:0;top:0;width:22px;height:2px;background:var(--red)}
+.acard b{display:block;font:700 28px/1.1 var(--fh);color:#fff;font-variant-numeric:tabular-nums}
+.acard span{font:700 10.5px var(--fh);letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.accwrap{max-height:calc(100vh - 330px);min-height:140px}
+table.atab{border-collapse:separate;border-spacing:0;width:100%;min-width:900px;font-size:13px}
+.atab thead th{position:sticky;top:0;z-index:5;background:#17181b;color:#c9ccd1;text-align:left;padding:10px 12px;white-space:nowrap;font:700 11px var(--fh);letter-spacing:.12em;text-transform:uppercase;border-bottom:2px solid var(--red)}
+.atab th.sortable{cursor:pointer;user-select:none}.atab th.sortable:hover{color:#fff;background:#1e1f23}
+.atab th.n,.atab td.n{text-align:right;font-variant-numeric:tabular-nums}
+.atab td{padding:9px 12px;border-bottom:1px solid #1d1f23;background:#121315;vertical-align:middle}
+.atab tbody tr:hover td{background:#191a1d}
+.atab tfoot td{background:#18191c;font-weight:700;border-top:2px solid var(--line2);padding:9px 12px}
+.a-user{display:flex;align-items:center;gap:9px;white-space:nowrap}.a-user b{color:#fff}
+.avatar.sm{width:24px;height:24px;font-size:10px}
+.adot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none}
+.adot.on{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.7)}.adot.off{background:#4a4d54}
+.a-login b{color:#fff}
+.accnote{margin:10px 2px 0;line-height:1.6;max-width:1100px}
+
 /* ===== live sync pill / recently deleted ===== */
 .syncpill{display:flex;align-items:center;gap:7px;border:1px solid var(--line2);background:transparent;border-radius:16px;padding:5px 12px;font:600 12px var(--fb);color:#d5d7db;white-space:nowrap}
 .syncpill i{width:8px;height:8px;border-radius:50%;background:#6b6f77;display:block}
@@ -461,7 +527,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
   @page{size:landscape;margin:.4in}
   :root{color-scheme:light;--bg:#fff;--panel:#fff;--panel2:#fff;--raise:#eee;--line:#ccc;--line2:#bbb;--txt:#000;--mut:#555;--mut2:#777;--field:#fff;--rowbg:#fff}
   body{background:#fff;color:#000;font-size:10px}
-  .top,.tools,.bulk,.tabs,#viewHist,.menu,.embedbar,.toast,.acts,.c-act,.c-sel,.exp,.dropzone,.sum-actions,.sc:not(.sb-donut){display:none!important}
+  .top,.tools,.bulk,.tabs,#viewHist,#viewAccess,.menu,.embedbar,.toast,.acts,.c-act,.c-sel,.exp,.dropzone,.sum-actions,.sc:not(.sb-donut){display:none!important}
   .sum-body{display:block}.sb-donut{color:#000}.donut-c b,.lg b{color:#000}
   #viewLog .twrap{max-height:none;overflow:visible;border:0;background:#fff}
   table.log{min-width:0;font-size:9px;table-layout:auto;width:100%!important}
@@ -535,6 +601,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
     <button class="tab" data-act="tab" data-view="meet">Meetings <span id="tabMeetCount">0</span></button>
     <button class="tab" data-act="tab" data-view="bic">Ball-In-Court Items <span id="tabBicCount">0</span></button>
     <button class="tab" data-act="tab" data-view="hist">History <span id="tabHistCount">0</span></button>
+    <button class="tab" data-act="tab" data-view="access">User Access <span id="tabAccessCount">0</span></button>
     <div class="menu">
       <button class="btn dlbtn" data-act="menu" data-menu="dlMenu">⬇ Download ▾</button>
       <div class="menu-pop" id="dlMenu">
@@ -557,7 +624,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
   <section id="viewLog">
     <div class="tools">
       <input type="search" id="fSearch" placeholder="Search actions, owners, notes, updates…">
-      <select id="fStatus"></select><select id="fOwner"></select><select id="fProject"></select><select id="fMeeting"></select><select id="fCategory" title="Category / Type"></select><select id="fQuick"></select>
+      <select id="fStatus"></select><select id="fOwner"></select><select id="fProject"></select><div class="msel" id="fMeetingWrap"><button type="button" class="msbtn" id="fMeetingBtn" data-act="ms-toggle" aria-haspopup="true" aria-expanded="false" title="Choose one or more meetings"><span class="msl">All meetings</span><i class="caret">▾</i></button><div class="mspop" id="fMeetingPop" role="group" aria-label="Filter by meeting" hidden></div></div><select id="fCategory" title="Category / Type"></select><select id="fQuick"></select>
       <label class="chk" title="Show only items flagged as Ongoing Activity (they need continual updates and have no due date)"><input type="checkbox" id="fOngoing"> Ongoing Activity</label>
       <button class="btn clearbtn" id="btnClearAll" data-act="clear-all-filters" title="Clear every filter, the search box and the grouping">Clear All Filters</button>
       <span class="spacer"></span>
@@ -590,6 +657,12 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
     </div>
     <div class="count" id="hCount"></div>
     <div class="twrap histwrap"><table class="htab" id="histTable"></table></div>
+  </section>
+
+  <section id="viewAccess" hidden>
+    <div class="acards" id="accCards"></div>
+    <div class="twrap accwrap"><table class="atab" id="accTable"></table></div>
+    <p class="muted sm accnote" id="accNote"></p>
   </section>
 
   <section id="viewBic" hidden>
@@ -834,11 +907,11 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   let muteHistory = false;   // used while one action writes a single summary entry
   let modalLocked = false;   // the sign-in prompt cannot be dismissed
   const ui = {
-    view: 'log', search: '', status: 'active', owner: '', project: '', meeting: '', quick: '',
+    view: 'log', search: '', status: 'active', owner: '', project: '', meetings: new Set(), quick: '',
     group: 'none', sort: { key: 'due', dir: 1 }, expanded: new Set(), selected: new Set(),
     density: 'normal', summary: true, category: '', ongoing: false, colw: {}, colorder: [], drafts: {},
     bSearch: '', bOwner: '', bSort: 'open',
-    hSearch: '', hType: '', hUser: '', hDept: '', hFrom: '', hTo: '', hLimit: 200
+    aSort: { key: 'login', dir: -1 }, mdate: null, hSearch: '', hType: '', hUser: '', hDept: '', hFrom: '', hTo: '', hLimit: 200
   };
   let pending = [];      // parsed PDFs awaiting import confirmation
 
@@ -882,6 +955,21 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   function trunc(s, n) { s = String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); return s.length > n ? s.slice(0, n - 1) + '…' : s; }
   const snip = s => s ? '"' + trunc(s, 60) + '"' : '—';
 
+  /* ---------- sign-in log (shown on the User Access tab) ---------- */
+  const LOGIN_KEY = 'twcg-live-lastlogin-v1', LOGIN_GAP_MS = 30 * 60 * 1000;
+  let loginHow = 'Opened the tracker with a saved sign-in';
+  function recordLogin(how) {   // one 'login' row in the shared history; a reload within 30 minutes is not a new login
+    if (!profile) return;
+    try {
+      const key = actorName().toLowerCase(), now = Date.now();
+      let last = {}; try { last = JSON.parse(localStorage.getItem(LOGIN_KEY) || '{}') || {}; } catch (e) { last = {}; }
+      if (last[key] && now - last[key] < LOGIN_GAP_MS) return;
+      last[key] = now; localStorage.setItem(LOGIN_KEY, JSON.stringify(last));
+    } catch (e) { /* storage unavailable: record it anyway */ }
+    pushHistory('login', { text: how });
+    save();
+  }
+  const histVisible = () => state.history.filter(h => h.type !== 'login');   // sign-ins are shown on the User Access tab, not in History
   function pushHistory(type, o) {
     if (muteHistory) return;
     o = o || {};
@@ -922,6 +1010,8 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
 
   /* ---------- model helpers ---------- */
   const meetingOf = it => state.meetings.find(m => m.id === it.meetingId) || state.trash.meetings.find(m => m.id === it.meetingId) || null;
+  // a meeting's date as shown on the dashboard: weekly meetings read "Ongoing"; the real date stays stored
+  const meetDate = m => !m ? '' : m.weekly ? 'Ongoing' : (m.dateISO ? fmtDate(m.dateISO) : (m.date || ''));
   // An owner cell such as "HS/RN" lists several people; split on / \ , ; & + and the word "and"
   const OWNER_SPLIT = /\s*(?:[\/\\,;&+]|\band\b)\s*/i;
   function ownerList(owner) {
@@ -1057,7 +1147,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       else if (ui.status !== 'all' && it.status !== ui.status) return false;
       if (ui.owner && ownerList(it.owner).every(o => o.key !== ui.owner)) return false;
       if (ui.project && (it.project || '') !== ui.project) return false;
-      if (ui.meeting && String(it.meetingId) !== ui.meeting) return false;
+      if (ui.meetings.size && !ui.meetings.has(it.meetingId ? String(it.meetingId) : MS_NONE)) return false;   // ticked meetings only (items with no meeting = "Manual entries")
       if (ui.category) { const c = it.category || ''; if (ui.category === '__none') { if (c) return false; } else if (catKey(c) !== catKey(ui.category)) return false; }
       if (ui.ongoing && !it.ongoing) return false;
       if (ui.quick === 'overdue' && !isOverdue(it)) return false;
@@ -1104,14 +1194,15 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   /* ---------- rendering ---------- */
   function renderAll() {
     renderSubtitle(); renderInsights(); renderFilters(); renderBulk();
-    $('#viewLog').hidden = ui.view !== 'log'; $('#viewMeet').hidden = ui.view !== 'meet'; $('#viewBic').hidden = ui.view !== 'bic'; $('#viewHist').hidden = ui.view !== 'hist';
+    $('#viewLog').hidden = ui.view !== 'log'; $('#viewMeet').hidden = ui.view !== 'meet'; $('#viewBic').hidden = ui.view !== 'bic'; $('#viewHist').hidden = ui.view !== 'hist'; $('#viewAccess').hidden = ui.view !== 'access';
     renderUser();
     $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.view === ui.view));
     $('#tabMeetCount').textContent = state.meetings.length;
     $('#tabLogCount').textContent = state.items.length;
-    $('#tabHistCount').textContent = state.history.length;
+    $('#tabHistCount').textContent = histVisible().length;
+    $('#tabAccessCount').textContent = accessData().users.length;
     $('#tabBicCount').textContent = state.items.filter(i => !isClosed(i)).length;
-    if (ui.view === 'log') renderTable(); else if (ui.view === 'meet') renderMeetings(); else if (ui.view === 'bic') renderBic(); else renderHistory();
+    if (ui.view === 'log') renderTable(); else if (ui.view === 'meet') renderMeetings(); else if (ui.view === 'bic') renderBic(); else if (ui.view === 'access') renderAccess(); else renderHistory();
     document.body.dataset.density = ui.density;
     updateDlMenu();
     const tn = document.getElementById('trashN'); if (tn) tn.textContent = (state.trash.items.length + state.trash.meetings.length) ? '(' + (state.trash.items.length + state.trash.meetings.length) + ')' : '';
@@ -1123,6 +1214,64 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       ? open + ' active of ' + state.items.length + ' items · ' + state.meetings.length + ' meeting' + (state.meetings.length === 1 ? '' : 's') + ' imported'
       : 'Import meeting-minute PDFs to build the log';
   }
+
+  /* ---------- meeting checklist filter ---------- */
+  const MS_NONE = '__none';          // "Manual entries": items that belong to no meeting
+  let msOpen = false;
+  function meetingFilterOptions() {
+    const cnt = new Map(); let none = 0;
+    state.items.forEach(i => { if (i.meetingId) cnt.set(String(i.meetingId), (cnt.get(String(i.meetingId)) || 0) + 1); else none++; });
+    const opts = state.meetings.slice().sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true, sensitivity: 'base' }))
+      .map(m => ({ key: String(m.id), title: m.title || 'Meeting', date: meetDate(m), n: cnt.get(String(m.id)) || 0 }));
+    if (none) opts.push({ key: MS_NONE, title: 'Manual entries (no meeting)', date: '', n: none });
+    return opts;
+  }
+  function renderMeetingFilter() {
+    const btn = $('#fMeetingBtn'), pop = $('#fMeetingPop'); if (!btn || !pop) return;
+    const opts = meetingFilterOptions(), keys = new Set(opts.map(o => o.key));
+    Array.from(ui.meetings).forEach(k => { if (!keys.has(k)) ui.meetings.delete(k); });   // a meeting that was deleted or merged away drops out of the filter
+    const sel = opts.filter(o => ui.meetings.has(o.key)), n = sel.length;
+    btn.querySelector('.msl').textContent = n === 0 ? 'All meetings' : n === 1 ? sel[0].title : n + ' meetings selected';
+    btn.classList.toggle('on', n > 0);
+    btn.title = n ? 'Showing items from:\n' + sel.map(o => '• ' + o.title).join('\n') : 'Choose one or more meetings';
+    btn.setAttribute('aria-expanded', msOpen ? 'true' : 'false');
+    pop.hidden = !msOpen;
+    if (!msOpen) { pop.innerHTML = ''; return; }
+    const oldList = pop.querySelector('.mslist'), keepTop = oldList ? oldList.scrollTop : 0, ae = document.activeElement;
+    const keepFocus = ae && pop.contains(ae) && ae.dataset ? ae.dataset.ms : undefined;
+    const total = opts.reduce((s, o) => s + o.n, 0);
+    const row = (key, title, sub, on, cls) => '<label class="msrow' + (cls ? ' ' + cls : '') + '"><input type="checkbox" data-ms="' + esc(key) + '"' + (on ? ' checked' : '') + '><span class="mst"><b>' + esc(title) + '</b>' + (sub ? '<em>' + esc(sub) + '</em>' : '') + '</span></label>';
+    pop.innerHTML = '<div class="mshead">Show items from</div>' +
+      '<div class="mslist">' + row('__all', 'All meetings', total + ' item' + (total === 1 ? '' : 's'), n === 0, 'all') +
+      (opts.length ? opts.map(o => row(o.key, o.title, [o.date, o.n + ' item' + (o.n === 1 ? '' : 's')].filter(Boolean).join(' · '), ui.meetings.has(o.key))).join('') : '<div class="msempty">No meetings yet.</div>') + '</div>' +
+      '<div class="msfoot"><span class="msn">' + (n ? n + ' of ' + opts.length + ' selected' : 'No filter — every meeting is shown') + '</span><button type="button" class="btn" data-act="ms-done">Done</button></div>';
+    const list = pop.querySelector('.mslist'); if (list) list.scrollTop = keepTop;
+    if (keepFocus !== undefined) { const f = Array.from(pop.querySelectorAll('input[data-ms]')).find(x => x.dataset.ms === keepFocus); if (f) f.focus({ preventScroll: true }); }
+    placeMsPop();
+  }
+  function placeMsPop() {   // keeps the checklist inside the window: lines up with the button, shifts left if needed, opens upward when there is no room below
+    const wrap = $('#fMeetingWrap'), pop = $('#fMeetingPop'); if (!msOpen || !wrap || !pop || pop.hidden) return;
+    const M = 8, vw = document.documentElement.clientWidth, vh = window.innerHeight, list = pop.querySelector('.mslist');
+    pop.style.left = '0px'; pop.style.top = ''; pop.style.bottom = ''; if (list) list.style.maxHeight = '';
+    const wr = wrap.getBoundingClientRect(), w = pop.offsetWidth;
+    let left = wr.left; if (left + w > vw - M) left = vw - M - w; if (left < M) left = M;
+    pop.style.left = (left - wr.left) + 'px';
+    const below = vh - wr.bottom - 8 - M, above = wr.top - 8 - M, chrome = pop.offsetHeight - (list ? list.offsetHeight : 0), need = Math.min(pop.offsetHeight, chrome + 190), up = below < need && above > below;   // opens downward (like the old drop-down) unless there is hardly any room
+    if (list) list.style.maxHeight = Math.max(56, Math.min(340, (up ? above : below) - chrome)) + 'px';
+    if (up) { pop.style.top = 'auto'; pop.style.bottom = 'calc(100% + 8px)'; }
+  }
+  function openMsPop() { msOpen = true; renderMeetingFilter(); const f = $('#fMeetingPop input[data-ms]:checked') || $('#fMeetingPop input[data-ms]'); if (f) f.focus({ preventScroll: true }); }
+  function closeMsPop(focusBtn) { if (!msOpen) return; msOpen = false; renderMeetingFilter(); if (focusBtn) { const b = $('#fMeetingBtn'); if (b) b.focus(); } }
+  function toggleMeetingFilter(key, checked) {
+    if (key === '__all') ui.meetings.clear();                      // "All meetings" = no filter
+    else if (checked) ui.meetings.add(key); else ui.meetings.delete(key);   // unticking the last meeting goes back to "All meetings"
+    renderFilters(); renderTable(); renderBulk();                  // the log follows each tick straight away
+  }
+  document.addEventListener('focusout', e => {   // tabbing away from the checklist closes it
+    if (!msOpen) return; const w = $('#fMeetingWrap');
+    if (w && w.contains(e.target) && e.relatedTarget && !w.contains(e.relatedTarget)) closeMsPop(false);
+  });
+  window.addEventListener('resize', () => { if (msOpen) placeMsPop(); });
 
   /* ---------- Summary & Metrics strip ---------- */
   const MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -1194,7 +1343,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const ms = state.meetings.slice().sort((x, y) => (y.dateISO || '').localeCompare(x.dateISO || '') || y.id - x.id).slice(0, 3);
     let bars = '';
     const bar = (label, full, closed, total, act2, dt) => { const pct = total ? Math.round(closed / total * 100) : 0; return '<div class="pr"' + (act2 ? ' data-act="meeting-filter" data-mid="' + act2 + '"' : '') + ' title="' + esc(full) + '"><span class="pl">' + (dt ? '<em>' + esc(dt) + '</em>' : '') + esc(label) + '</span><span class="ptrack"><i style="width:' + pct + '%"></i><u style="left:' + pct + '%"></u></span><span class="pp">' + pct + '%</span><span class="pn">' + closed + '/' + total + '</span></div>'; };
-    if (ms.length) ms.forEach(m => { const its = items.filter(i => i.meetingId === m.id); const t = m.title.toUpperCase(); bars += bar(t, m.title + (m.dateISO ? ' — ' + fmtDate(m.dateISO) : ''), its.filter(isClosed).length, its.length, m.id, m.dateISO ? m.dateISO.slice(5, 7) + '/' + m.dateISO.slice(8) : ''); });
+    if (ms.length) ms.forEach(m => { const its = items.filter(i => i.meetingId === m.id); const t = m.title.toUpperCase(); bars += bar(t, m.title + (meetDate(m) ? ' — ' + meetDate(m) : ''), its.filter(isClosed).length, its.length, m.id, m.weekly ? 'Ongoing' : (m.dateISO ? m.dateISO.slice(5, 7) + '/' + m.dateISO.slice(8) : '')); });
     else { const cl = items.filter(isClosed).length; bars = bar('OVERALL', 'All items', cl, items.length, 0); }
     const overall = items.length ? Math.round(items.filter(isClosed).length / items.length * 100) : 0;
     return '<div class="sc-title red">Needs attention <i>·</i> untouched longest' + (soon ? '<button class="soonchip" data-act="kpi" data-k="soon">' + soon + ' due ≤ 7d</button>' : '') + '</div>' +
@@ -1217,7 +1366,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
 
   function renderInsights() {
     const body = $('#sumBody'); if (!body) return;
-    $('#sumUpdates').textContent = (state.history ? state.history.length : 0) + ' updates';
+    $('#sumUpdates').textContent = (state.history ? histVisible().length : 0) + ' updates';
     $('#btnSummary').textContent = ui.summary ? '▲' : '▼';
     $('#btnSummary').setAttribute('aria-expanded', ui.summary ? 'true' : 'false');
     body.hidden = !ui.summary;
@@ -1257,7 +1406,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     sel('#bOwner', ui.bOwner, [['', 'All owners']].concat(owners.map(o => [o.key, o.name])));
     $('#bSort').value = ui.bSort; if ($('#bSearch').value !== ui.bSearch) $('#bSearch').value = ui.bSearch;
     sel('#fProject', ui.project, [['', 'All projects']].concat(projects.map(o => [o, o])));
-    sel('#fMeeting', ui.meeting, [['', 'All meetings']].concat(state.meetings.map(m => [String(m.id), m.title + (m.date ? ' (' + m.date + ')' : '')])));
+    renderMeetingFilter();
     sel('#fCategory', ui.category, [['', 'All categories / types']].concat(state.items.some(i => !i.category) ? [['__none', 'Uncategorized']] : []).concat(cats.map(c => [c, c])));
     sel('#fGroup', ui.group, [['none', 'No grouping'], ['meeting', 'Group by meeting'], ['owner', 'Group by owner'], ['project', 'Group by project'], ['category', 'Group by category / type'], ['status', 'Group by status']]);
     sel('#fQuick', ui.quick, [['', 'Any due date'], ['overdue', 'Overdue only'], ['soon', 'Due in 7 days']]);
@@ -1272,13 +1421,14 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     let n = 0;
     if (ui.search.trim()) n++;
     if (ui.status !== 'all') n++;
-    ['owner', 'project', 'meeting', 'category', 'quick'].forEach(k => { if (ui[k]) n++; });
+    ['owner', 'project', 'category', 'quick'].forEach(k => { if (ui[k]) n++; });
+    if (ui.meetings.size) n++;
     if (ui.ongoing) n++;
     if (ui.group !== 'none') n++;
     return n;
   }
   function clearAllFilters() {
-    ui.search = ''; ui.status = 'all'; ui.owner = ui.project = ui.meeting = ui.category = ui.quick = ''; ui.ongoing = false; ui.group = 'none';
+    ui.search = ''; ui.status = 'all'; ui.owner = ui.project = ui.category = ui.quick = ''; ui.meetings.clear(); ui.ongoing = false; ui.group = 'none';
     ui.view = 'log'; renderAll(); toast('All filters and grouping cleared.');
   }
 
@@ -1326,7 +1476,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const tableWidth = () => colOrder().reduce((s, id) => s + colW(id), 0);
 
   function groupKeyOf(it, mode) {
-    if (mode === 'meeting') { const m = meetingOf(it); return m ? m.title + (m.date ? ' — ' + m.date : '') : 'Manual entries'; }
+    if (mode === 'meeting') { const m = meetingOf(it); return m ? m.title + (meetDate(m) ? ' — ' + meetDate(m) : '') : 'Manual entries'; }
     if (mode === 'owner') return it.owner || 'Unassigned';
     if (mode === 'project') return it.project || 'No project';
     if (mode === 'category') return it.category || 'Uncategorized';
@@ -1356,7 +1506,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     status: it => '<td class="c-status"><select class="stsel st-' + it.status.replace(/\s/g, '') + '" data-act="status">' + STATUSES.map(s => '<option' + (s === it.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></td>',
     category: it => '<td class="c-category"><input class="catIn" type="text" list="catList" maxlength="40" data-act="category" value="' + esc(it.category) + '" placeholder="— none —" spellcheck="false" aria-label="Category / Type"></td>',
     meeting: (it, x) => '<td class="c-meeting">' + (x.m ? esc(x.m.title) : '<span class="muted">Manual entry</span>') + '</td>',
-    mdate: (it, x) => '<td class="c-mdate">' + (x.m ? esc(x.m.dateISO ? fmtDate(x.m.dateISO) : x.m.date) : '') + '</td>',
+    mdate: (it, x) => '<td class="c-mdate">' + (x.m ? esc(meetDate(x.m)) : '') + '</td>',
     project: it => '<td class="c-project"><div class="ce" contenteditable="plaintext-only" spellcheck="true" data-edit="project" data-single="1">' + esc(it.project) + '</div></td>',
     notes: it => '<td class="c-notes"><div class="ce" contenteditable="plaintext-only" spellcheck="true" data-edit="notes">' + esc(it.notes) + '</div></td>',
     latest: (it, x) => '<td class="c-latest">' + (x.lu ? '<div class="lu"><span class="lud">' + fmtDate(x.lu.date) + '</span> ' + esc(x.lu.text) + '</div>' : '<span class="muted">—</span>') + '</td>',
@@ -1546,7 +1696,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       field('owner', 'Owner', '<div class="frow"><label class="fl">How<select id="bOwner_mode"><option value="replace">Replace the owner with</option><option value="add">Add to the existing owner(s)</option></select></label><label class="fl">Owner<input id="bOwner_val" type="text" placeholder="e.g. HS or HS/RN"></label></div>') +
       field('due', 'Due date', '<div class="frow"><label class="fl">How<select id="bDue_mode"><option value="set">Set this due date</option><option value="ongoing">Mark as Ongoing Activity</option><option value="clear">Clear the due date (and Ongoing)</option></select></label><label class="fl" id="bDue_dwrap">Due date<input id="bDue_date" type="date"></label></div>') +
       field('status', 'Status', '<div class="frow"><label class="fl">Set status to<select id="bStatus_val">' + STATUSES.map(s => '<option>' + s + '</option>').join('') + '</select></label></div>') +
-      field('meeting', 'Meeting', '<div class="frow"><label class="fl">Move to meeting<select id="bMeet_val"><option value="">— None (manual entry) —</option>' + state.meetings.map(m => '<option value="' + esc(m.id) + '">' + esc(m.title + (m.date ? ' (' + m.date + ')' : '')) + '</option>').join('') + '</select></label></div>') +
+      field('meeting', 'Meeting', '<div class="frow"><label class="fl">Move to meeting<select id="bMeet_val"><option value="">— None (manual entry) —</option>' + state.meetings.map(m => '<option value="' + esc(m.id) + '">' + esc(m.title + (meetDate(m) ? ' (' + meetDate(m) + ')' : '')) + '</option>').join('') + '</select></label></div>') +
       field('category', 'Category / Type', '<div class="frow"><label class="fl">Set to<input id="bCat_val" type="text" list="catList" maxlength="40" placeholder="Leave empty to clear the category"></label></div>') +
       '<label class="fl">Note added to each item’s history <span class="muted">(optional)</span><input id="bNote" type="text" maxlength="200" placeholder="e.g. Reassigned after kickoff meeting"></label>' +
       '<div class="perr" id="bErr"></div></div>' +
@@ -1662,17 +1812,138 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     closeModal(); commit('Bulk edit applied to ' + picked.length + ' item' + (picked.length === 1 ? '' : 's') + '.');
   }
 
+  const CAL_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2 6.5h12M5 1.8v2.6M11 1.8v2.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  function mdatePopHtml() {
+    const s = ui.mdate;
+    return '<div class="mdpop" role="dialog" aria-label="Change the meeting date">' +
+      '<label class="fl">Meeting date<input type="date" id="mdIso" value="' + esc(s.iso) + '"></label>' +
+      '<label class="chk mdweekly"><input type="checkbox" id="mdWeekly"' + (s.weekly ? ' checked' : '') + (WEEKLY_OK ? '' : ' disabled') + '> <span><b>Weekly Meeting?</b> Shows “Ongoing” instead of the date.</span></label>' +
+      (WEEKLY_OK ? '' : '<div class="mdwarn">Needs the one-time database update (supabase_update_v3.sql) before this can be saved.</div>') +
+      '<div class="mdfoot"><button class="link" data-act="mdate-clear">Clear date</button><span class="spacer"></span><button class="btn" data-act="mdate-cancel">Cancel</button><button class="btn primary" data-act="mdate-save">Save</button></div></div>';
+  }
   function renderMeetings() {
     const box = $('#meetList');
     if (!state.meetings.length) { box.innerHTML = '<div class="empty-big"><h3>No meetings imported yet</h3><p>Imported meeting minutes will be listed here with their general notes.</p></div>'; return; }
     box.innerHTML = state.meetings.slice().sort((a, b) => (b.dateISO || '') < (a.dateISO || '') ? -1 : 1).map(m => {
       const its = state.items.filter(i => i.meetingId === m.id);
       const act = its.filter(i => !isClosed(i)).length;
-      return '<article class="mcard" data-mid="' + m.id + '"><div class="mhead"><div><div class="mtl"><h3 class="mtitle" contenteditable="plaintext-only" spellcheck="true" data-single="1" data-mtitle="1" title="Click to rename this meeting">' + esc(m.title) + '</h3><button class="pen" data-act="mtitle-edit" title="Rename this meeting" aria-label="Rename this meeting">✎</button></div><p>' + esc(m.dateISO ? fmtDate(m.dateISO) : m.date || 'No date') + (m.project ? ' · ' + esc(m.project) : '') + (m.preparedBy ? ' · Prepared by ' + esc(m.preparedBy) : '') + '</p>' +
+      const open = !!(ui.mdate && ui.mdate.mid === m.id);
+      const dtxt = m.weekly ? 'Ongoing' : (m.dateISO ? fmtDate(m.dateISO) : (m.date || 'No date'));
+      const dbtn = '<span class="mdwrap"><button class="mdate' + (open ? ' open' : '') + '" data-act="mdate-toggle" aria-haspopup="dialog" aria-expanded="' + open + '" title="' + esc(m.weekly ? 'Weekly meeting (date on file: ' + (m.dateISO ? fmtDate(m.dateISO) : 'none') + ') — click to change' : 'Click to change the meeting date') + '">' + CAL_SVG +
+        '<span class="' + (m.weekly ? 'chip ongo' : 'dtxt') + '">' + (m.weekly ? '↻ ' : '') + esc(dtxt) + '</span><i class="caret">▾</i></button>' + (open ? mdatePopHtml() : '') + '</span>';
+      return '<article class="mcard" data-mid="' + esc(m.id) + '"><div class="mhead"><div><div class="mtl"><h3 class="mtitle" contenteditable="plaintext-only" spellcheck="true" data-single="1" data-mtitle="1" title="Click to rename this meeting">' + esc(m.title) + '</h3><button class="pen" data-act="mtitle-edit" title="Rename this meeting" aria-label="Rename this meeting">✎</button></div>' +
+        '<div class="mmeta">' + dbtn + (m.project ? ' · ' + esc(m.project) : '') + (m.preparedBy ? ' · Prepared by ' + esc(m.preparedBy) : '') + '</div>' +
         (m.source ? '<p class="muted">Source: ' + esc(m.source) + '</p>' : '') + '</div><div class="mstats"><b>' + its.length + '</b> items<br><span>' + act + ' active · ' + (its.length - act) + ' closed</span></div></div>' +
         '<label class="mlabel">General meeting notes</label><textarea class="mnotes" data-act="mnotes" rows="3" placeholder="No general notes recorded.">' + esc(m.notes) + '</textarea>' +
-        '<div class="mact"><button class="btn" data-act="meet-filter">View items in log</button><button class="btn danger" data-act="meet-delete">Delete meeting &amp; its items</button></div></article>';
+        '<div class="mact"><button class="btn" data-act="meet-filter">View items in log</button><button class="btn" data-act="meet-merge"' + (state.meetings.length < 2 ? ' disabled title="There is no other meeting to merge with"' : ' title="Combine this meeting with another one"') + '>Merge Meeting</button><button class="btn danger" data-act="meet-delete">Delete meeting &amp; its items</button></div></article>';
     }).join('');
+  }
+
+  /* ---------- meeting date dropdown ---------- */
+  function closeMdatePop() {   // closes the dropdown without redrawing the cards
+    ui.mdate = null;
+    $$('.mdpop').forEach(p => p.remove());
+    $$('.mdate.open').forEach(b => { b.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); });
+  }
+  function toggleMdate(mid) {
+    if (ui.mdate && ui.mdate.mid === mid) { closeMdatePop(); return; }
+    const m = state.meetings.find(x => x.id === mid); if (!m) return;
+    ui.mdate = { mid, iso: m.dateISO || '', weekly: !!m.weekly };
+    renderMeetings();
+    setTimeout(() => { const i = $('#mdIso'); if (i) i.focus(); }, 0);
+  }
+  function saveMeetingDate() {
+    const s = ui.mdate, m = s && state.meetings.find(x => x.id === s.mid); if (!m) { closeMdatePop(); return; }
+    const iso = ($('#mdIso') ? $('#mdIso').value : s.iso) || '';
+    const weekly = WEEKLY_OK && $('#mdWeekly') ? $('#mdWeekly').checked : !!m.weekly;
+    const changes = [];
+    if ((m.dateISO || '') !== iso) { changes.push('Meeting date: ' + (m.dateISO ? fmtDate(m.dateISO) : (m.date || 'none')) + ' → ' + (iso ? fmtDate(iso) : 'none')); m.dateISO = iso; m.date = iso ? fmtDate(iso) : ''; }
+    if (!!m.weekly !== weekly) { changes.push('Weekly Meeting?: ' + (m.weekly ? 'yes' : 'no') + ' → ' + (weekly ? 'yes' : 'no')); m.weekly = weekly; }
+    ui.mdate = null;
+    if (!changes.length) { renderMeetings(); return; }
+    pushHistory('meeting', { subject: m.title, text: changes.join('; ') });
+    commit('Meeting date saved.');
+  }
+
+  /* ---------- merge meetings ---------- */
+  function baseTitle(t) {   // "Staff Meeting Items (2 of 3)" -> "Staff Meeting Items"
+    return String(t || '').replace(/\s*[\(\[]\s*\d+\s*(?:of|\/)\s*\d+\s*[\)\]]\s*$/i, '').replace(/\s*[-–—:]\s*\d+\s*(?:of|\/)\s*\d+\s*$/i, '').replace(/\s+/g, ' ').trim();
+  }
+  function mergeDefaults(A, B) {
+    const da = A.dateISO || '', db = B.dateISO || '';
+    const ba = baseTitle(A.title), bb = baseTitle(B.title);
+    return { iso: da && db ? (da <= db ? da : db) : (da || db), weekly: !!(A.weekly || B.weekly), title: ba && ba.toLowerCase() === bb.toLowerCase() ? ba : A.title };
+  }
+  const meetingById = id => state.meetings.find(m => m.id === id) || null;
+  const itemCount = m => state.items.filter(i => i.meetingId === m.id).length;
+  function openMergeMeeting(aid) {
+    const A = meetingById(aid); if (!A) return;
+    const others = state.meetings.filter(m => m.id !== aid).sort((x, y) => (x.title || '').localeCompare(y.title || '', undefined, { numeric: true, sensitivity: 'base' }));
+    if (!others.length) { toast('There is no other meeting to merge with.', 'warn'); return; }
+    openModal('<h2>Merge meeting</h2>' +
+      '<p class="muted">Combine <b>“' + esc(A.title) + '”</b> with another meeting. The items, notes and source files of both end up in one meeting. The other meeting moves to <b>Recently deleted</b> — nothing is erased and it can be restored.</p>' +
+      '<div id="mergeForm" data-aid="' + esc(aid) + '">' +
+      '<label class="fl">Merge with<select id="mgWith"><option value="">— Select a meeting —</option>' + others.map(m => '<option value="' + esc(m.id) + '">' + esc(m.title + (meetDate(m) ? ' — ' + meetDate(m) : '') + ' · ' + itemCount(m) + ' items') + '</option>').join('') + '</select></label>' +
+      '<label class="fl">Title of the merged meeting<input id="mgTitle" type="text" maxlength="200" value="' + esc(A.title) + '"></label>' +
+      '<div class="frow"><label class="fl">Meeting date <span class="muted">(earlier of the two — you can change it)</span><input id="mgDate" type="date" value="' + esc(A.dateISO || '') + '"></label>' +
+      '<label class="chk formchk mgweekly"><input type="checkbox" id="mgWeekly"' + (A.weekly ? ' checked' : '') + (WEEKLY_OK ? '' : ' disabled') + '> <span><b>Weekly Meeting?</b> Shows “Ongoing”</span></label></div>' +
+      (WEEKLY_OK ? '' : '<div class="mdwarn">“Weekly Meeting?” needs the one-time database update (supabase_update_v3.sql).</div>') +
+      '<div class="mgprev" id="mgPrev"></div><div class="perr" id="mgErr"></div></div>' +
+      '<div class="mfoot"><button class="btn" data-act="modal-close">Cancel</button><button class="btn primary" id="mgGo" data-act="merge-apply" disabled>Merge meetings</button></div>', { cls: 'dlmodal mergemodal' });
+    mergeRecalc();
+  }
+  function mergeFill() {   // choosing the other meeting fills in the title / date / weekly suggestions
+    const f = $('#mergeForm'); if (!f) return;
+    const A = meetingById(f.dataset.aid), B = meetingById($('#mgWith').value);
+    if (A && B) { const d = mergeDefaults(A, B); $('#mgTitle').value = d.title; $('#mgDate').value = d.iso; $('#mgWeekly').checked = d.weekly; }
+    mergeRecalc();
+  }
+  function mergeRecalc() {
+    const f = $('#mergeForm'); if (!f) return;
+    const A = meetingById(f.dataset.aid), B = meetingById($('#mgWith').value), go = $('#mgGo'), prev = $('#mgPrev'), err = $('#mgErr');
+    if (!A || !B) { prev.innerHTML = ''; err.textContent = ''; go.disabled = true; return; }
+    const title = $('#mgTitle').value.replace(/\s+/g, ' ').trim(), iso = $('#mgDate').value, weekly = WEEKLY_OK && $('#mgWeekly').checked, d = mergeDefaults(A, B);
+    const nA = itemCount(A), nB = itemCount(B), hasA = !!String(A.notes || '').trim(), hasB = !!String(B.notes || '').trim();
+    prev.innerHTML = '<ul><li><b>' + (nA + nB) + ' items</b> in the merged meeting (' + nA + ' + ' + nB + ')</li>' +
+      '<li>Date: <b>' + esc(weekly ? 'Ongoing (weekly)' : iso ? fmtDate(iso) : 'No date') + '</b>' + (weekly && iso ? ' — date on file ' + fmtDate(iso) : '') + (iso && iso === d.iso ? ' (the earlier meeting’s date)' : iso ? ' (set by you)' : '') + '</li>' +
+      '<li>Notes: ' + (hasA && hasB ? 'both sets are combined — the earlier meeting’s first, the other added below under a heading' : hasA || hasB ? 'the notes of one meeting are kept' : 'no general notes on either meeting') + '</li>' +
+      '<li>“' + esc(B.title) + '” moves to Recently deleted (can be restored)</li></ul>';
+    err.textContent = title ? '' : 'Enter a title for the merged meeting.';
+    go.disabled = !title;
+  }
+  function applyMerge() {
+    const f = $('#mergeForm'); if (!f) return;
+    const A = meetingById(f.dataset.aid), B = meetingById($('#mgWith').value);
+    if (!A || !B || A === B) { toast('Please choose the meeting to merge with.', 'warn'); return; }
+    const title = $('#mgTitle').value.replace(/\s+/g, ' ').trim().slice(0, 200);
+    if (!title) { mergeRecalc(); return; }
+    const o = { title, iso: $('#mgDate').value || '', weekly: WEEKLY_OK && $('#mgWeekly').checked };
+    closeModal(); mergeMeetings(A.id, B.id, o);
+  }
+  function mergeMeetings(aid, bid, o) {
+    const A = meetingById(aid), B = meetingById(bid);
+    if (!A || !B || A === B) { toast('Those meetings could not be merged.', 'warn'); return false; }
+    const aFirst = !(A.dateISO && B.dateISO && B.dateISO < A.dateISO), first = aFirst ? A : B, second = aFirst ? B : A;   // the earlier meeting's notes come first
+    const n1 = String(first.notes || '').trim(), n2 = String(second.notes || '').trim();
+    const notes = n1 && n2 && n1 !== n2 ? n1 + '\n\n— From “' + second.title + '”' + (meetDate(second) ? ' (' + meetDate(second) + ')' : '') + ' —\n' + n2 : (n1 || n2);
+    const hadIso = !!(A.dateISO || B.dateISO), aTxt = meetDate(A) ? A.title + ' (' + meetDate(A) + ')' : A.title, bTxt = meetDate(B) ? B.title + ' (' + meetDate(B) + ')' : B.title;
+    const moved = state.items.filter(i => i.meetingId === B.id), nA = itemCount(A);
+    const movedTrash = state.trash.items.filter(i => i.meetingId === B.id);   // items that were deleted earlier follow along, so a restore lands them in the merged meeting
+    const srcs = []; [A.source, B.source].forEach(s => srcList(s).forEach(x => { if (srcs.indexOf(x) < 0) srcs.push(x); }));
+    const oldBTitle = B.title;
+    A.title = o.title; A.dateISO = o.iso || ''; A.date = o.iso ? fmtDate(o.iso) : (hadIso ? '' : (A.date || B.date || ''));
+    if (WEEKLY_OK) A.weekly = !!o.weekly;
+    A.notes = notes; A.source = srcs.join('; '); A.project = A.project || B.project || ''; A.preparedBy = A.preparedBy || B.preparedBy || '';
+    muteHistory = true;
+    moved.concat(movedTrash).forEach(it => { it.meetingId = A.id; addLog(it, 'edit', 'Meeting: “' + oldBTitle + '” → “' + o.title + '” (meetings merged)'); });
+    muteHistory = false;
+    B.deletedAt = new Date().toISOString(); B.deletedBy = actorLabel();   // never erased: it can be restored from Recently deleted
+    state.meetings = state.meetings.filter(m => m !== B); state.trash.meetings.push(B);
+    if (ui.meetings.delete(String(B.id))) ui.meetings.add(String(A.id));   // a merged-away meeting in the checklist becomes the merged one
+    ui.mdate = null;
+    pushHistory('meeting', { subject: o.title, itemIds: moved.map(i => i.id), text: 'Merged “' + bTxt + '” (' + moved.length + ' item' + (moved.length === 1 ? '' : 's') + ') into “' + aTxt + '” (' + nA + ' item' + (nA === 1 ? '' : 's') + ') → “' + o.title + '”, date ' + (A.weekly ? 'Ongoing' : (A.dateISO ? fmtDate(A.dateISO) : 'none')) + (n1 && n2 ? ', notes combined' : '') + '. “' + oldBTitle + '” moved to Recently deleted.' });
+    commit('Merged into “' + o.title + '” — ' + itemCount(A) + ' items.');
+    return true;
   }
 
   /* ---------- user profile ---------- */
@@ -1709,7 +1980,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     if (passEl) passEl.classList.toggle('bad', !pass);
     const miss = !first ? '#pFirst' : !last ? '#pLast' : !okDept ? '#pDept' : (passEl && !pass) ? '#pPass' : '';
     if (miss) { $('#pErr').textContent = passEl ? 'Please enter your first name, last name, department and password.' : 'Please enter your first name and last name and select a department.'; $(miss).focus(); return; }
-    if (!forced) { profile = { first, last, dept }; saveProfile(); closeModal(); renderAll(); toast('Now using the tracker as ' + actorLabel()); return; }
+    if (!forced) { profile = { first, last, dept }; saveProfile(); recordLogin('Switched user on this device'); closeModal(); renderAll(); toast('Now using the tracker as ' + actorLabel()); return; }
     signingIn = true; const go = $('#pGo'); if (go) { go.disabled = true; go.textContent = passEl ? 'Signing in…' : 'Continuing…'; }
     if (passEl) {
       const r = await Live.signIn(pass);
@@ -1720,7 +1991,86 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       Live.manualSignOut = false;
     }
     profile = { first, last, dept }; profileDraft = null; saveProfile(); signingIn = false;
+    loginHow = passEl ? 'Signed in with the team password' : 'Signed in (name and department entered)';
     await startSession();
+  }
+
+
+  /* ---------- User Access tab ---------- */
+  const MINUTES_RE = /Status as recorded in minutes|Carried into "/;
+  function parseBy(by) {   // trail entries are signed "First Last (Department)"
+    const s = String(by || '').replace(/\s+/g, ' ').trim(); if (!s) return null;
+    const m = /^(.*?)\s*\((OPS|VDC Field|VDC|Precon|Risk)\)$/.exec(s);
+    const name = m ? m[1].trim() : s;
+    return name ? { name, dept: m ? m[2] : '' } : null;
+  }
+  function accessData() {
+    const now = Date.now(), d30 = now - 30 * 86400000, d7 = now - 7 * 86400000, U = new Map();
+    const ms = iso => { const t = Date.parse(iso); return isNaN(t) ? 0 : t; };
+    const get = raw => {
+      const nm = String(raw || '').replace(/\s+/g, ' ').trim(); if (!nm) return null;
+      const k = nm.toLowerCase(); let u = U.get(k);
+      if (!u) { u = { key: k, name: nm, dept: '', deptTs: 0, lastLogin: 0, logins: 0, lastAct: 0, closed: 0, closed30: 0 }; U.set(k, u); }
+      return u;
+    };
+    const setDept = (u, dept, t) => { if (dept && t >= u.deptTs) { u.dept = dept; u.deptTs = t; } };
+    state.history.forEach(h => {
+      const u = get(h.user); if (!u) return; const t = ms(h.ts);
+      if (h.type === 'login') { u.logins++; if (t > u.lastLogin) u.lastLogin = t; } else if (t > u.lastAct) u.lastAct = t;
+      setDept(u, h.dept, t);
+    });
+    allItems().forEach(it => (it.updates || []).forEach(x => {   // people who worked in the tracker before sign-ins were logged still appear
+      const b = parseBy(x.by), u = b && get(b.name); if (!u) return; const t = ms(x.ts);
+      if (t > u.lastAct) u.lastAct = t; setDept(u, b.dept, t);
+    }));
+    let noCloser = 0, fromMinutes = 0;   // closed items nobody can be credited for
+    state.items.forEach(it => {
+      if (it.status !== 'Closed') return;
+      const ups = it.updates || []; let c = null;
+      for (let i = ups.length - 1; i >= 0; i--) if (ups[i].type === 'close') { c = ups[i]; break; }   // the most recent close
+      if (!c) { noCloser++; return; }
+      if (MINUTES_RE.test(c.text || '')) { fromMinutes++; return; }
+      const b = parseBy(c.by), u = b && get(b.name);
+      if (!u) { noCloser++; return; }
+      u.closed++; if (ms(c.ts) >= d30) u.closed30++;
+    });
+    const users = Array.from(U.values());
+    return { users, signed7: users.filter(u => u.lastLogin >= d7).length, closedTotal: users.reduce((s, u) => s + u.closed, 0), noCloser, fromMinutes };
+  }
+  function relTime(t) {
+    const min = Math.floor((Date.now() - t) / 60000);
+    if (min < 1) return 'just now'; if (min < 60) return min + ' min ago';
+    const hr = Math.floor(min / 60); if (hr < 24) return hr + ' hr ago';
+    const dd = Math.floor(hr / 24); if (dd < 30) return dd + (dd === 1 ? ' day' : ' days') + ' ago';
+    const mo = Math.floor(dd / 30); return mo + (mo === 1 ? ' month' : ' months') + ' ago';
+  }
+  function renderAccess() {
+    const d = accessData(), key = ui.aSort.key, dir = ui.aSort.dir;
+    const val = { user: u => u.name.toLowerCase(), dept: u => u.dept.toLowerCase(), login: u => u.lastLogin, logins: u => u.logins, act: u => u.lastAct, closed: u => u.closed, closed30: u => u.closed30 }[key] || (u => u.lastLogin);
+    const rows = d.users.slice().sort((a, b) => {
+      const x = val(a), y = val(b), c = typeof x === 'string' ? x.localeCompare(y, undefined, { sensitivity: 'base' }) : (x < y ? -1 : x > y ? 1 : 0);
+      return (c * dir) || (b.lastLogin - a.lastLogin) || (b.lastAct - a.lastAct) || a.name.localeCompare(b.name);
+    });
+    const card = (n, l) => '<div class="acard"><b>' + n + '</b><span>' + l + '</span></div>';
+    $('#accCards').innerHTML = card(d.users.length, d.users.length === 1 ? 'User' : 'Users') + card(d.signed7, 'Signed in, last 7 days') + card(d.closedTotal, 'Items closed by users') +
+      (d.noCloser + d.fromMinutes ? card(d.noCloser + d.fromMinutes, 'Closed items with no one credited') : '');
+    const th = (k, label, cls) => '<th class="' + (cls || '') + ' sortable' + (key === k ? ' sorted' : '') + '" data-act="a-sort" data-key="' + k + '">' + label + (key === k ? (dir === 1 ? ' ▲' : ' ▼') : '') + '</th>';
+    const iso = t => new Date(t).toISOString();
+    const body = rows.length ? rows.map(u => {
+      const ini = (u.name.split(' ')[0][0] + (u.name.indexOf(' ') > 0 ? u.name.split(' ').pop()[0] : '')).toUpperCase(), recent = u.lastLogin >= Date.now() - 7 * 86400000;
+      return '<tr><td class="a-user"><i class="adot ' + (recent ? 'on' : 'off') + '" title="' + (recent ? 'Signed in within the last 7 days' : 'No sign-in in the last 7 days') + '"></i><span class="avatar sm">' + esc(ini) + '</span><b>' + esc(u.name) + '</b></td>' +
+        '<td>' + (u.dept ? esc(u.dept) : '<span class="muted">—</span>') + '</td>' +
+        '<td class="a-login">' + (u.lastLogin ? '<b>' + esc(fmtDateTime(iso(u.lastLogin))) + '</b> <span class="muted">' + relTime(u.lastLogin) + '</span>' : '<span class="muted">Not recorded yet</span>') + '</td>' +
+        '<td class="n">' + (u.logins || '<span class="muted">—</span>') + '</td>' +
+        '<td class="a-act">' + (u.lastAct ? esc(fmtDateTime(iso(u.lastAct))) : '<span class="muted">—</span>') + '</td>' +
+        '<td class="n"><b>' + u.closed + '</b></td><td class="n">' + u.closed30 + '</td></tr>';
+    }).join('') : '<tr><td colspan="7" class="empty-row">No one has signed in yet.</td></tr>';
+    const tot = k => rows.reduce((s, u) => s + u[k], 0);
+    $('#accTable').innerHTML = '<thead><tr>' + th('user', 'User') + th('dept', 'Department') + th('login', 'Last login') + th('logins', 'Logins', 'n') + th('act', 'Last activity') + th('closed', 'Items closed', 'n') + th('closed30', 'Closed, last 30 days', 'n') + '</tr></thead><tbody>' + body + '</tbody>' +
+      (rows.length ? '<tfoot><tr><td>All users (' + rows.length + ')</td><td></td><td></td><td class="n">' + tot('logins') + '</td><td></td><td class="n">' + tot('closed') + '</td><td class="n">' + tot('closed30') + '</td></tr></tfoot>' : '');
+    $('#accNote').innerHTML = 'A <b>login</b> is recorded each time someone signs in, or opens the tracker with a saved sign-in (at most once every 30 minutes per person per device). Logins are recorded from the day this version was published; people who worked in the tracker earlier are listed with their last activity. ' +
+      'Names and departments are what each person entered when signing in.<br><b>Items closed</b> counts items that are currently Closed, credited to whoever closed them last' +
+      (d.noCloser + d.fromMinutes ? ' — ' + (d.noCloser + d.fromMinutes) + ' closed item' + (d.noCloser + d.fromMinutes === 1 ? ' is' : 's are') + ' not credited to anyone (' + [d.fromMinutes ? d.fromMinutes + ' imported already closed in meeting minutes' : '', d.noCloser ? d.noCloser + ' closed before sign-in tracking' : ''].filter(Boolean).join(', ') + ')' : '') + '.';
   }
 
   /* ---------- History ---------- */
@@ -1729,6 +2079,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   function filteredHistory() {
     const q = ui.hSearch.trim().toLowerCase().split(/\s+/).filter(Boolean);
     const rows = state.history.filter(h => {
+      if (h.type === 'login') return false;
       if (ui.hType && h.type !== ui.hType) return false;
       if (ui.hUser && h.user !== ui.hUser) return false;
       if (ui.hDept && h.dept !== ui.hDept) return false;
@@ -1756,13 +2107,13 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const shown = rows.slice(0, ui.hLimit);
     const head = '<thead><tr><th class="h-when">Date / Time</th><th class="h-user">User</th><th class="h-dept">Department</th><th class="h-type">Action</th><th class="h-item">Item / Subject</th><th class="h-text">Details</th></tr></thead>';
     let body;
-    if (!shown.length) body = '<tr><td colspan="6" class="empty-row">' + (state.history.length ? 'No history matches the current filters.' : 'No activity recorded yet. Imports, edits, updates and closures will appear here.') + '</td></tr>';
+    if (!shown.length) body = '<tr><td colspan="6" class="empty-row">' + (histVisible().length ? 'No history matches the current filters.' : 'No activity recorded yet. Imports, edits, updates and closures will appear here.') + '</td></tr>';
     else body = shown.map(h => '<tr><td class="h-when">' + esc(fmtDateTime(h.ts)) + '</td><td class="h-user">' + (h.user ? esc(h.user) : '<span class="muted">Before sign-in tracking</span>') + '</td><td class="h-dept">' + esc(h.dept || '') + '</td>' +
       '<td class="h-type"><span class="chip h-' + h.type + '">' + esc(H_LABEL[h.type] || h.type) + '</span></td><td class="h-item">' + histItemCell(h) + '</td><td class="h-text">' + esc(h.text) + '</td></tr>').join('');
     if (rows.length > shown.length) body += '<tr><td colspan="6" class="empty-row"><button class="btn" data-act="hist-more">Show ' + Math.min(200, rows.length - shown.length) + ' more (' + (rows.length - shown.length) + ' older entries hidden)</button></td></tr>';
     $('#histTable').innerHTML = head + '<tbody>' + body + '</tbody>';
-    $('#hCount').textContent = rows.length + ' of ' + state.history.length + ' entries' + (rows.length ? ' · newest first' : '');
-    const users = Array.from(new Set(state.history.map(h => h.user).filter(Boolean))).sort((x, y) => x.localeCompare(y));
+    $('#hCount').textContent = rows.length + ' of ' + histVisible().length + ' entries' + (rows.length ? ' · newest first' : '');
+    const users = Array.from(new Set(histVisible().map(h => h.user).filter(Boolean))).sort((x, y) => x.localeCompare(y));
     const opt = (cur, first, list) => '<option value="">' + first + '</option>' + list.map(v => '<option value="' + esc(v[0]) + '"' + (v[0] === cur ? ' selected' : '') + '>' + esc(v[1]) + '</option>').join('');
     $('#hType').innerHTML = opt(ui.hType, 'All actions', Object.keys(H_LABEL).map(k => [k, H_LABEL[k]]));
     $('#hUser').innerHTML = opt(ui.hUser, 'All users', users.map(u => [u, u]));
@@ -1801,7 +2152,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       '<td class="b-action">' + esc(it.action) + (others.length ? '<div class="shared">Shared with: ' + others.map(o => '<span class="chip">' + esc(o.name) + '</span>').join(' ') + '</div>' : '') + '</td>' +
       '<td class="b-due">' + (it.ongoing ? '' : it.dueISO ? fmtDate(it.dueISO) : (it.dueRaw ? '<i class="rawdue">“' + esc(it.dueRaw) + '”</i>' : '<span class="muted">—</span>')) + (d.label ? ' <span class="chip ' + d.cls + '">' + d.label + '</span>' : '') + '</td>' +
       '<td class="b-status"><select class="stsel st-' + it.status.replace(/\s/g, '') + '" data-act="status">' + STATUSES.map(s => '<option' + (s === it.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></td>' +
-      '<td class="b-meeting">' + (m ? esc(m.title) + '<div class="muted sm">' + esc(m.dateISO ? fmtDate(m.dateISO) : m.date) + '</div>' : '<span class="muted">Manual entry</span>') + '</td>' +
+      '<td class="b-meeting">' + (m ? esc(m.title) + '<div class="muted sm">' + esc(meetDate(m)) + '</div>' : '<span class="muted">Manual entry</span>') + '</td>' +
       '<td class="b-notes">' + esc(it.notes) + '</td>' +
       '<td class="b-latest">' + (lu ? '<span class="lud">' + fmtDate(lu.date) + '</span> ' + esc(lu.text) : '<span class="muted">—</span>') + '</td>' +
       '<td class="b-act"><div class="acts"><button class="mini" data-act="focus" title="Open in Tracking Log to post an update">Update</button><button class="mini ok" data-act="close">Close</button></div></td></tr>';
@@ -1872,7 +2223,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       '<label class="fl">Or due as written<input id="fDueTxt" type="text" value="' + esc(dueText) + '" placeholder="ASAP, Weekly…"' + (it.ongoing ? ' disabled' : '') + '></label></div>' +
       '<label class="chk formchk"><input type="checkbox" id="fOngoingIn"' + (it.ongoing ? ' checked' : '') + '> <span><b>Ongoing activity</b> — needs continual updates, so it has no due date and is never shown as overdue</span></label>' +
       '<div class="frow"><label class="fl">Category / Type<input id="fCat" type="text" list="catList" maxlength="40" value="' + esc(it.category || '') + '" placeholder="e.g. RFI, Permit, Inspection"></label></div>' +
-      '<div class="frow"><label class="fl">Meeting<select id="fMeet"><option value="">— None (manual entry) —</option>' + state.meetings.map(m => '<option value="' + m.id + '"' + (m.id === it.meetingId ? ' selected' : '') + '>' + esc(m.title + (m.date ? ' (' + m.date + ')' : '')) + '</option>').join('') + '</select></label>' +
+      '<div class="frow"><label class="fl">Meeting<select id="fMeet"><option value="">— None (manual entry) —</option>' + state.meetings.map(m => '<option value="' + m.id + '"' + (m.id === it.meetingId ? ' selected' : '') + '>' + esc(m.title + (meetDate(m) ? ' (' + meetDate(m) + ')' : '')) + '</option>').join('') + '</select></label>' +
       '<label class="fl">Project / location<input id="fProj" type="text" value="' + esc(it.project) + '"></label></div>' +
       '<label class="fl">Notes / deliverable<textarea id="fNotes" rows="3">' + esc(it.notes) + '</textarea></label>' +
             '<div class="mfoot"><button class="btn" data-act="modal-close">Cancel</button><button class="btn primary" data-act="save-item" data-id="' + (isNew ? '' : esc(it.id)) + '">' + (isNew ? 'Add item' : 'Save changes') + '</button></div>');
@@ -1916,7 +2267,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
 
   function focusItem(id) {
-    ui.view = 'log'; ui.status = 'all'; ui.quick = ''; ui.search = ''; ui.owner = ''; ui.project = ''; ui.meeting = ''; ui.category = ''; ui.ongoing = false;
+    ui.view = 'log'; ui.status = 'all'; ui.quick = ''; ui.search = ''; ui.owner = ''; ui.project = ''; ui.meetings.clear(); ui.category = ''; ui.ongoing = false;
     ui.expanded.add(id); renderAll();
     const tr = document.querySelector('tr.r[data-id="' + CSS.escape(id) + '"]');
     if (tr) { tr.scrollIntoView({ block: 'center', behavior: 'smooth' }); tr.classList.add('flash'); setTimeout(() => tr.classList.remove('flash'), 1800); }
@@ -1965,10 +2316,11 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     let inter = 0; A.forEach(w => { if (B.has(w)) inter++; });
     return inter / (A.size + B.size - inter);
   }
+  const srcList = s => String(s || '').split(/\s*;\s*/).map(x => x.trim()).filter(Boolean);
   function findMeeting(m, file) {
     const d = parseDate(m.date) || '';
     return state.meetings.find(x => norm(x.title) === norm(m.title) && (x.dateISO || '') === d && norm(x.project) === norm(m.project))
-      || (file && state.meetings.find(x => x.source && x.source === file && (x.dateISO || '') === d)) || null;
+      || (file && state.meetings.find(x => { const s = srcList(x.source); return s.indexOf(file) >= 0 && ((x.dateISO || '') === d || s.length > 1 || x.weekly); })) || null;
   }
   function classify(p) {
     const ex = findMeeting(p.meeting, p.file);
@@ -2178,7 +2530,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     p.push(ui.status === 'active' ? 'Active (not closed)' : ui.status === 'all' ? 'All statuses' : 'Status: ' + ui.status);
     if (ui.owner) { const o = allOwners().find(x => x.key === ui.owner); p.push('Owner: ' + (o ? o.name : ui.owner)); }
     if (ui.project) p.push('Project: ' + ui.project);
-    if (ui.meeting) { const m = state.meetings.find(x => String(x.id) === ui.meeting); p.push('Meeting: ' + (m ? m.title : ui.meeting)); }
+    if (ui.meetings.size) { const nm = Array.from(ui.meetings).map(k => k === MS_NONE ? 'Manual entries' : ((state.meetings.find(x => String(x.id) === k) || {}).title || k)); p.push('Meeting' + (nm.length > 1 ? 's' : '') + ': ' + nm.join(', ')); }
     if (ui.category) p.push('Category: ' + (ui.category === '__none' ? 'Uncategorized' : ui.category));
     if (ui.quick) p.push(ui.quick === 'overdue' ? 'Overdue only' : 'Due in 7 days');
     if (ui.ongoing) p.push('Ongoing Activity only');
@@ -2190,7 +2542,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     return {
       id: it.id, itemNo: it.itemNo, action: it.action, owner: it.owner || '', dueISO: it.ongoing ? '' : (it.dueISO || ''), dueText: it.ongoing ? 'Ongoing' : (it.dueISO ? fmtDate(it.dueISO) : (it.dueRaw || '')),
       status: it.status, category: it.category || '', ongoing: !!it.ongoing, overdue: isOverdue(it), overdueDays: isOverdue(it) ? daysBetween(it.dueISO, todayISO()) : 0, closed: isClosed(it),
-      meeting: m ? m.title : '', mdateISO: m ? (m.dateISO || '') : '', mdateText: m ? (m.dateISO ? fmtDate(m.dateISO) : (m.date || '')) : '',
+      meeting: m ? m.title : '', mdateISO: m && !m.weekly ? (m.dateISO || '') : '', mdateText: m ? meetDate(m) : '',
       project: it.project || '', notes: it.notes || '', closedISO: it.closedDate || '', closedText: it.closedDate ? fmtDate(it.closedDate) : '',
       latest: lu ? fmtDate(lu.date) + ': ' + lu.text : '',
       history: (it.updates || []).map(u => fmtDate(u.date) + ' [' + (TYPE_LABEL[u.type] || u.type) + '] ' + u.text + (u.by ? ' — ' + u.by : '')).join('\n')
@@ -2429,6 +2781,8 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   /* ---------- events ---------- */
   document.addEventListener('click', e => {
     if (Date.now() < noClickUntil) return;   // the mouse-up that ended a column drag / resize is not a click
+    if (msOpen && !(e.target.closest && e.target.closest('#fMeetingWrap'))) closeMsPop(false);   // clicking anywhere else closes the meeting checklist
+    if (ui.mdate && !(e.target.closest && e.target.closest('.mdwrap'))) closeMdatePop();   // clicking anywhere else closes the date dropdown
     $$('.menu-pop.show').forEach(p => { if (!p.parentElement.contains(e.target)) p.classList.remove('show'); });
     const t = e.target.closest('[data-act]'); if (!t) return;
     const act = t.dataset.act;
@@ -2504,13 +2858,22 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       case 'bulk-apply': bulkApply(); break;
       case 'confirm-import': confirmImport(); break;
       case 'tab': ui.view = t.dataset.view; renderAll(); break;
+      case 'mdate-toggle': { const c = t.closest('.mcard'); if (c) toggleMdate(c.dataset.mid); break; }
+      case 'mdate-cancel': closeMdatePop(); break;
+      case 'mdate-clear': { if (ui.mdate) { ui.mdate.iso = ''; const i = $('#mdIso'); if (i) { i.value = ''; i.focus(); } } break; }
+      case 'mdate-save': saveMeetingDate(); break;
+      case 'meet-merge': { const c = t.closest('.mcard'); if (c) openMergeMeeting(c.dataset.mid); break; }
+      case 'merge-apply': applyMerge(); break;
+      case 'ms-toggle': if (msOpen) closeMsPop(false); else openMsPop(); break;
+      case 'ms-done': closeMsPop(true); break;
+      case 'a-sort': { const k = t.dataset.key; if (ui.aSort.key === k) ui.aSort.dir *= -1; else { ui.aSort.key = k; ui.aSort.dir = (k === 'user' || k === 'dept') ? 1 : -1; } renderAccess(); break; }
       case 'mtitle-edit': { const h = t.closest('.mcard').querySelector('.mtitle'); if (h) { h.focus(); const r = document.createRange(); r.selectNodeContents(h); const sl = window.getSelection(); sl.removeAllRanges(); sl.addRange(r); } break; }
       case 'bic-jump': { const sec = document.querySelector('.osec[data-key="' + CSS.escape(t.dataset.key) + '"]'); if (sec) { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); sec.classList.add('flashsec'); setTimeout(() => sec.classList.remove('flashsec'), 1600); } break; }
       case 'insights': ui.summary = !ui.summary; saveUi(); renderInsights(); break;
       case 'goto-hist': ui.view = 'hist'; renderAll(); break;
-      case 'proj-filter': ui.project = ui.project === t.dataset.project ? '' : t.dataset.project; ui.status = 'active'; ui.quick = ''; ui.owner = ''; ui.meeting = ''; ui.search = ''; ui.category = ''; ui.ongoing = false; ui.view = 'log'; renderAll(); break;
-      case 'meeting-filter': ui.meeting = t.dataset.mid; ui.status = 'all'; ui.quick = ''; ui.owner = ''; ui.project = ''; ui.search = ''; ui.category = ''; ui.ongoing = false; ui.view = 'log'; renderAll(); break;
-      case 'meet-filter': { const mid = t.closest('.mcard').dataset.mid; ui.meeting = mid; ui.status = 'all'; ui.category = ''; ui.ongoing = false; ui.view = 'log'; renderAll(); break; }
+      case 'proj-filter': ui.project = ui.project === t.dataset.project ? '' : t.dataset.project; ui.status = 'active'; ui.quick = ''; ui.owner = ''; ui.meetings.clear(); ui.search = ''; ui.category = ''; ui.ongoing = false; ui.view = 'log'; renderAll(); break;
+      case 'meeting-filter': ui.meetings = new Set([String(t.dataset.mid)]); ui.status = 'all'; ui.quick = ''; ui.owner = ''; ui.project = ''; ui.search = ''; ui.category = ''; ui.ongoing = false; ui.view = 'log'; renderAll(); break;
+      case 'meet-filter': { const mid = t.closest('.mcard').dataset.mid; ui.meetings = new Set([String(mid)]); ui.status = 'all'; ui.category = ''; ui.ongoing = false; ui.view = 'log'; renderAll(); break; }
       case 'meet-delete': {
         const mid = t.closest('.mcard').dataset.mid, dm = state.meetings.find(x => x.id === mid); if (!dm) break;
         const its = state.items.filter(i => i.meetingId === mid);
@@ -2531,13 +2894,17 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
 
   document.addEventListener('change', e => {
     const t = e.target;
+    if (t.dataset && t.dataset.ms !== undefined) { toggleMeetingFilter(t.dataset.ms, t.checked); return; }
+    if (t.id === 'mgWith') { mergeFill(); return; }
+    if (t.closest && t.closest('#mergeForm')) { mergeRecalc(); return; }
+    if (t.id === 'mdIso') { if (ui.mdate) ui.mdate.iso = t.value; return; }
+    if (t.id === 'mdWeekly') { if (ui.mdate) ui.mdate.weekly = t.checked; return; }
     if (t.id === 'fileIn') { if (t.files.length) handleFiles(t.files); t.value = ''; return; }
     if (t.id === 'jsonIn') { if (t.files[0]) restoreJson(t.files[0]); t.value = ''; return; }
     if (t.id === 'selAll') { filtered().forEach(i => t.checked ? ui.selected.add(i.id) : ui.selected.delete(i.id)); renderTable(); renderBulk(); return; }
     if (t.id === 'fStatus') { ui.status = t.value; renderAll(); return; }
     if (t.id === 'fOwner') { ui.owner = t.value; renderAll(); return; }
     if (t.id === 'fProject') { ui.project = t.value; renderAll(); return; }
-    if (t.id === 'fMeeting') { ui.meeting = t.value; renderAll(); return; }
     if (t.id === 'fGroup') { ui.group = t.value; renderTable(); renderFilters(); return; }
     if (t.id === 'fCategory') { ui.category = t.value; renderAll(); return; }
     if (t.id === 'fOngoing') { ui.ongoing = t.checked; renderAll(); return; }
@@ -2586,6 +2953,8 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   });
 
   document.addEventListener('input', e => {
+    if (e.target.closest && e.target.closest('#mergeForm') && e.target.id !== 'mgWith') { mergeRecalc(); return; }
+    if (e.target.id === 'mdIso') { if (ui.mdate) ui.mdate.iso = e.target.value; return; }
     if (e.target.classList && e.target.classList.contains('upText')) { const d = e.target.closest('.detail'); if (d) syncDraft(d); return; }
     if (e.target.closest && e.target.closest('#bulkForm')) { bulkRecalc(); return; }
     if (e.target.id === 'hSearch') { ui.hSearch = e.target.value; ui.hLimit = 200; renderHistory(); return; }
@@ -2624,6 +2993,11 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     }
   });
   document.addEventListener('keydown', e => {
+    if (msOpen && e.key === 'Escape') { closeMsPop(true); return; }
+    if (e.target.closest && e.target.closest('.mdpop')) {
+      if (e.key === 'Escape') { closeMdatePop(); return; }
+      if (e.key === 'Enter' && e.target.id === 'mdIso') { e.preventDefault(); saveMeetingDate(); return; }
+    }
     if (e.key === 'Escape' && !$('#modalRoot').firstChild && e.target.closest && e.target.closest('tr.detail')) { closeDetail(e.target.closest('tr.detail').dataset.id); return; }
     if (e.key === 'Escape' && $('#modalRoot').firstChild && !modalLocked) { pending = []; closeModal(); }
     if (e.key === 'Enter' && e.target.closest && e.target.closest('#profileForm') && e.target.tagName !== 'BUTTON') { e.preventDefault(); saveProfileForm(); }
@@ -2665,6 +3039,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     ['category', 'category', S_STR, S_STR], ['ongoing', 'ongoing', v => !!v, v => !!v],
     ['deletedAt', 'deleted_at', NZ, TS_DE], ['deletedBy', 'deleted_by', NZ, FROM_NZ]
   ];
+  let WEEKLY_OK = false;   // becomes true once the database has the 'weekly' column (supabase_update_v3.sql)
   const MEET_F = [
     ['title', 'title', S_STR, S_STR], ['date', 'date_text', S_STR, S_STR], ['dateISO', 'date_iso', NZ, FROM_NZ], ['project', 'project', S_STR, S_STR],
     ['preparedBy', 'prepared_by', S_STR, S_STR], ['notes', 'notes', S_STR, S_STR], ['source', 'source', S_STR, S_STR], ['imported', 'imported_at', NZ, TS_DE],
@@ -2979,6 +3354,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         const fillV2 = it => { if (it.category === undefined) it.category = ''; if (it.ongoing === undefined) it.ongoing = false; };
         state.items.forEach(fillV2); state.trash.items.forEach(fillV2);
         SY.snapI.forEach(sn => { if (sn.category === undefined) sn.category = ''; if (sn.ongoing === undefined) sn.ongoing = false; });
+        if (WEEKLY_OK) { state.meetings.concat(state.trash.meetings).forEach(m => { if (m.weekly === undefined) m.weekly = false; }); SY.snapM.forEach(sn => { if (sn.weekly === undefined) sn.weekly = false; }); }
         return true;
       } catch (e) { return false; }
     }
@@ -3005,7 +3381,10 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       const chk = await sb.from('app_meta').select('value').eq('key', 'schema_version');
       if (chk.error) throw wrapErr(chk.error);
       if (!chk.data || !chk.data.length) throw new Error('The database setup is incomplete (schema_version missing). Run supabase_setup.sql again.');
-      if ((parseInt(chk.data[0].value, 10) || 1) < 2) { const err = new Error('Your database needs a one-time update before this version of the tracker can open it. In Supabase open SQL Editor > New query, paste the contents of supabase_update_v2.sql, click Run, then press “Try again”. Nothing in your data is deleted or changed by this update, and nothing has been changed by opening this page.'); err.code = 'SCHEMA_OLD'; throw err; }
+      const dbVer = parseInt(chk.data[0].value, 10) || 1;
+      if (dbVer < 2) { const err = new Error('Your database needs a one-time update before this version of the tracker can open it. In Supabase open SQL Editor > New query, paste the contents of supabase_update_v3.sql, click Run, then press “Try again”. Nothing in your data is deleted or changed by this update, and nothing has been changed by opening this page.'); err.code = 'SCHEMA_OLD'; throw err; }
+      WEEKLY_OK = dbVer >= 3;   // version 2 databases keep working; only the Weekly Meeting? checkbox waits for the update
+      if (WEEKLY_OK && !MEET_F.some(f => f[0] === 'weekly')) MEET_F.push(['weekly', 'weekly', v => !!v, v => !!v]);
       if (!loadedOnce) cacheLoad();
       await pull(true);
       ready = true; loadedOnce = true; setSync('ok'); cacheSave();
@@ -3060,7 +3439,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     openModal('<h2>Loading the tracker…</h2><p class="muted">Connecting to the shared database.</p>', { cls: 'narrow lockmodal', lock: true });
     try { await Live.load(); }
     catch (e) { console.error(e); fatalModal(e && e.code === 'SCHEMA_OLD' ? 'One-time database update needed' : 'Could not load the tracker', friendlyError(e), true); return; }
-    closeModal(); setLocked(false); renderAll(); Live.startLive();
+    closeModal(); setLocked(false); recordLogin(loginHow); renderAll(); Live.startLive();
     toast('Signed in as ' + actorLabel());
     setTimeout(maybeOfferLegacy, 600);
   }
@@ -3071,7 +3450,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const n = Live.pendingCount();
     if (n && !confirm(n + ' change(s) have not finished saving. If you sign out now they will be lost from this device. Sign out anyway?')) return;
     Live.clearLocal(); await Live.signOut();
-    try { localStorage.removeItem(PROFILE_KEY); } catch (e) { /* ignore */ }
+    try { localStorage.removeItem(PROFILE_KEY); localStorage.removeItem(LOGIN_KEY); } catch (e) { /* ignore */ }
     location.reload();
   }
 
@@ -3080,7 +3459,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const its = state.trash.items.slice().sort((a, b) => (b.deletedAt || '').localeCompare(a.deletedAt || ''));
     const ms = state.trash.meetings.slice().sort((a, b) => (b.deletedAt || '').localeCompare(a.deletedAt || ''));
     const row = (kind, uid, title, sub, o) => '<div class="trow"><div class="tmain"><b>' + title + '</b><span>' + esc(trunc(sub, 110)) + '</span></div><div class="twho">' + esc(fmtDateTime(o.deletedAt)) + '<br>' + esc(o.deletedBy || '') + '</div><button class="btn" data-act="trash-restore-' + kind + '" data-uid="' + esc(uid) + '">Restore</button></div>';
-    const body = (ms.length ? '<h4 class="th">Meetings</h4>' + ms.map(m => row('meeting', m.id, esc(m.title || 'Meeting'), (m.dateISO ? fmtDate(m.dateISO) : m.date) + ' · restores its items too', m)).join('') : '') +
+    const body = (ms.length ? '<h4 class="th">Meetings</h4>' + ms.map(m => row('meeting', m.id, esc(m.title || 'Meeting'), meetDate(m) + (state.trash.items.some(i => i.meetingId === m.id) ? ' · restores its items too' : ' · no items to restore (merged or empty)'), m)).join('') : '') +
       (its.length ? '<h4 class="th">Items</h4>' + its.map(i => row('item', i.uid, esc(i.id), i.action, i)).join('') : '');
     openModal('<h2>Recently deleted</h2><p class="muted">Deleted items and meetings are never erased — they stay in the database and can be restored here.</p>' +
       '<div class="trash">' + (body || '<p class="muted">Nothing has been deleted.</p>') + '</div><div class="mfoot"><button class="btn" data-act="modal-close">Close</button></div>', { cls: 'dlmodal' });
@@ -3116,7 +3495,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const mmap = new Map();
     const meetings = (doc.meetings || []).map(m => {
       const uid = isUuid(m.uid) ? m.uid : isUuid(m.id) ? m.id : uuid(); mmap.set(String(m.id), uid);
-      return { id: uid, title: S_STR(m.title), date: S_STR(m.date), dateISO: DATE_RE.test(m.dateISO || '') ? m.dateISO : '', project: S_STR(m.project), preparedBy: S_STR(m.preparedBy), notes: S_STR(m.notes), source: S_STR(m.source), imported: m.imported || '', created: m.created || m.imported || '', deletedAt: m.deletedAt || '', deletedBy: m.deletedBy || '' };
+      return { id: uid, weekly: !!m.weekly, title: S_STR(m.title), date: S_STR(m.date), dateISO: DATE_RE.test(m.dateISO || '') ? m.dateISO : '', project: S_STR(m.project), preparedBy: S_STR(m.preparedBy), notes: S_STR(m.notes), source: S_STR(m.source), imported: m.imported || '', created: m.created || m.imported || '', deletedAt: m.deletedAt || '', deletedBy: m.deletedBy || '' };
     });
     const imap = new Map();
     const items = (doc.items || []).map(it => {
