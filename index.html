@@ -79,7 +79,7 @@ input,select,textarea{font:inherit;color:inherit}
 .tmplbtn{border-color:#6b6f77!important}.tmplbtn:hover{border-color:var(--red)!important}
 .pwrow{display:flex;gap:6px;align-items:stretch}.pwrow input{flex:1}
 .showpw{border:1px solid var(--line2);background:var(--panel2);border-radius:6px;padding:0 12px;font-weight:600;font-size:12px;color:var(--g1)}.showpw:hover{border-color:var(--red);color:#fff}
-body.gated main,body.gated .top-actions{visibility:hidden}
+body.gated main,body.gated .top-actions,body.gated .gsearch{visibility:hidden}
 
 main{padding:16px 22px 44px}
 
@@ -437,6 +437,54 @@ a.brand:hover .wm{text-shadow:0 0 18px rgba(225,37,43,.65)}
 a.brand:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 a.brand .mark{transition:transform .15s}a.brand:hover .mark{transform:translateY(-1px)}
 
+/* ===== global search (header) ===== */
+.gsearch{position:relative;flex:1 1 260px;min-width:200px;max-width:520px;margin:0 auto;display:flex;align-items:center}
+.gs-ico{position:absolute;left:12px;width:15px;height:15px;color:var(--mut);pointer-events:none}
+#gsInput{width:100%;border:1px solid var(--line2);background:#101113;color:#fff;border-radius:22px;padding:9px 52px 9px 35px;font:inherit}
+#gsInput::placeholder{color:#7d8189}
+#gsInput:hover{border-color:#5b5f67}
+#gsInput:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 2px rgba(225,37,43,.25);background:#0b0b0c}
+.gs-kbd{position:absolute;right:12px;font:600 11px var(--fm);color:var(--mut);border:1px solid var(--line2);border-radius:4px;padding:0 6px;background:#17181b;pointer-events:none}
+.gs-x{position:absolute;right:6px;width:26px;height:26px;border:0;border-radius:50%;background:transparent;color:#c9ccd1;padding:0;display:flex;align-items:center;justify-content:center}
+.gs-x:hover{background:rgba(255,255,255,.14);color:#fff}
+.gs-panel{position:fixed;z-index:70;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line2);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.8);overflow:hidden;color:var(--txt);text-align:left}
+.gs-panel::before{content:"";height:3px;background:var(--red);flex:none}
+.gs-scroll{overflow:auto;flex:1;min-height:0;padding-bottom:6px}
+.gs-grp>header{display:flex;align-items:center;gap:8px;padding:11px 14px 4px;position:sticky;top:0;background:var(--panel);z-index:1}
+.gs-grp>header b{font:700 10.5px var(--fh);letter-spacing:.14em;text-transform:uppercase;color:var(--red2)}
+.gs-n{font-size:11.5px;color:var(--mut);border:1px solid var(--line2);border-radius:10px;padding:0 7px}
+.gs-all{margin-left:auto;border:0;background:none;color:#fff;font:600 12px var(--fb);text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:3px;padding:2px 0}
+.gs-all:hover{color:var(--red2)}
+.gs-row{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:0;border-left:3px solid transparent;background:none;padding:8px 14px 8px 12px;color:inherit;cursor:pointer;font:inherit}
+.gs-row:hover,.gs-row.on{background:#1a1b1e;border-left-color:var(--red)}
+.gs-row.closed .gs-t{color:#8c9099}
+.gs-id{flex:none;min-width:76px;max-width:96px;font:700 12px var(--fm);color:#fff;padding-top:2px;overflow-wrap:anywhere}
+.gs-main{display:flex;flex-direction:column;min-width:0;flex:1}
+.gs-t{color:#f3f3f4;overflow-wrap:anywhere}
+.gs-meta{font-size:11.5px;color:var(--mut);margin-top:2px;overflow-wrap:anywhere}
+.gs-meta i{font-style:normal;opacity:.7}
+.gs-st{font-weight:700;color:#d6d8dc}.gs-st.s-InProgress{color:#fff}.gs-st.s-OnHold{color:#9b9fa7}.gs-st.s-Closed{color:#7d8189}
+.gs-snip{font-size:12px;color:#b6b9c0;margin-top:4px;border-left:2px solid #34373d;padding-left:8px;overflow-wrap:anywhere}
+.gs-snip em{font-style:normal;color:var(--mut);font-weight:600;margin-right:5px}
+.gs-panel mark{background:rgba(225,37,43,.42);color:#fff;border-radius:3px;padding:0 1px}
+.gs-more{display:block;width:100%;text-align:left;border:0;background:none;color:var(--mut);padding:5px 14px 5px 15px;font:12px var(--fb)}
+.gs-more:hover{color:#fff}
+.gs-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 14px;border-top:1px solid var(--line);background:#101113;color:var(--mut);font-size:11.5px;flex:none}
+.gs-foot kbd,.gs-tips kbd{font:600 10.5px var(--fm);border:1px solid var(--line2);border-radius:4px;padding:0 5px;background:#17181b;color:#d5d7db;margin:0 2px}
+.gs-empty{padding:22px 18px;color:var(--g1);line-height:1.6}.gs-empty span{color:var(--mut);font-size:12.5px}
+.gs-tips{padding:14px 18px 10px;color:var(--g1);font-size:12.5px;line-height:1.55}
+.gs-tips b{color:#fff;font:700 11px var(--fh);letter-spacing:.14em;text-transform:uppercase}
+.gs-tips ul{margin:8px 0;padding-left:18px}.gs-tips li i{font-style:normal;color:#fff;font-weight:600}
+.gs-tips p{margin:6px 0 0;color:var(--mut)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.sfbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 0;padding:8px 12px;background:var(--redbg);border:1px solid var(--redline);border-radius:8px;color:#f0d6d6;font-size:12.5px}
+.sfbar .sf-t{font:700 10.5px var(--fh);letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.sfbar code{max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sfbar .sf-n{color:var(--mut)}
+.sf-empty{grid-column:1/-1;text-align:center;padding:34px 10px;color:var(--mut)}.sf-empty h3{margin:0 0 6px;color:#fff;font:700 16px var(--fh);letter-spacing:.08em;text-transform:uppercase}.sf-empty p{margin:0 0 12px}
+.mcard.flash{animation:cardflash 1.8s}
+@keyframes cardflash{0%,60%{box-shadow:0 0 0 3px var(--red)}100%{box-shadow:0 0 0 0 transparent}}
+
 /* ===== meeting checklist filter ===== */
 .msel{position:relative;display:inline-block}
 .msbtn{display:inline-flex;align-items:center;gap:8px;min-width:150px;max-width:230px;border:1px solid var(--line2);border-radius:6px;padding:7px 10px;background:var(--panel2);color:var(--txt);font:inherit;text-align:left;cursor:pointer}
@@ -554,6 +602,14 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
     <span class="vr"></span>
     <div class="bt"><h1>Meeting Action Item Tracking Log</h1><p id="subtitle"></p></div>
   </a>
+  <div class="gsearch" id="gsWrap" role="search">
+    <svg class="gs-ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.8" cy="6.8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.4 10.4L14 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <input id="gsInput" type="text" maxlength="200" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" role="combobox" aria-expanded="false" aria-controls="gsPanel" aria-autocomplete="list" aria-label="Search the whole dashboard" placeholder="Search everything…" title="Search action items, meetings, history and people (press / from any page)">
+    <kbd class="gs-kbd" id="gsKbd" aria-hidden="true">/</kbd>
+    <button type="button" class="gs-x" id="gsClear" data-act="gs-clear" aria-label="Clear search" title="Clear search" hidden><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>
+    <div class="gs-panel" id="gsPanel" role="listbox" aria-label="Search results" hidden></div>
+    <div class="sr-only" id="gsLive" aria-live="polite"></div>
+  </div>
   <div class="top-actions">
     <button class="syncpill" id="syncPill" data-s="off" data-act="sync-details" type="button"><i></i><span>Not connected</span></button>
     <button class="btn userbtn" id="userBtn" data-act="profile"></button>
@@ -645,7 +701,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
     <div class="twrap"><table class="log" id="logTable"></table></div>
   </section>
 
-  <section id="viewMeet" hidden><div id="meetList"></div></section>
+  <section id="viewMeet" hidden><div class="sfbar" id="mSearchBar" hidden></div><div id="meetList"></div></section>
 
   <section id="viewHist" hidden>
     <div class="tools">
@@ -661,6 +717,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
 
   <section id="viewAccess" hidden>
     <div class="acards" id="accCards"></div>
+    <div class="sfbar" id="uSearchBar" hidden></div>
     <div class="twrap accwrap"><table class="atab" id="accTable"></table></div>
     <p class="muted sm accnote" id="accNote"></p>
   </section>
@@ -911,7 +968,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     group: 'none', sort: { key: 'due', dir: 1 }, expanded: new Set(), selected: new Set(),
     density: 'normal', summary: true, category: '', ongoing: false, colw: {}, colorder: [], drafts: {},
     bSearch: '', bOwner: '', bSort: 'open',
-    aSort: { key: 'login', dir: -1 }, mdate: null, hSearch: '', hType: '', hUser: '', hDept: '', hFrom: '', hTo: '', hLimit: 200
+    aSort: { key: 'login', dir: -1 }, mdate: null, mSearch: '', uSearch: '', hSearch: '', hType: '', hUser: '', hDept: '', hFrom: '', hTo: '', hLimit: 200
   };
   let pending = [];      // parsed PDFs awaiting import confirmation
 
@@ -1141,7 +1198,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
 
   /* ---------- filtering / sorting ---------- */
   function filtered() {
-    const q = ui.search.trim().toLowerCase();
+    const q = ui.search.trim();
     const list = state.items.filter(it => {
       if (ui.status === 'active') { if (isClosed(it)) return false; }
       else if (ui.status !== 'all' && it.status !== ui.status) return false;
@@ -1152,11 +1209,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       if (ui.ongoing && !it.ongoing) return false;
       if (ui.quick === 'overdue' && !isOverdue(it)) return false;
       if (ui.quick === 'soon' && !isSoon(it)) return false;
-      if (q) {
-        const m = meetingOf(it);
-        const hay = [it.id, it.action, it.owner, it.dueRaw, it.status, it.category, it.ongoing ? 'ongoing' : '', it.notes, it.project, m ? m.title : '', (it.updates || []).map(u => u.text).join(' ')].join(' ').toLowerCase();
-        if (!q.split(/\s+/).every(w => hay.indexOf(w) >= 0)) return false;
-      }
+      if (q && !queryMatches(itemHay(it), q)) return false;
       return true;
     });
     return sortItems(list);
@@ -1205,6 +1258,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     if (ui.view === 'log') renderTable(); else if (ui.view === 'meet') renderMeetings(); else if (ui.view === 'bic') renderBic(); else if (ui.view === 'access') renderAccess(); else renderHistory();
     document.body.dataset.density = ui.density;
     updateDlMenu();
+    if (gsOpen) gsRefresh();
     const tn = document.getElementById('trashN'); if (tn) tn.textContent = (state.trash.items.length + state.trash.meetings.length) ? '(' + (state.trash.items.length + state.trash.meetings.length) + ')' : '';
   }
 
@@ -1823,8 +1877,11 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
   function renderMeetings() {
     const box = $('#meetList');
-    if (!state.meetings.length) { box.innerHTML = '<div class="empty-big"><h3>No meetings imported yet</h3><p>Imported meeting minutes will be listed here with their general notes.</p></div>'; return; }
-    box.innerHTML = state.meetings.slice().sort((a, b) => (b.dateISO || '') < (a.dateISO || '') ? -1 : 1).map(m => {
+    if (!state.meetings.length) { renderSearchBar('#mSearchBar', '', 0, 0, ''); box.innerHTML = '<div class="empty-big"><h3>No meetings imported yet</h3><p>Imported meeting minutes will be listed here with their general notes.</p></div>'; return; }
+    const mlist = ui.mSearch ? state.meetings.filter(m => queryMatches(meetHay(m), ui.mSearch)) : state.meetings;
+    renderSearchBar('#mSearchBar', ui.mSearch, mlist.length, state.meetings.length, 'meetings');
+    if (!mlist.length) { box.innerHTML = '<div class="sf-empty"><h3>No meetings match your search</h3><p>Try fewer letters or a different word.</p><button type="button" class="btn" data-act="sf-clear" data-page="meet">Clear search</button></div>'; return; }
+    box.innerHTML = mlist.slice().sort((a, b) => (b.dateISO || '') < (a.dateISO || '') ? -1 : 1).map(m => {
       const its = state.items.filter(i => i.meetingId === m.id);
       const act = its.filter(i => !isClosed(i)).length;
       const open = !!(ui.mdate && ui.mdate.mid === m.id);
@@ -1996,6 +2053,255 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
 
 
+  /* ---------- search: ONE matcher used by every search box on every page ---------- */
+  // Partial words and single characters match, every word must be present (any order), "quoted text" must match exactly as a phrase,
+  // capitals and accents are ignored, and every other character (# % & ( ) / - + * ? \ ...) is searched literally.
+  const ASCII_ONLY = /^[\x00-\x7f]*$/;
+  function foldChar(c) {
+    if (/\s/.test(c)) return ' ';
+    let f = c.toLowerCase(); if (f.length !== 1) f = c;
+    const d = f.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return d.length === 1 ? d : f;
+  }
+  function fold(s) {   // lower-case, accent-free, every white-space character becomes a plain space; the result is always exactly as long as the original
+    s = String(s == null ? '' : s);
+    if (ASCII_ONLY.test(s)) return s.toLowerCase().replace(/\s/g, ' ');
+    const r = s.replace(/[^\x00-\x7f]/g, foldChar).toLowerCase().replace(/\s/g, ' ');   // only the non-ASCII characters need work
+    if (r.length === s.length) return r;
+    let o = ''; for (let i = 0; i < s.length; i++) o += foldChar(s[i]); return o;   // (a few rare letters lower-case to two characters: fold them one by one so positions never shift)
+  }
+  let pqCache = { q: null, t: [] };
+  function parseQuery(q) {
+    q = String(q == null ? '' : q);
+    if (pqCache.q === q) return pqCache.t;
+    const terms = [], re = /["\u201c]([^"\u201d]*)(?:["\u201d]|$)|(\S+)/g; let m;
+    while ((m = re.exec(q))) {
+      const t = fold((m[1] !== undefined ? m[1] : m[2]).replace(/\s+/g, ' ').trim());
+      if (t) terms.push(t);
+    }
+    if (!terms.length && q.trim()) terms.push(fold(q.trim()));   // a search for just a quote mark is a search for that character
+    pqCache = { q, t: terms };
+    return terms;
+  }
+  function queryMatches(hay, q) {
+    const t = parseQuery(q); if (!t.length) return true;
+    const f = fold(hay);
+    for (let i = 0; i < t.length; i++) if (f.indexOf(t[i]) < 0) return false;
+    return true;
+  }
+  const SEP = ' \u001f ';   // fields are joined with this (a plain-ASCII control character nobody types) so a quoted phrase can never match across two different fields
+  function itemHay(it) {
+    const m = meetingOf(it);
+    return [it.id, it.itemNo, it.action, it.owner, it.dueRaw, it.ongoing ? 'Ongoing' : '', it.dueISO, it.dueISO ? fmtDate(it.dueISO) : '', it.status, it.category, it.notes, it.project,
+      m ? m.title : '', m ? meetDate(m) : '', it.closedDate ? fmtDate(it.closedDate) : '', (it.updates || []).map(u => u.text).join(' ')].join(SEP);
+  }
+  function meetHay(m) { return [m.title, meetDate(m), m.dateISO, m.dateISO ? fmtDate(m.dateISO) : '', m.date, m.project, m.preparedBy, m.notes, m.source].join(SEP); }
+  function histHay(h) { return [h.user, h.dept, H_LABEL[h.type], h.itemId, (h.itemIds || []).join(' '), h.subject, h.text].join(' '); }
+  function userHay(u) { return [u.name, u.dept].join(SEP); }
+  function renderSearchBar(sel, q, shown, total, noun) {   // the "filtered by your search" strip on the Meetings and User Access pages
+    const el = $(sel); if (!el) return;
+    if (!q) { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    el.innerHTML = '<span class="sf-t">Search filter</span><code>' + esc(q) + '</code><span class="sf-n">' + shown + ' of ' + total + ' ' + esc(noun) + '</span><button type="button" class="link" data-act="sf-clear" data-page="' + (sel === '#mSearchBar' ? 'meet' : 'access') + '">Clear search</button>';
+  }
+
+  /* ---------- global search bar (in the header, so it is on every page) ---------- */
+  const GS_CAP = { item: 8, meet: 5, hist: 5, user: 5 };
+  let gsOpen = false, gsActive = -1, gsTimer = null, gsRes = null, gsKeys = [];
+  const gsEl = id => document.getElementById(id);
+  const gsQuery = () => { const i = gsEl('gsInput'); return i ? i.value.trim() : ''; };
+  function hlRanges(s, terms) {
+    const f = fold(s), r = [];
+    terms.forEach(t => { if (!t) return; let i = f.indexOf(t); while (i >= 0) { r.push([i, i + t.length]); i = f.indexOf(t, i + t.length); } });
+    r.sort((a, b) => a[0] - b[0]);
+    const out = [];
+    r.forEach(x => { const l = out[out.length - 1]; if (l && x[0] <= l[1]) l[1] = Math.max(l[1], x[1]); else out.push([x[0], x[1]]); });
+    return out;
+  }
+  function hl(s, terms, max) {   // text with the matching words / characters marked; long text is cut around the first match
+    s = String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
+    const ranges = hlRanges(s, terms);
+    let from = 0, to = s.length;
+    if (max && s.length > max) { const first = ranges.length ? ranges[0][0] : 0; from = Math.max(0, first - Math.floor(max * 0.3)); to = Math.min(s.length, from + max); from = Math.max(0, to - max); }
+    let html = '', pos = from;
+    ranges.forEach(r => {
+      if (r[1] <= from || r[0] >= to) return;
+      const a = Math.max(r[0], from), b = Math.min(r[1], to);
+      if (a > pos) html += esc(s.slice(pos, a));
+      html += '<mark>' + esc(s.slice(a, b)) + '</mark>'; pos = b;
+    });
+    if (pos < to) html += esc(s.slice(pos, to));
+    return (from > 0 ? '…' : '') + html + (to < s.length ? '…' : '');
+  }
+  function gsCompute(q) {
+    const terms = parseQuery(q); if (!terms.length) return null;
+    const items = state.items.filter(it => queryMatches(itemHay(it), q));
+    const score = it => {
+      const m = meetingOf(it), upd = (it.updates || []).map(u => u.text).join(' ');
+      const F = [[10, it.id], [6, it.action], [3, it.owner], [3, it.category], [2, it.project], [2, m ? m.title : ''], [2, it.notes], [1, upd]].map(x => [x[0], fold(x[1])]), id = fold(it.id);
+      let s = 0;
+      terms.forEach(t => { let best = 0; F.forEach(f => { if (f[0] > best && f[1].indexOf(t) >= 0) best = f[0]; }); s += best; if (id === t) s += 20; else if (id.indexOf(t) === 0) s += 6; });
+      return s;
+    };
+    const ranked = items.map(it => ({ it, s: score(it) }));
+    ranked.sort((a, b) => b.s - a.s || a.it.id.localeCompare(b.it.id, undefined, { numeric: true }));
+    const meets = state.meetings.filter(m => queryMatches(meetHay(m), q)).sort((a, b) => (b.dateISO || '').localeCompare(a.dateISO || '') || String(a.title).localeCompare(String(b.title), undefined, { numeric: true }));
+    const hist = state.history.filter(x => x.type !== 'login' && queryMatches(histHay(x), q)).sort((x, y) => x.ts < y.ts ? 1 : x.ts > y.ts ? -1 : 0);
+    const users = accessData().users.filter(u => queryMatches(userHay(u), q)).sort((a, b) => b.lastLogin - a.lastLogin || b.lastAct - a.lastAct || a.name.localeCompare(b.name));
+    return { q, terms, items: ranked.map(x => x.it), meets, hist, users };
+  }
+  const GS_TIPS = '<div class="gs-tips"><b>Search the whole dashboard</b>' +
+    '<ul><li><i>Action items</i> — ID, action, owner, notes, updates, category, project, dates</li><li><i>Meetings</i> — title, date, notes, source file</li><li><i>History</i> — who changed what</li><li><i>People</i> — names and departments</li></ul>' +
+    '<p>Type any words or characters. Every word must match, in any order. Put <code>"quotes"</code> around an exact phrase, e.g. <code>"fire curtain"</code>. Press <kbd>/</kbd> on any page to jump here.</p></div>';
+  function gsRowHtml(n, kind, key, inner, cls, attrs) {
+    gsKeys.push(kind + ':' + key);
+    return '<button type="button" class="gs-row' + (cls ? ' ' + cls : '') + '" role="option" aria-selected="false" id="gs-o-' + n + '" data-act="gs-open" data-kind="' + kind + '" ' + (attrs || '') + '>' + inner + '</button>';
+  }
+  function gsItemRow(it, terms, n) {
+    const m = meetingOf(it), due = it.ongoing ? 'Ongoing' : (it.dueISO ? fmtDate(it.dueISO) : (it.dueRaw || ''));
+    const meta = [it.owner, due, it.category, m ? m.title : ''].filter(Boolean);
+    const shown = fold([it.id, it.action, it.status].concat(meta).join(' '));
+    const missing = terms.filter(t => shown.indexOf(t) < 0);
+    let snip = '';
+    if (missing.length) {   // the match is in text that is not shown in the row: show where
+      const cands = [['Notes', it.notes], ['Project', it.project]].concat((it.updates || []).slice().reverse().map(u => ['Update' + (u.date ? ' ' + fmtDate(u.date) : ''), u.text]));
+      let best = null, bs = 0;
+      cands.forEach(c => { const f = fold(c[1]); const k = missing.filter(t => f.indexOf(t) >= 0).length; if (k > bs) { bs = k; best = c; } });
+      if (best) snip = '<span class="gs-snip"><em>' + esc(best[0]) + '</em>' + hl(best[1], terms, 150) + '</span>';
+    }
+    return gsRowHtml(n, 'item', it.id,
+      '<span class="gs-id">' + hl(it.id, terms) + '</span><span class="gs-main"><span class="gs-t">' + hl(it.action, terms, 170) + '</span>' +
+      '<span class="gs-meta"><span class="gs-st s-' + esc(it.status.replace(/\s/g, '')) + '">' + hl(it.status, terms) + '</span>' + meta.map(x => ' · ' + hl(x, terms, 60)).join('') + '</span>' + snip + '</span>',
+      isClosed(it) ? 'closed' : '', 'data-id="' + esc(it.id) + '"');
+  }
+  function gsMeetRow(m, terms, n) {
+    const cnt = state.items.filter(i => i.meetingId === m.id).length;
+    const shown = fold([m.title, meetDate(m), m.project, m.preparedBy].join(' ')), missing = terms.filter(t => shown.indexOf(t) < 0);
+    let snip = '';
+    if (missing.length) { const c = [['Notes', m.notes], ['Source', m.source]].find(x => missing.some(t => fold(x[1]).indexOf(t) >= 0)); if (c) snip = '<span class="gs-snip"><em>' + c[0] + '</em>' + hl(c[1], terms, 150) + '</span>'; }
+    return gsRowHtml(n, 'meet', m.id,
+      '<span class="gs-id">' + hl(meetDate(m) || 'No date', terms) + '</span><span class="gs-main"><span class="gs-t">' + hl(m.title, terms, 170) + '</span>' +
+      '<span class="gs-meta">' + [m.project ? hl(m.project, terms, 60) : '', m.preparedBy ? 'Prepared by ' + hl(m.preparedBy, terms, 40) : '', cnt + ' item' + (cnt === 1 ? '' : 's')].filter(Boolean).join(' · ') + '</span>' + snip + '</span>',
+      '', 'data-mid="' + esc(m.id) + '"');
+  }
+  function gsHistRow(x, terms, n) {
+    const who = x.user ? x.user + (x.dept ? ' (' + x.dept + ')' : '') : 'Earlier activity';
+    const subj = [x.itemId, x.subject].filter(Boolean).join(' — ');
+    return gsRowHtml(n, 'hist', x.uid,
+      '<span class="gs-id"><span class="chip h-' + esc(x.type) + '">' + esc(H_LABEL[x.type] || x.type) + '</span></span><span class="gs-main">' + (subj ? '<span class="gs-t">' + hl(subj, terms, 120) + '</span>' : '') +
+      '<span class="gs-meta">' + hl(who, terms, 60) + ' · ' + esc(fmtDateTime(x.ts)) + '</span>' + (x.text ? '<span class="gs-snip">' + hl(x.text, terms, 170) + '</span>' : '') + '</span>', '');
+  }
+  function gsUserRow(u, terms, n) {
+    const ini = (u.name.split(' ')[0][0] + (u.name.indexOf(' ') > 0 ? u.name.split(' ').pop()[0] : '')).toUpperCase();
+    return gsRowHtml(n, 'user', u.key,
+      '<span class="gs-id"><span class="avatar sm">' + esc(ini) + '</span></span><span class="gs-main"><span class="gs-t">' + hl(u.name, terms) + '</span><span class="gs-meta">' + (u.dept ? hl(u.dept, terms) : '<i>No department on file</i>') +
+      ' · ' + (u.lastLogin ? 'Last login ' + esc(fmtDateTime(new Date(u.lastLogin).toISOString())) : 'No login recorded yet') + ' · ' + u.closed + ' item' + (u.closed === 1 ? '' : 's') + ' closed</span></span>', '', 'data-name="' + esc(u.name) + '"');
+  }
+  function gsRender() {
+    const panel = gsEl('gsPanel'); if (!panel) return;
+    gsKeys = []; gsActive = -1;
+    const q = gsQuery();
+    if (!parseQuery(q).length) { gsRes = null; panel.innerHTML = '<div class="gs-scroll">' + GS_TIPS + '</div>'; gsEl('gsLive').textContent = ''; return; }
+    const r = gsRes = gsCompute(q), total = r.items.length + r.meets.length + r.hist.length + r.users.length;
+    let html = '', n = 0;
+    const grp = (kind, title, list, rowFn, allText) => {
+      if (!list.length) return;
+      const cap = GS_CAP[kind];
+      html += '<section class="gs-grp" role="group" aria-label="' + title + '"><header><b>' + title + '</b><span class="gs-n">' + list.length + '</span><button type="button" class="gs-all" data-act="gs-all" data-kind="' + kind + '">' + allText + ' →</button></header>' +
+        list.slice(0, cap).map(x => rowFn(x, r.terms, n++)).join('') +
+        (list.length > cap ? '<button type="button" class="gs-more" data-act="gs-all" data-kind="' + kind + '">+ ' + (list.length - cap) + ' more — show all ' + list.length + '</button>' : '') + '</section>';
+    };
+    grp('item', 'Action items', r.items, gsItemRow, 'Show all in Tracking Log');
+    grp('meet', 'Meetings', r.meets, gsMeetRow, 'Show all on Meetings');
+    grp('hist', 'History', r.hist, gsHistRow, 'Show all in History');
+    grp('user', 'People', r.users, gsUserRow, 'Show all in User Access');
+    if (!total) html = '<div class="gs-empty">No matches for <b>“' + esc(q.length > 60 ? q.slice(0, 60) + '…' : q) + '”</b> in action items, meetings, history or people.<br><span>Try fewer letters, a different spelling, or remove a word.</span></div>';
+    const first = r.items.length ? 'all ' + r.items.length + ' item' + (r.items.length === 1 ? '' : 's') + ' in the Tracking Log' : r.meets.length ? 'all ' + r.meets.length + ' meeting' + (r.meets.length === 1 ? '' : 's') : r.hist.length ? 'all ' + r.hist.length + ' history entr' + (r.hist.length === 1 ? 'y' : 'ies') : r.users.length ? 'all ' + r.users.length + ' ' + (r.users.length === 1 ? 'person' : 'people') : '';
+    panel.innerHTML = '<div class="gs-scroll">' + html + '</div>' + (total ? '<div class="gs-foot"><span>Press <kbd>Enter</kbd> to show ' + first + '</span><span><kbd>↑</kbd><kbd>↓</kbd> choose a result · <kbd>Esc</kbd> close</span></div>' : '');
+    gsEl('gsLive').textContent = total ? total + ' result' + (total === 1 ? '' : 's') : 'No results';
+  }
+  function gsPlace() {   // keeps the results panel under the search bar and inside the window
+    const p = gsEl('gsPanel'), i = gsEl('gsInput'); if (!p || !i || p.hidden) return;
+    const r = i.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = window.innerHeight, M = 8, pw = Math.min(780, vw - 2 * M);
+    const left = Math.max(M, Math.min(r.left + r.width / 2 - pw / 2, vw - M - pw));
+    p.style.width = pw + 'px'; p.style.left = left + 'px'; p.style.top = (r.bottom + 8) + 'px'; p.style.maxHeight = Math.max(170, vh - r.bottom - 8 - M) + 'px';
+  }
+  function gsOpenPanel() { gsOpen = true; gsEl('gsPanel').hidden = false; gsEl('gsInput').setAttribute('aria-expanded', 'true'); gsRender(); gsPlace(); }
+  function gsClose() {
+    gsOpen = false; gsActive = -1; clearTimeout(gsTimer);
+    const p = gsEl('gsPanel'); if (p) p.hidden = true;
+    const i = gsEl('gsInput'); if (i) { i.setAttribute('aria-expanded', 'false'); i.removeAttribute('aria-activedescendant'); }
+  }
+  function gsRefresh() {   // the data changed while the panel is open (a live update from someone else, an edit): keep the same row chosen
+    const keep = gsKeys[gsActive]; gsRender();
+    if (keep) { const k = gsKeys.indexOf(keep); if (k >= 0) gsSetActive(k, false); }
+    gsPlace();
+  }
+  function gsSetActive(i, scroll) {
+    const rows = $$('#gsPanel .gs-row'); gsActive = i;
+    rows.forEach((r, k) => { r.classList.toggle('on', k === i); r.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+    const inp = gsEl('gsInput'); if (i >= 0 && rows[i]) { inp.setAttribute('aria-activedescendant', rows[i].id); if (scroll) rows[i].scrollIntoView({ block: 'nearest' }); } else inp.removeAttribute('aria-activedescendant');
+  }
+  function gsReveal() {   // after "show all": bring the page's list into view just under the header
+    const nav = document.querySelector('nav.tabs'), hd = document.querySelector('header.top'); if (!nav || !hd) return;
+    const y = nav.getBoundingClientRect().top + window.scrollY - hd.offsetHeight - 10;
+    if (Math.abs(window.scrollY - y) > 4) window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
+  function gsShowAll(kind) {
+    const q = gsQuery(); if (!parseQuery(q).length) return;
+    if (kind === 'item') { ui.search = q; ui.status = 'all'; ui.owner = ui.project = ui.category = ui.quick = ''; ui.meetings.clear(); ui.ongoing = false; ui.view = 'log'; }
+    else if (kind === 'meet') { ui.mSearch = q; ui.view = 'meet'; }
+    else if (kind === 'hist') { ui.hSearch = q; ui.hType = ui.hUser = ui.hDept = ui.hFrom = ui.hTo = ''; ui.hLimit = 200; ui.view = 'hist'; }
+    else if (kind === 'user') { ui.uSearch = q; ui.view = 'access'; }
+    gsClose(); renderAll(); setTimeout(gsReveal, 30);
+  }
+  function gsOpenResult(t) {
+    const kind = t.dataset.kind;
+    if (kind === 'item') { gsClose(); focusItem(t.dataset.id); }
+    else if (kind === 'meet') {
+      const mid = t.dataset.mid; ui.mSearch = ''; ui.view = 'meet'; gsClose(); renderAll();
+      setTimeout(() => { const c = document.querySelector('.mcard[data-mid="' + CSS.escape(mid) + '"]'); if (c) { c.scrollIntoView({ block: 'center', behavior: 'smooth' }); c.classList.add('flash'); setTimeout(() => c.classList.remove('flash'), 1800); } }, 90);
+    }
+    else if (kind === 'hist') gsShowAll('hist');
+    else if (kind === 'user') { ui.uSearch = '"' + String(t.dataset.name || '').replace(/["\u201c\u201d]/g, '') + '"'; ui.view = 'access'; gsClose(); renderAll(); setTimeout(gsReveal, 30); }
+  }
+  function gsEnterDefault() {
+    const r = gsRes; if (!r) return;
+    const kind = r.items.length ? 'item' : r.meets.length ? 'meet' : r.hist.length ? 'hist' : r.users.length ? 'user' : '';
+    if (kind) gsShowAll(kind);
+  }
+  function gsClearInput() { const i = gsEl('gsInput'); i.value = ''; gsEl('gsClear').hidden = true; gsEl('gsKbd').hidden = false; i.focus(); gsOpenPanel(); }
+  function gsWire() {
+    const i = gsEl('gsInput'), w = gsEl('gsWrap'); if (!i || !w) return;
+    i.addEventListener('input', () => {
+      const v = i.value; gsEl('gsClear').hidden = !v; gsEl('gsKbd').hidden = !!v; clearTimeout(gsTimer);
+      gsTimer = setTimeout(gsOpenPanel, v ? 70 : 0);
+    });
+    i.addEventListener('focus', () => { if (!gsOpen) gsOpenPanel(); });
+    i.addEventListener('click', () => { if (!gsOpen) gsOpenPanel(); });
+    i.addEventListener('keydown', e => {
+      const rows = () => $$('#gsPanel .gs-row');
+      if (e.key === 'ArrowDown') { e.preventDefault(); if (!gsOpen) { gsOpenPanel(); return; } if (rows().length) gsSetActive(Math.min(gsActive + 1, rows().length - 1), true); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); if (gsOpen && rows().length) gsSetActive(gsActive <= 0 ? -1 : gsActive - 1, true); }
+      else if (e.key === 'Enter') {
+        e.preventDefault(); clearTimeout(gsTimer);
+        if (!gsOpen) gsOpenPanel(); else if (!gsRes || gsRes.q !== gsQuery()) gsRender();
+        const r = rows()[gsActive]; if (r) r.click(); else gsEnterDefault();
+      }
+      else if (e.key === 'Escape') { e.preventDefault(); if (gsOpen) gsClose(); else if (i.value) { i.value = ''; gsEl('gsClear').hidden = true; gsEl('gsKbd').hidden = false; } else i.blur(); }
+    });
+    w.addEventListener('focusout', e => { if (gsOpen && e.relatedTarget && !w.contains(e.relatedTarget)) gsClose(); });
+    window.addEventListener('resize', gsPlace);
+    document.addEventListener('keydown', e => {   // "/" (when you are not typing) or Ctrl/Cmd+K jumps to the search bar from any page
+      if (e.defaultPrevented) return;
+      const tg = e.target, tag = tg && tg.tagName, typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (tg && tg.isContentEditable), mod = e.ctrlKey || e.metaKey;
+      if (!((mod && (e.key === 'k' || e.key === 'K')) || (!typing && !mod && !e.altKey && e.key === '/'))) return;
+      const hd = i.closest('header.top'); if ($('#modalRoot').firstChild || (hd && hd.inert)) return;
+      e.preventDefault(); i.focus(); i.select();
+    });
+  }
+  gsWire();
+
   /* ---------- User Access tab ---------- */
   const MINUTES_RE = /Status as recorded in minutes|Carried into "/;
   function parseBy(by) {   // trail entries are signed "First Last (Department)"
@@ -2047,10 +2353,11 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   function renderAccess() {
     const d = accessData(), key = ui.aSort.key, dir = ui.aSort.dir;
     const val = { user: u => u.name.toLowerCase(), dept: u => u.dept.toLowerCase(), login: u => u.lastLogin, logins: u => u.logins, act: u => u.lastAct, closed: u => u.closed, closed30: u => u.closed30 }[key] || (u => u.lastLogin);
-    const rows = d.users.slice().sort((a, b) => {
+    const rows = d.users.filter(u => !ui.uSearch || queryMatches(userHay(u), ui.uSearch)).sort((a, b) => {
       const x = val(a), y = val(b), c = typeof x === 'string' ? x.localeCompare(y, undefined, { sensitivity: 'base' }) : (x < y ? -1 : x > y ? 1 : 0);
       return (c * dir) || (b.lastLogin - a.lastLogin) || (b.lastAct - a.lastAct) || a.name.localeCompare(b.name);
     });
+    renderSearchBar('#uSearchBar', ui.uSearch, rows.length, d.users.length, 'people');
     const card = (n, l) => '<div class="acard"><b>' + n + '</b><span>' + l + '</span></div>';
     $('#accCards').innerHTML = card(d.users.length, d.users.length === 1 ? 'User' : 'Users') + card(d.signed7, 'Signed in, last 7 days') + card(d.closedTotal, 'Items closed by users') +
       (d.noCloser + d.fromMinutes ? card(d.noCloser + d.fromMinutes, 'Closed items with no one credited') : '');
@@ -2064,10 +2371,10 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         '<td class="n">' + (u.logins || '<span class="muted">—</span>') + '</td>' +
         '<td class="a-act">' + (u.lastAct ? esc(fmtDateTime(iso(u.lastAct))) : '<span class="muted">—</span>') + '</td>' +
         '<td class="n"><b>' + u.closed + '</b></td><td class="n">' + u.closed30 + '</td></tr>';
-    }).join('') : '<tr><td colspan="7" class="empty-row">No one has signed in yet.</td></tr>';
+    }).join('') : '<tr><td colspan="7" class="empty-row">' + (ui.uSearch ? 'No one matches your search.' : 'No one has signed in yet.') + '</td></tr>';
     const tot = k => rows.reduce((s, u) => s + u[k], 0);
     $('#accTable').innerHTML = '<thead><tr>' + th('user', 'User') + th('dept', 'Department') + th('login', 'Last login') + th('logins', 'Logins', 'n') + th('act', 'Last activity') + th('closed', 'Items closed', 'n') + th('closed30', 'Closed, last 30 days', 'n') + '</tr></thead><tbody>' + body + '</tbody>' +
-      (rows.length ? '<tfoot><tr><td>All users (' + rows.length + ')</td><td></td><td></td><td class="n">' + tot('logins') + '</td><td></td><td class="n">' + tot('closed') + '</td><td class="n">' + tot('closed30') + '</td></tr></tfoot>' : '');
+      (rows.length ? '<tfoot><tr><td>' + (ui.uSearch ? 'Matching users (' : 'All users (') + rows.length + ')</td><td></td><td></td><td class="n">' + tot('logins') + '</td><td></td><td class="n">' + tot('closed') + '</td><td class="n">' + tot('closed30') + '</td></tr></tfoot>' : '');
     $('#accNote').innerHTML = 'A <b>login</b> is recorded each time someone signs in, or opens the tracker with a saved sign-in (at most once every 30 minutes per person per device). Logins are recorded from the day this version was published; people who worked in the tracker earlier are listed with their last activity. ' +
       'Names and departments are what each person entered when signing in.<br><b>Items closed</b> counts items that are currently Closed, credited to whoever closed them last' +
       (d.noCloser + d.fromMinutes ? ' — ' + (d.noCloser + d.fromMinutes) + ' closed item' + (d.noCloser + d.fromMinutes === 1 ? ' is' : 's are') + ' not credited to anyone (' + [d.fromMinutes ? d.fromMinutes + ' imported already closed in meeting minutes' : '', d.noCloser ? d.noCloser + ' closed before sign-in tracking' : ''].filter(Boolean).join(', ') + ')' : '') + '.';
@@ -2077,14 +2384,14 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const fmtDateTime = iso => { try { return new Date(iso).toLocaleString(undefined, { month: '2-digit', day: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit' }); } catch (e) { return ''; } };
   const localDay = iso => { const d = new Date(iso); return mk(d.getFullYear(), d.getMonth() + 1, d.getDate()); };
   function filteredHistory() {
-    const q = ui.hSearch.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const q = ui.hSearch.trim();
     const rows = state.history.filter(h => {
       if (h.type === 'login') return false;
       if (ui.hType && h.type !== ui.hType) return false;
       if (ui.hUser && h.user !== ui.hUser) return false;
       if (ui.hDept && h.dept !== ui.hDept) return false;
       if (ui.hFrom || ui.hTo) { const d = localDay(h.ts); if (ui.hFrom && d < ui.hFrom) return false; if (ui.hTo && d > ui.hTo) return false; }
-      if (q.length) { const hay = [h.user, h.dept, H_LABEL[h.type], h.itemId, (h.itemIds || []).join(' '), h.subject, h.text].join(' ').toLowerCase(); if (!q.every(w => hay.indexOf(w) >= 0)) return false; }
+      if (q && !queryMatches(histHay(h), q)) return false;
       return true;
     });
     rows.sort((x, y) => x.ts < y.ts ? 1 : x.ts > y.ts ? -1 : (y.uid > x.uid ? 1 : -1));
@@ -2180,12 +2487,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       '</tbody><tfoot><tr><td class="o-name">All items (each counted once)</td><td class="n">' + T.total + '</td><td class="n"><b>' + T.open + '</b></td><td class="n">' + T.prog + '</td><td class="n">' + T.hold + '</td><td class="n' + (T.over ? ' bad' : '') + '">' + T.over + '</td><td class="n">' + T.closed + '</td><td class="pc">' + pbar(T.pct) + '</td></tr></tfoot></table></div>' +
       '<p class="muted sm note">% Complete = closed items ÷ all items assigned to that owner. An item with several owners (e.g. “HS/RN”) is counted under each owner and stays open for each until it is closed. “Open” includes In Progress and On Hold.</p>';
 
-    const q = ui.bSearch.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    const match = it => {
-      if (!q.length) return true; const m = meetingOf(it);
-      const hay = [it.id, it.action, it.owner, it.notes, it.project, m ? m.title : '', (it.updates || []).map(u => u.text).join(' ')].join(' ').toLowerCase();
-      return q.every(w => hay.indexOf(w) >= 0);
-    };
+    const match = it => queryMatches(itemHay(it), ui.bSearch.trim());
     const byDue = (a, b) => (a.dueISO || '9999-99-99').localeCompare(b.dueISO || '9999-99-99') || a.id.localeCompare(b.id, undefined, { numeric: true });
     const secs = stats.map(s => {
       const rows = s.items.filter(match).sort(byDue);
@@ -2783,6 +3085,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     if (Date.now() < noClickUntil) return;   // the mouse-up that ended a column drag / resize is not a click
     if (msOpen && !(e.target.closest && e.target.closest('#fMeetingWrap'))) closeMsPop(false);   // clicking anywhere else closes the meeting checklist
     if (ui.mdate && !(e.target.closest && e.target.closest('.mdwrap'))) closeMdatePop();   // clicking anywhere else closes the date dropdown
+    if (gsOpen && !(e.target.closest && e.target.closest('#gsWrap'))) gsClose();   // clicking anywhere else closes the search results
     $$('.menu-pop.show').forEach(p => { if (!p.parentElement.contains(e.target)) p.classList.remove('show'); });
     const t = e.target.closest('[data-act]'); if (!t) return;
     const act = t.dataset.act;
@@ -2866,6 +3169,10 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       case 'merge-apply': applyMerge(); break;
       case 'ms-toggle': if (msOpen) closeMsPop(false); else openMsPop(); break;
       case 'ms-done': closeMsPop(true); break;
+      case 'gs-open': gsOpenResult(t); break;
+      case 'gs-all': gsShowAll(t.dataset.kind); break;
+      case 'gs-clear': gsClearInput(); break;
+      case 'sf-clear': { if (t.dataset.page === 'meet') ui.mSearch = ''; else ui.uSearch = ''; renderAll(); break; }
       case 'a-sort': { const k = t.dataset.key; if (ui.aSort.key === k) ui.aSort.dir *= -1; else { ui.aSort.key = k; ui.aSort.dir = (k === 'user' || k === 'dept') ? 1 : -1; } renderAccess(); break; }
       case 'mtitle-edit': { const h = t.closest('.mcard').querySelector('.mtitle'); if (h) { h.focus(); const r = document.createRange(); r.selectNodeContents(h); const sl = window.getSelection(); sl.removeAllRanges(); sl.addRange(r); } break; }
       case 'bic-jump': { const sec = document.querySelector('.osec[data-key="' + CSS.escape(t.dataset.key) + '"]'); if (sec) { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); sec.classList.add('flashsec'); setTimeout(() => sec.classList.remove('flashsec'), 1600); } break; }
@@ -3581,7 +3888,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   renderAll();
   if (embedded) { const eb = $('#embedBar'); if (eb) eb.hidden = false; }
   boot();
-  window.__twcg = { state: () => state, Live, parseDate, TWCGParser, uuid };
+  window.__twcg = { state: () => state, Live, parseDate, TWCGParser, uuid, gsCompute, queryMatches, parseQuery };
 })();
 </script>
 </body>
