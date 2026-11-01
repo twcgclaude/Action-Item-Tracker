@@ -21,7 +21,7 @@ window.TWCG_CONFIG = {
   // The tracker ADMINISTRATOR's own login (Harrison Swift). He signs in with this account and its OWN password, so
   // nobody else can act as the administrator just by typing his name.  Leave it empty ("") until the administrator account
   // has been created (README, step 2): while it is empty everyone signs in with the team password as before.
-  hswift@juneaucc.com: ""
+  ADMIN_EMAIL: ""
 
   // Optional: if your company network blocks cdn.jsdelivr.net, save supabase.js
   // in this folder (README, Troubleshooting) and uncomment:
