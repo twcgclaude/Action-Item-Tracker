@@ -3970,7 +3970,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
      typing the administrator's name or changing this page cannot get around it.  This page only hides the buttons.
      ===================================================================== */
   const VIEW_NAME_MAX = 80;
-  const adminOn = () => /@/.test((window.TWCG_CONFIG || {}).ADMIN_EMAIL || '');
+  const adminOn = () => { const c = window.TWCG_CONFIG || {}, a = String(c.ADMIN_EMAIL || '').trim().toLowerCase(), t = String(c.TEAM_EMAIL || '').trim().toLowerCase(); return /@/.test(a) && a !== t; };   // one shared account can never be both the team login and the administrator
   const ADMIN_NAME = String((window.TWCG_CONFIG || {}).ADMIN_NAME || 'Harrison Swift').replace(/\s+/g, ' ').trim();
   const sameName = (a, b) => String(a || '').replace(/\s+/g, ' ').trim().toLowerCase() === String(b || '').replace(/\s+/g, ' ').trim().toLowerCase();
   const isAdminName = (first, last) => sameName(first + ' ' + last, ADMIN_NAME);
@@ -5425,12 +5425,16 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       try { sb.auth.onAuthStateChange(evt => { if (evt === 'SIGNED_OUT' && ready && !Live.manualSignOut) onSignedOut(); }); } catch (e) { /* ignore */ }
     }
     async function hasSession() { try { const r = await sb.auth.getSession(); return !!(r && r.data && r.data.session); } catch (e) { return false; } }
-    let roleNow = 'member';
-    function jwtRole(session) { try { let p = String(session.access_token || '').split('.')[1] || ''; p = p.replace(/-/g, '+').replace(/_/g, '/'); while (p.length % 4) p += '='; const j = JSON.parse(atob(p)); return (j.app_metadata && j.app_metadata.role) === 'admin' ? 'admin' : 'member'; } catch (e) { return 'member'; } }
-    async function refreshRole() { try { const r = await sb.auth.getSession(); roleNow = r && r.data && r.data.session ? jwtRole(r.data.session) : 'member'; } catch (e) { roleNow = 'member'; } return roleNow; }
+    let roleNow = 'member', rawAdm = false;   // roleNow = what the page lets this person do; rawAdm = the signed-in login carries the database admin role
+    function jwtInfo(session) { try { let p = String(session.access_token || '').split('.')[1] || ''; p = p.replace(/-/g, '+').replace(/_/g, '/'); while (p.length % 4) p += '='; const j = JSON.parse(atob(p)); return { adm: !!(j.app_metadata && j.app_metadata.role === 'admin'), email: String(j.email || '').trim().toLowerCase() }; } catch (e) { return { adm: false, email: '' }; } }
+    async function refreshRole() {
+      roleNow = 'member'; rawAdm = false;
+      try { const r = await sb.auth.getSession(); if (r && r.data && r.data.session) { const i = jwtInfo(r.data.session); rawAdm = i.adm; roleNow = i.adm && adminOn() && i.email === String(CFG.ADMIN_EMAIL || '').trim().toLowerCase() ? 'admin' : 'member'; } } catch (e) { roleNow = 'member'; rawAdm = false; }
+      return roleNow;
+    }
     async function signIn(password, asAdmin) {
       try {
-        if (asAdmin && !/@/.test(CFG.ADMIN_EMAIL || '')) return { ok: false, message: 'The administrator account is not set up yet. Add ADMIN_EMAIL to config.js (see the README).' };
+        if (asAdmin && !adminOn()) return { ok: false, message: 'The administrator account is not set up yet (config.js needs ADMIN_EMAIL, and it must be different from TEAM_EMAIL).' };
         const r = await sb.auth.signInWithPassword({ email: asAdmin ? CFG.ADMIN_EMAIL : CFG.TEAM_EMAIL, password });
         if (r.error) {
           const m = r.error.message || '';
@@ -5440,7 +5444,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         }
         await refreshRole();
         if (asAdmin && roleNow !== 'admin') { try { await sb.auth.signOut(); } catch (e) { /* ignore */ } roleNow = 'member'; return { ok: false, message: 'That account has not been given the administrator role yet. Run supabase_make_admin.sql (see the README).' }; }
-        if (!asAdmin && roleNow === 'admin') { try { await sb.auth.signOut(); } catch (e) { /* ignore */ } roleNow = 'member'; return { ok: false, message: 'The shared team account must not have the administrator role. Remove it (see the README).' }; }
+        if (!asAdmin && rawAdm && adminOn()) { try { await sb.auth.signOut(); } catch (e) { /* ignore */ } roleNow = 'member'; rawAdm = false; return { ok: false, message: 'The shared team login still has the administrator role, so everyone using it would be an administrator. In Supabase run supabase_fix_roles.sql (see the README), then try again.' }; }
         return { ok: true };
       } catch (e) { return { ok: false, message: friendlyError(e) }; }
     }
@@ -5847,7 +5851,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       renderPresence();
     }
     window.addEventListener('pagehide', () => { if (prCh) { try { prCh.untrack(); } catch (e) { /* ignore */ } } });
-    return { manualSignOut: false, role: () => roleNow, isAdmin: () => roleNow === 'admin', refreshRole, viewsOK: () => VIEWS_OK, flushRender, calOK: () => CAL_OK, calSynced: uid => SY.snapC.has(uid), startPresence, trackPresence, stopPresence, presenceList, presenceSince: () => prSince, ensureLib, init, hasSession, signIn, signOut, load, startLive, dirty, allocIds, pendingCount, pull, flushNow: () => flushLoop(), info, clearLocal, setSync, isReady: () => ready, ITEM_F, MEET_F };
+    return { manualSignOut: false, role: () => roleNow, isAdmin: () => roleNow === 'admin', rawAdmin: () => rawAdm, refreshRole, viewsOK: () => VIEWS_OK, flushRender, calOK: () => CAL_OK, calSynced: uid => SY.snapC.has(uid), startPresence, trackPresence, stopPresence, presenceList, presenceSince: () => prSince, ensureLib, init, hasSession, signIn, signOut, load, startLive, dirty, allocIds, pendingCount, pull, flushNow: () => flushLoop(), info, clearLocal, setSync, isReady: () => ready, ITEM_F, MEET_F };
   })();
 
   /* ---------- sign-in / session ---------- */
@@ -5875,7 +5879,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     Live.init(); loadProfile();
     const sess = await Live.hasSession();
     gateNeedsPw = !sess; if (sess) await Live.refreshRole();
-    if (sess && profile && adminOn() && isAdminName(profile.first, profile.last) !== Live.isAdmin()) { await Live.signOut(); gateNeedsPw = true; }   // a saved name needs the matching kind of login
+    if (sess && adminOn() && (Live.rawAdmin() && !Live.isAdmin() || (profile && isAdminName(profile.first, profile.last) !== Live.isAdmin()))) { await Live.signOut(); gateNeedsPw = true; }   // a saved name needs the matching kind of login
     if (gateNeedsPw && profile) { profileDraft = profile; profile = null; }   // no active login: ask for the password again
     if (sess && profile) await startSession(); else profileModal(true);
   }
