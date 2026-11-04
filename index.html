@@ -781,6 +781,21 @@ body.cal-moving,body.cal-moving *{cursor:grabbing!important;user-select:none!imp
   .mstrip{padding:6pt 10pt 2pt!important;margin:6pt 0!important}.ms-lab{color:#c8161c!important}
 }
 
+/* ===== v9: raised-at column, origin line, calendar did-not-meet / entered-manually buttons ===== */
+.c-raised{min-width:0}
+.orig{display:flex;flex-direction:column;gap:2px;border-radius:6px;padding:2px 4px;margin:-2px -4px;cursor:pointer;line-height:1.3}
+.orig.man{cursor:default}.orig:not(.man):hover{background:var(--raise)}.orig:focus-visible{outline:2px solid var(--red)}
+.og-d{font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+.og-m{color:var(--g1);font-size:12px;overflow-wrap:anywhere}
+.og-n{display:inline-block;align-self:flex-start;font:700 10px var(--fh);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line2);border-radius:9px;padding:0 7px;color:#d5d7db;background:#17181b}
+.og-c{color:var(--mut);font-size:11px}
+.origin{margin:0 0 12px;padding:8px 12px;border-left:3px solid var(--red);background:var(--redbg);border-radius:0 8px 8px 0;color:#f0d6d6;font-size:12.5px;line-height:1.55}.origin b{color:#fff}
+.dly-a .skipbtn,.cp-acts .skipbtn{border-color:var(--redline);color:#ffb3b3}.dly-a .skipbtn:hover,.cp-acts .skipbtn:hover{background:var(--red);border-color:var(--red);color:#fff}
+.dly-a .manbtn,.cp-acts .manbtn{border-color:#8c9099}
+.attlist{max-height:46vh;overflow:auto;margin:10px 0;border:1px solid var(--line);border-radius:8px}
+.attrow{display:flex;gap:10px;align-items:flex-start;padding:7px 10px;border-bottom:1px solid #1d1f23;cursor:pointer}.attrow:last-child{border-bottom:0}.attrow:hover{background:var(--raise)}.attrow input{margin-top:3px}.attrow span{display:flex;flex-direction:column;min-width:0}.attrow b{color:#fff}.attrow em{font-style:normal;color:var(--mut);font-size:11.5px}
+@media print{.og-d{color:#0b0b0c!important}.og-m{color:#333!important}.og-c{color:#555!important}.og-n{background:#fff!important;color:#111!important;border-color:#8c9099!important}.orig:not(.man):hover{background:none}}
+
 /* ===== Summary & Metrics tab ===== */
 #viewSummary{padding-top:20px}
 .sum-sub{margin:5px 0 0 14px;color:var(--mut);font-size:12.5px}
@@ -1842,6 +1857,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         case 'status': return STATUS_ORDER[it.status];
         case 'meeting': return m ? m.title.toLowerCase() : '';
         case 'mdate': return m ? (m.dateISO || '') : '';
+        case 'raised': return openedOn(it);
         case 'project': return (it.project || '').toLowerCase();
         case 'closed': return it.closedDate || '9999-99-99';
         default: return it.id;
@@ -2119,6 +2135,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     { id: 'due', label: 'Due Date', sort: 'due', w: 160 },
     { id: 'status', label: 'Status', sort: 'status', w: 128 },
     { id: 'category', label: 'Category / Type', sort: 'category', w: 184 },
+    { id: 'raised', label: 'Raised At / Origin', sort: 'raised', w: 210 },
     { id: 'meeting', label: 'Meeting', sort: 'meeting', w: 200 },
     { id: 'mdate', label: 'Mtg Date', sort: 'mdate', w: 108 },
     { id: 'project', label: 'Project / Location', sort: 'project', w: 170 },
@@ -2163,6 +2180,31 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const p = ownerProgress(it); if (!p || it.status === 'Closed' || !p.done.length) return '';
     return '<div class="ownprog" title="Closed for: ' + esc(nameList(p.done)) + ' · Still open for: ' + esc(nameList(p.open)) + '"><b>' + p.done.length + ' of ' + p.total + ' owners closed</b><span>Open: ' + esc(nameList(p.open)) + '</span></div>';
   }
+  /* ---------- where an item came from: the meeting it was raised at, and the later meetings it was carried into ---------- */
+  function originInfo(it) {
+    const m = meetingOf(it), raised = openedOn(it), s = m ? seriesIndex().get(serKey(m.title)) : null;
+    const dates = s ? Array.from(new Set(s.held.map(x => x.dateISO).filter(ISO_OK))).sort() : [];
+    const mdate = m && ISO_OK(m.dateISO) ? m.dateISO : '';
+    const series = s && isRepeatingSeries(s) ? s : null;
+    const carried = Array.from(new Set((it.updates || []).filter(u => u.type === 'carry' && u.date).map(u => u.date))).sort();
+    return { m, raised, mdate, series, pos: series && mdate ? dates.indexOf(mdate) + 1 : 0, total: series ? dates.length : 0, carried };
+  }
+  const dowDate = iso => ISO_OK(iso) ? DOWS[dowOf(iso)] + ' ' + fmtDate(iso) : '';
+  function originCell(it) {
+    const o = originInfo(it);
+    if (!o.m) return '<div class="orig man"><span class="og-d">' + esc(dowDate(o.raised)) + '</span><span class="og-m muted">Manual entry \u2014 no meeting</span></div>';
+    return '<div class="orig" role="button" tabindex="0" data-act="meeting-filter" data-mid="' + esc(o.m.id) + '" title="Raised at \u201c' + esc(o.m.title) + '\u201d' + (o.mdate ? ' on ' + esc(fmtLong(o.mdate)) : '') + '. Click to show every item from that meeting.">' +
+      '<span class="og-d">' + esc(dowDate(o.raised)) + '</span><span class="og-m">' + esc(baseTitle(o.m.title) || o.m.title) + '</span>' +
+      (o.pos ? '<span class="og-n">Meeting ' + o.pos + ' of ' + o.total + '</span>' : '') +
+      (o.mdate && o.mdate !== o.raised ? '<span class="og-c">Meeting date ' + esc(fmtDate(o.mdate)) + '</span>' : '') +
+      (o.carried.length ? '<span class="og-c">Carried into ' + o.carried.length + ' later meeting' + (o.carried.length === 1 ? '' : 's') + ' \u00b7 last ' + esc(fmtDate(o.carried[o.carried.length - 1])) + '</span>' : '') + '</div>';
+  }
+  function originHtml(it) {
+    const o = originInfo(it);
+    return '<div class="origin"><b>Raised</b> ' + esc(ISO_OK(o.raised) ? fmtLong(o.raised) : '') + (o.m ? ' at <b>' + esc(o.m.title) + '</b>' : ' as a <b>manual entry</b> (no meeting)') +
+      (o.pos ? ' \u2014 meeting ' + o.pos + ' of ' + o.total + ' in the \u201c' + esc(o.series.title) + '\u201d series' : '') +
+      (o.carried.length ? '<br>Carried into ' + o.carried.length + ' later meeting' + (o.carried.length === 1 ? '' : 's') + ': ' + o.carried.map(d => esc(fmtDate(d))).join(', ') : '') + '</div>';
+  }
   const hasDraft = it => !!(ui.drafts[it.uid] && ui.drafts[it.uid].text);
   const CELLS = {
     sel: it => '<td class="c-sel"><input type="checkbox" data-act="select" aria-label="Select ' + esc(it.id) + '" ' + (ui.selected.has(it.id) ? 'checked' : '') + '></td>',
@@ -2180,6 +2222,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     category: it => '<td class="c-category"><input class="catIn" type="text" list="catList" maxlength="40" data-act="category" value="' + esc(it.category) + '" placeholder="— none —" spellcheck="false" aria-label="Category / Type"></td>',
     meeting: (it, x) => '<td class="c-meeting">' + (x.m ? esc(x.m.title) : '<span class="muted">Manual entry</span>') + '</td>',
     mdate: (it, x) => '<td class="c-mdate">' + (x.m ? esc(meetDate(x.m)) : '') + '</td>',
+    raised: it => '<td class="c-raised">' + originCell(it) + '</td>',
     project: it => '<td class="c-project"><div class="ce" contenteditable="plaintext-only" spellcheck="true" data-edit="project" data-single="1">' + esc(it.project) + '</div></td>',
     notes: it => '<td class="c-notes"><div class="ce" contenteditable="plaintext-only" spellcheck="true" data-edit="notes">' + esc(it.notes) + '</div></td>',
     latest: (it, x) => '<td class="c-latest">' + (x.lu ? '<div class="lu"><span class="lud">' + fmtDate(x.lu.date) + '</span> ' + esc(x.lu.text) + '</div>' : '<span class="muted">—</span>') + '</td>',
@@ -2244,7 +2287,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const hist = (it.updates || []).slice().reverse().map(u => '<li><span class="hd">' + fmtDate(u.date) + '</span><span class="chip t-' + u.type + '">' + (TYPE_LABEL[u.type] || u.type) + '</span><span class="ht">' + esc(u.text) + (u.by ? ' <em>— ' + esc(u.by) + '</em>' : '') + '</span></li>').join('') || '<li class="muted">No history yet.</li>';
     return '<tr class="detail" data-id="' + esc(it.id) + '"><td></td><td colspan="' + (n - 1) + '"><div class="dwrap">' +
       '<button class="dclose" data-act="close-detail" title="Hide this panel (an unposted update is kept)" aria-label="Hide this panel"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>' +
-      '<div class="dleft"><h4>History</h4><ul class="hist">' + hist + '</ul></div>' +
+      '<div class="dleft">' + originHtml(it) + '<h4>History</h4><ul class="hist">' + hist + '</ul></div>' +
       '<div class="dright"><h4>Post an update <span class="draftmark"' + (dr.text ? '' : ' hidden') + '>✎ draft kept until posted</span></h4>' +
       '<textarea class="upText" rows="3" placeholder="What changed? e.g. RFI answered, submittal approved, waiting on vendor…">\n' + esc(dr.text || '') + '</textarea>' +
       '<div class="frow"><label>Status <select class="upStatus">' + STATUSES.map(s => '<option' + (s === (dr.st || it.status) ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></label>' +
@@ -2526,7 +2569,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         '<div class="mmeta">' + dbtn + (m.project ? ' · ' + esc(m.project) : '') + (m.preparedBy ? ' · Prepared by ' + esc(m.preparedBy) : '') + '</div>' +
         (m.source ? '<p class="muted">Source: ' + esc(m.source) + '</p>' : '') + '</div><div class="mstats"><b>' + its.length + '</b> items<br><span>' + act + ' active · ' + (its.length - act) + ' closed</span></div></div>' +
         '<label class="mlabel">General meeting notes</label><textarea class="mnotes" data-act="mnotes" rows="3" placeholder="No general notes recorded.">' + esc(m.notes) + '</textarea>' +
-        '<div class="mact"><button class="btn" data-act="meet-filter">View items in log</button><button class="btn" data-act="meet-upload" title="Upload another minutes PDF for this meeting">\u2b06 Upload minutes</button><button class="btn" data-act="meet-merge"' + (state.meetings.length < 2 ? ' disabled title="There is no other meeting to merge with"' : ' title="Combine this meeting with another one"') + '>Merge Meeting</button><button class="btn danger" data-act="meet-delete">Delete meeting &amp; its items</button></div></article>';
+        '<div class="mact"><button class="btn" data-act="meet-filter">View items in log</button><button class="btn" data-act="meet-upload" title="Upload another minutes PDF for this meeting">\u2b06 Upload minutes</button><button class="btn" data-act="meet-additem" title="Type an action item straight into this meeting">\uff0b Add item</button><button class="btn" data-act="meet-merge"' + (state.meetings.length < 2 ? ' disabled title="There is no other meeting to merge with"' : ' title="Combine this meeting with another one"') + '>Merge Meeting</button><button class="btn danger" data-act="meet-delete">Delete meeting &amp; its items</button></div></article>';
     }).join('');
   }
 
@@ -3195,7 +3238,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     html += '<section class="cs"><h3>Series <span class="gs-n">' + series.length + '</span></h3>' + (series.length ? '<p class="cs-sub">Click a series to highlight it on the calendar.</p>' + series.map(s => '<div class="cser' + (ui.calSeries === s.sk ? ' on' : '') + '"><button type="button" class="cser-b" data-act="cal-series" data-sk="' + esc(s.sk) + '" aria-pressed="' + (ui.calSeries === s.sk) + '"><i class="cdot" style="background:' + seriesColor(s.sk) + '"></i><span class="cser-t"><b>' + esc(s.title) + '</b><em>' + s.held.length + ' held' + (s.rule ? ' \u00b7 ' + esc(s.rule) : '') + (s.next ? ' \u00b7 next ' + esc(fmtDate(s.next)) : s.lastHeld ? ' \u00b7 last ' + esc(fmtDate(s.lastHeld)) : '') + '</em></span></button>' +
       (s.held.length ? '<button type="button" class="cser-o" data-act="cal-log-series" data-sk="' + esc(s.sk) + '" title="Open the action items from all ' + s.held.length + ' meetings in this series">Items</button>' : '') + '</div>').join('') : '<p class="cs-sub">A series appears when the same meeting has been held more than once, or when you schedule a repeating meeting.</p>') + '</section>';
     if (gone.length) html += '<section class="cs"><h3>Cancelled / deleted <span class="gs-n">' + gone.length + '</span></h3>' + gone.slice(0, 12).map(c => '<div class="cgone"><span><b>' + esc(c.title) + '</b><em>' + esc(fmtDate(c.date)) + (c.recurrence !== 'none' ? ' \u00b7 ' + esc(recurText(c)) : '') + '</em></span><button type="button" class="btn" data-act="cal-restore" data-uid="' + esc(c.uid) + '">Restore</button></div>').join('') + '</section>';
-    return html + '</aside>';
+    return html + calSkippedHtml() + '</aside>';
   }
   function renderCalendar() {
     const wrap = $('#calWrap'); if (!wrap) return;
@@ -3247,7 +3290,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     html += '<div class="cp-acts sec">';
     if (held) html += '<button type="button" class="btn" data-act="cal-pop-follow">Schedule a follow-up\u2026</button>';
     else {
-      html += '<button type="button" class="btn" data-act="cal-pop-edit">Edit\u2026</button><button type="button" class="btn danger" data-act="cal-pop-cancel">' + (ev.series ? 'Cancel this meeting' : 'Delete') + '</button>';
+      html += '<button type="button" class="btn" data-act="cal-pop-edit">Edit\u2026</button>' + (calStarted(ev) ? '<button type="button" class="btn danger skipbtn" data-act="cal-pop-skip" title="This meeting did not happen">\u2715 Didn\u2019t meet</button>' : '<button type="button" class="btn danger" data-act="cal-pop-cancel">' + (ev.series ? 'Cancel this meeting' : 'Delete') + '</button>') + '';
       if (ev.series) html += '<button type="button" class="btn danger" data-act="cal-pop-delseries">Delete series</button>';
     }
     html += '</div>';
@@ -3879,22 +3922,25 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const today = calAllEvents(t, t).filter(e => e.kind === 'sched' && e.time && now >= (e.endTime || addMin(e.time, 60)));
     return past.concat(today);
   }
+  const calStarted = ev => { const now = nowHM(), today = todayISO(); return ev.date < today || (ev.date === today && (!ev.time || now >= ev.time)); };   // has this meeting begun (or passed)?
   function dailyRowHtml(e, mode) {
     calTodayMap.set(e.key, e);
     const held = e.kind === 'held', s = seriesIndex().get(e.sk), hasHeld = !!(s && s.held.length), now = nowHM(), today = todayISO();
-    const endT = e.endTime || addMin(e.time, 60);
+    const endT = e.endTime || addMin(e.time, 60), mm = held ? meetingById(e.mid) : null, manual = !!(mm && /entered manually/i.test(mm.source || ''));
     let stateTxt, cls = '';
-    if (held) { stateTxt = 'Minutes uploaded \u00b7 ' + e.n + ' item' + (e.n === 1 ? '' : 's') + (e.n ? ' (' + e.open + ' open)' : ''); cls = 'ok'; }
+    if (held) { stateTxt = (manual ? 'Minutes entered manually' : 'Minutes uploaded') + ' \u00b7 ' + e.n + ' item' + (e.n === 1 ? '' : 's') + (e.n ? ' (' + e.open + ' open)' : ''); cls = 'ok'; }
     else if (e.date < today) { stateTxt = 'No minutes uploaded yet'; cls = 'bad'; }
     else if (e.date === today && e.time && endT && now >= endT) { stateTxt = 'Meeting finished \u2014 upload the minutes'; cls = 'bad'; }
     else if (e.date === today && e.time && now >= e.time) { stateTxt = 'In progress'; cls = 'live'; }
     else stateTxt = e.date === today ? 'Later today' : 'Upcoming';
-    const need = !held && (e.date < today || (e.date === today && e.time && now >= endT));
+    const need = !held && (e.date < today || (e.date === today && e.time && now >= endT)), started = calStarted(e);
     const when = (mode !== 'today' ? fmtShortD(e.date) + (e.time ? ' \u00b7 ' : '') : '') + (e.time ? fmtTime(e.time) + (e.endTime ? '\u2013' + fmtTime(e.endTime) : '') : '');
     const open = hasHeld ? s.items.filter(i => !isClosed(i)).length : 0;
     return '<div class="dly ' + cls + '" data-key="' + esc(e.key) + '"><span class="dly-t">' + esc(when || '\u2014') + '</span><span class="dly-m"><b>' + esc(e.title) + '</b><em>' + esc(stateTxt) + (!held && hasHeld ? ' \u00b7 ' + open + ' open item' + (open === 1 ? '' : 's') + ' in the series' : '') + '</em></span><span class="dly-a">' +
-      (held ? '<button type="button" class="btn" data-act="cal-open" data-key="' + esc(e.key) + '">Open items</button><button type="button" class="btn" data-act="cal-upload" data-key="' + esc(e.key) + '" title="Upload another PDF for this meeting">\u2b06 Add minutes</button>'
-        : '<button type="button" class="btn ' + (need ? 'primary' : '') + '" data-act="cal-upload" data-key="' + esc(e.key) + '">\u2b06 Upload minutes</button>') +
+      (held ? '<button type="button" class="btn" data-act="cal-open" data-key="' + esc(e.key) + '">Open items</button>' + (manual ? '<button type="button" class="btn primary" data-act="cal-add-item" data-mid="' + esc(e.mid) + '" title="Type an action item straight into this meeting">\uff0b Add item</button>' : '') + '<button type="button" class="btn" data-act="cal-upload" data-key="' + esc(e.key) + '" title="Upload another PDF for this meeting">\u2b06 Add minutes</button>'
+        : '<button type="button" class="btn ' + (need ? 'primary' : '') + '" data-act="cal-upload" data-key="' + esc(e.key) + '">\u2b06 Upload minutes</button>' +
+          (started ? '<button type="button" class="btn manbtn" data-act="cal-manual" data-key="' + esc(e.key) + '" title="The minutes were typed into the tracker by hand \u2014 no PDF to upload. Marks this meeting as held so you can add its items.">\u2713 Entered manually</button>' : '') +
+          '<button type="button" class="btn skipbtn" data-act="cal-skip" data-key="' + esc(e.key) + '" title="' + (started ? 'This meeting did not happen \u2014 remove it from \u201cNeeds minutes\u201d' : 'Cancel this meeting') + '" aria-label="' + (started ? 'Meeting did not happen' : 'Cancel this meeting') + '">\u2715 ' + (started ? 'Didn\u2019t meet' : 'Cancel') + '</button>') +
       (hasHeld ? '<button type="button" class="btn" data-act="cal-run" data-sk="' + esc(e.sk) + '" title="Open this meeting\u2019s open items, grouped by owner">Run meeting</button><button type="button" class="btn" data-act="cal-metrics" data-sk="' + esc(e.sk) + '">Metrics</button>' : '') + '</span></div>';
   }
   function calTodayHtml() {
@@ -3904,15 +3950,72 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     let body = '';
     body += todays.length ? todays.map(e => dailyRowHtml(e, 'today')).join('') : '<p class="dly-none">No meetings are scheduled for today.</p>';
     if (need.length) body += '<h4 class="dly-h bad">Needs minutes <span class="gs-n">' + need.length + '</span></h4>' + need.slice(0, 8).map(e => dailyRowHtml(e, 'need')).join('') + (need.length > 8 ? '<p class="dly-more">+ ' + (need.length - 8) + ' more \u2014 see the calendar</p>' : '');
+    const manualRecent = calAllEvents(addDays(t, -14), addDays(t, -1)).filter(e => e.kind === 'held' && e.mid && /entered manually/i.test((meetingById(e.mid) || {}).source || ''));
+    if (manualRecent.length) body += '<h4 class="dly-h">Minutes entered manually <span class="gs-n">' + manualRecent.length + '</span></h4>' + manualRecent.map(e => dailyRowHtml(e, 'need')).join('');
     if (soon.length) body += '<h4 class="dly-h">Coming up this week</h4>' + soon.slice(0, 6).map(e => dailyRowHtml(e, 'soon')).join('');
     return '<section class="caltoday" aria-label="Today\u2019s meetings"><div class="ct-head"><div><h3>Today <span>\u00b7 ' + esc(fmtLong(t)) + '</span></h3><p class="muted">Upload the minutes after each meeting, then run the next one from its open items.</p></div><div class="ct-act">' +
       '<button type="button" class="btn" data-act="cal-weekly"' + (canSched ? '' : ' disabled title="Needs the one-time database update (supabase_update_v5.sql)"') + '>' + (setup ? 'Set up weekly meetings (' + setup + ' to add)' : 'Weekly meetings') + '</button>' +
       '<button type="button" class="btn primary" data-act="cal-upload-any" title="Pick a filled-in action item PDF">\u2b06 Upload minutes</button></div></div>' + body + '</section>';
   }
   function calPopExtra(ev) {   // extra buttons on a meeting's details card
-    const s = seriesIndex().get(ev.sk), hasHeld = !!(s && s.held.length);
-    return '<div class="cp-acts ext"><button type="button" class="btn" data-act="cal-pop-upload">\u2b06 ' + (ev.kind === 'held' ? 'Add minutes to this meeting' : 'Upload minutes for this meeting') + '</button>' +
+    const s = seriesIndex().get(ev.sk), hasHeld = !!(s && s.held.length), sched = ev.kind === 'sched', started = calStarted(ev);
+    const mm = ev.kind === 'held' ? meetingById(ev.mid) : null, manualM = !!(mm && /entered manually/i.test(mm.source || ''));
+    return '<div class="cp-acts ext">' + (manualM ? '<button type="button" class="btn primary" data-act="cal-pop-additem">\uff0b Add item</button>' : '') + '<button type="button" class="btn" data-act="cal-pop-upload">\u2b06 ' + (ev.kind === 'held' ? 'Add minutes to this meeting' : 'Upload minutes for this meeting') + '</button>' +
+      (sched && started ? '<button type="button" class="btn manbtn" data-act="cal-pop-manual">\u2713 Minutes entered manually</button>' : '') +
       (hasHeld ? '<button type="button" class="btn" data-act="cal-pop-run">Run meeting (open items)</button><button type="button" class="btn" data-act="cal-pop-metrics">Metrics</button>' : '') + '</div>';
+  }
+
+  /* ---------- a meeting that did not happen / minutes that were entered by hand (no PDF) ---------- */
+  function calSkip(ev) {
+    const M = ev && ev.master; if (!M) return;
+    const past = calStarted(ev), what = past ? 'did not take place' : 'was cancelled', short = fmtShortD(ev.date);
+    if (!ev.series) {   // a one-off scheduled meeting: it is hidden (kept in the database) and can be restored from the side list
+      const snaps = calSnap([M]); M.deletedAt = new Date().toISOString(); M.deletedBy = actorLabel();
+      calLog(M.title, '\u201c' + M.title + '\u201d on ' + short + ' ' + what + ' (removed from the calendar; can be restored)');
+      calCommit('\u201c' + M.title + '\u201d on ' + short + ' marked as ' + (past ? 'not held' : 'cancelled') + '.', () => { calRestore(snaps, []); calLog(M.title, 'undone'); save(); renderAll(); toast('Restored.'); });
+      return;
+    }
+    const snaps = calSnap(calSeriesRows(M)), before = state.cal.length, O = calOverride(M, ev.orig), created = state.cal.length > before ? [O] : [];
+    O.cancelled = true;
+    calLog(M.title, '\u201c' + M.title + '\u201d on ' + short + ' ' + what + ' (this meeting only; the rest of the series is unchanged)');
+    calCommit('\u201c' + M.title + '\u201d on ' + short + ' marked as ' + (past ? 'not held' : 'cancelled') + '. The series is unchanged.', () => { calRestore(snaps, created); calLog(M.title, 'undone'); save(); renderAll(); toast('Restored.'); });
+  }
+  function calManual(ev) {
+    if (!ev || ev.kind === 'held') return;
+    const title = seriesTitleOf(ev), iso = ev.date, now = new Date().toISOString();
+    if (state.meetings.some(x => ISO_OK(x.dateISO) && x.dateISO === iso && serKey(x.title) === ev.sk)) { toast('Minutes already exist for that meeting.', 'warn'); return; }
+    const m = { id: uuid(), deletedAt: '', deletedBy: '', created: now, title, date: fmtDate(iso), dateISO: iso, project: ev.project || '', preparedBy: actorName(), notes: '', source: 'Entered manually', imported: now };
+    state.meetings.push(m); seriesReset();
+    pushHistory('meeting', { subject: title, text: 'Calendar: minutes for ' + fmtDate(iso) + ' marked as entered manually (no PDF upload)' });
+    calCommit('\u201c' + title + '\u201d (' + fmtShortD(iso) + ') marked as held \u2014 minutes entered manually. Use \uff0b Add item to type its items in.', () => {
+      const mm = meetingById(m.id); if (!mm) return;
+      if (state.items.some(i => i.meetingId === m.id)) { toast('Items were already added to this meeting, so it was kept.', 'warn'); return; }
+      state.meetings = state.meetings.filter(x => x !== mm);
+      if (Live.meetSynced(m.id)) { mm.deletedAt = new Date().toISOString(); mm.deletedBy = actorLabel(); state.trash.meetings.push(mm); }
+      seriesReset(); pushHistory('meeting', { subject: title, text: 'Calendar: manual-minutes mark for ' + fmtDate(iso) + ' undone' }); save(); renderAll(); toast('Undone.');
+    });
+    calOfferAttach(m);
+  }
+  function calAttachCandidates(m) { return state.items.filter(i => !i.meetingId && !i.deletedAt && ISO_OK(openedOn(i)) && openedOn(i) >= m.dateISO && openedOn(i) <= todayISO()).slice(0, 60); }
+  function calOfferAttach(m) {
+    const c = calAttachCandidates(m); if (!c.length) return;
+    openModal('<h2>Attach the items you already typed in?</h2><p class="muted">' + c.length + ' item' + (c.length === 1 ? ' was' : 's were') + ' entered by hand since <b>' + esc(m.title) + '</b> (' + esc(fmtShortD(m.dateISO)) + ') and ' + (c.length === 1 ? 'is' : 'are') + ' not linked to any meeting. Tick the ones that came from this meeting so they show where they were raised.</p>' +
+      '<div class="attlist">' + c.map(i => '<label class="attrow"><input type="checkbox" data-att="' + esc(i.id) + '" checked><span><b>' + esc(i.id) + '</b> ' + esc(trunc(i.action, 90)) + '<em>' + esc(i.owner || 'No owner') + ' \u00b7 added ' + esc(fmtDate(openedOn(i))) + '</em></span></label>').join('') + '</div>' +
+      '<div class="mfoot"><button type="button" class="btn" data-act="modal-close">Not now</button><button type="button" class="btn primary" data-act="cal-attach" data-mid="' + esc(m.id) + '">Attach ticked items</button></div>', { cls: 'dlmodal' });
+  }
+  function calAttach(mid) {
+    const m = meetingById(mid), ids = $$('#modalRoot input[data-att]').filter(x => x.checked).map(x => x.dataset.att);
+    if (!m || !ids.length) { closeModal(); return; }
+    const its = ids.map(byId).filter(Boolean); muteHistory = true;
+    its.forEach(i => { i.meetingId = m.id; addLog(i, 'edit', 'Meeting: None \u2192 ' + m.title + ' (' + fmtDate(m.dateISO) + ') \u2014 attached when the minutes were marked as entered manually'); });
+    muteHistory = false; pushHistory('edit', { subject: m.title, itemIds: its.map(i => i.id), text: its.length + ' item' + (its.length === 1 ? '' : 's') + ' attached to \u201c' + m.title + '\u201d (' + fmtDate(m.dateISO) + ')' });
+    closeModal(); commit(its.length + ' item' + (its.length === 1 ? '' : 's') + ' attached to \u201c' + m.title + '\u201d.');
+  }
+  function calSkippedHtml() {   // meetings marked "didn't meet", shown in the calendar's side panel so they can be put back
+    const t = todayISO(), list = state.cal.filter(c => !c.deletedAt && c.seriesUid && c.cancelled && ISO_OK(c.date) && c.date >= addDays(t, -60)).sort((x, y) => y.date.localeCompare(x.date)).slice(0, 10);
+    if (!list.length) return '';
+    return '<section class="cs"><h3>Didn\u2019t meet / cancelled <span class="gs-n">' + list.length + '</span></h3><p class="cs-sub">Taken off \u201cNeeds minutes\u201d. Restore one if it did happen.</p>' +
+      list.map(c => '<div class="cgone"><span><b>' + esc(c.title) + '</b><em>' + esc(fmtShortD(c.date)) + '</em></span><button type="button" class="btn" data-act="cal-unskip" data-uid="' + esc(c.uid) + '">Restore</button></div>').join('') + '</section>';
   }
 
   /* =====================================================================
@@ -4278,7 +4381,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       '<td class="b-action">' + esc(it.action) + (others.length ? '<div class="shared">Shared with: ' + others.map(o => '<span class="chip' + (dn(o) ? ' done' : '') + '" title="' + (dn(o) ? esc(o.name) + ' has closed their part' : esc(o.name) + ' still has this open') + '">' + (dn(o) ? '✓ ' : '') + esc(o.name) + '</span>').join(' ') + '</div>' : '') + '</td>' +
       '<td class="b-due">' + (it.ongoing ? '' : it.dueISO ? fmtDate(it.dueISO) : (it.dueRaw ? '<i class="rawdue">“' + esc(it.dueRaw) + '”</i>' : '<span class="muted">—</span>')) + (d.label ? ' <span class="chip ' + d.cls + '">' + d.label + '</span>' : '') + '</td>' +
       '<td class="b-status"><select class="stsel st-' + it.status.replace(/\s/g, '') + '" data-act="status">' + STATUSES.map(s => '<option' + (s === it.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></td>' +
-      '<td class="b-meeting">' + (m ? esc(m.title) + '<div class="muted sm">' + esc(meetDate(m)) + '</div>' : '<span class="muted">Manual entry</span>') + '</td>' +
+      '<td class="b-meeting">' + (m ? esc(m.title) + '<div class="muted sm">Raised ' + esc(fmtDate(openedOn(it))) + '</div>' : '<span class="muted">Manual entry</span>') + '</td>' +
       '<td class="b-notes">' + esc(it.notes) + '</td>' +
       '<td class="b-latest">' + (lu ? '<span class="lud">' + fmtDate(lu.date) + '</span> ' + esc(lu.text) : '<span class="muted">—</span>') + '</td>' +
       '<td class="b-act"><div class="acts"><button class="mini" data-act="focus" title="Open in Tracking Log to post an update">Update</button><button class="mini ok" data-act="close" title="' + (others.length ? 'Closes it for this owner only' : 'Close this item') + '">Close</button></div></td></tr>';
@@ -4344,9 +4447,9 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       '<div class="mfoot"><button class="btn" data-act="modal-close">Cancel</button><button class="btn primary" data-act="do-close" data-ids="' + esc(ids.join(',')) + '" data-owner="' + esc(scope ? scope.key : '') + '">' + label + '</button></div>');
   }
 
-  function itemForm(it) {
+  function itemForm(it, defaults) {
     const isNew = !it;
-    it = it || { action: '', owner: '', dueRaw: '', dueISO: '', status: 'Open', notes: '', project: '', meetingId: null, itemNo: '' };
+    it = it || Object.assign({ action: '', owner: '', dueRaw: '', dueISO: '', status: 'Open', notes: '', project: '', meetingId: null, itemNo: '' }, defaults || {});
     const dueText = it.dueISO ? '' : (it.dueRaw || '');
     openModal('<h2>' + (isNew ? 'Add action item' : 'Edit ' + esc(it.id)) + '</h2>' +
       '<label class="fl">Action item<textarea id="fAction" rows="3" autofocus>' + esc(it.action) + '</textarea></label>' +
@@ -4394,7 +4497,8 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       if (idRaw) { const err = idError(idRaw, null); if (err) { toast(err, 'warn'); return; } o.id = idRaw; }
       const it = newItem(Object.assign(o, ong ? { ongoing: true, dueISO: '', dueRaw: '' } : { dueISO: dIso || parseDate(dTxt), dueRaw: dIso ? fmtDate(dIso) : dTxt }));
       it.itemNo = '';
-      addLog(it, 'created', 'Added manually');
+      { const mt = it.meetingId ? meetingById(it.meetingId) : null, md = mt && ISO_OK(mt.dateISO) && mt.dateISO <= todayISO() ? mt.dateISO : '';
+        addLog(it, 'created', mt ? 'Added manually at \u201c' + mt.title + '\u201d' + (md ? ' (meeting of ' + fmtDate(md) + ')' : '') + (md && md !== todayISO() ? ' \u2014 entered ' + fmtDate(todayISO()) : '') : 'Added manually', md || undefined); }
       state.items.push(it);
       if (status !== 'Open') setStatus(it, status);
     }
@@ -4592,7 +4696,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   function buildTsv(list) {
     const cell = v => String(v == null ? '' : v).replace(/[\t\r\n]+/g, ' ').trim();
     const lines = [EXPORT_HEAD.join('\t')];
-    list.forEach(it => { const d = rowData(it); lines.push([d.id, d.itemNo, d.action, d.owner, d.dueText, d.status, d.category, d.meeting, d.mdateText, d.project, d.notes, d.closedText, d.latest, d.history.replace(/\n/g, ' | ')].map(cell).join('\t')); });
+    list.forEach(it => { const d = rowData(it); lines.push([d.id, d.itemNo, d.action, d.owner, d.dueText, d.status, d.category, d.meeting, d.mdateText, d.raisedText, d.project, d.notes, d.closedText, d.latest, d.history.replace(/\n/g, ' | ')].map(cell).join('\t')); });
     return lines.join('\r\n');
   }
   async function copyText(text) {
@@ -4729,16 +4833,17 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       id: it.id, itemNo: it.itemNo, action: it.action, owner: it.owner || '', dueISO: it.ongoing ? '' : (it.dueISO || ''), dueText: it.ongoing ? 'Ongoing' : (it.dueISO ? fmtDate(it.dueISO) : (it.dueRaw || '')),
       status: it.status, category: it.category || '', ongoing: !!it.ongoing, overdue: isOverdue(it), overdueDays: isOverdue(it) ? daysBetween(it.dueISO, todayISO()) : 0, closed: isClosed(it),
       meeting: m ? m.title : '', mdateISO: m && !m.weekly ? (m.dateISO || '') : '', mdateText: m ? meetDate(m) : '',
+      raisedISO: openedOn(it), raisedText: fmtDate(openedOn(it)), carried: (it.updates || []).filter(u => u.type === 'carry').length,
       project: it.project || '', notes: it.notes || '', closedISO: it.closedDate || '', closedText: it.closedDate ? fmtDate(it.closedDate) : '',
       latest: lu ? fmtDate(lu.date) + ': ' + lu.text : '',
       history: (it.updates || []).map(u => fmtDate(u.date) + ' [' + (TYPE_LABEL[u.type] || u.type) + '] ' + u.text + (u.by ? ' — ' + u.by : '')).join('\n')
     };
   }
-  const EXPORT_HEAD = ['ID', 'Item #', 'Action Item', 'Owner', 'Due Date', 'Status', 'Category / Type', 'Meeting', 'Meeting Date', 'Project / Location', 'Notes / Deliverable', 'Date Closed', 'Latest Update', 'Update History'];
+  const EXPORT_HEAD = ['ID', 'Item #', 'Action Item', 'Owner', 'Due Date', 'Status', 'Category / Type', 'Meeting', 'Meeting Date', 'Date Raised', 'Project / Location', 'Notes / Deliverable', 'Date Closed', 'Latest Update', 'Update History'];
 
   function buildCsv(list) {
     const lines = [EXPORT_HEAD.map(csvCell).join(',')];
-    list.forEach(it => { const d = rowData(it); lines.push([d.id, d.itemNo, d.action, d.owner, d.dueText, d.status, d.category, d.meeting, d.mdateText, d.project, d.notes, d.closedText, d.latest, d.history.replace(/\n/g, ' | ')].map(csvCell).join(',')); });
+    list.forEach(it => { const d = rowData(it); lines.push([d.id, d.itemNo, d.action, d.owner, d.dueText, d.status, d.category, d.meeting, d.mdateText, d.raisedText, d.project, d.notes, d.closedText, d.latest, d.history.replace(/\n/g, ' | ')].map(csvCell).join(',')); });
     return '\uFEFF' + lines.join('\r\n');
   }
 
@@ -4748,7 +4853,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const excelSerial = iso => { const p = iso.split('-').map(Number); return Math.round((Date.UTC(p[0], p[1] - 1, p[2]) - Date.UTC(1899, 11, 30)) / 86400000); };
   async function buildXlsx(list) {
     if (typeof JSZip === 'undefined') throw new Error('Excel builder is not available.');
-    const widths = [13, 7, 58, 20, 12, 13, 18, 32, 12, 26, 42, 12, 46, 80];
+    const widths = [13, 7, 58, 20, 12, 13, 18, 32, 12, 12, 26, 42, 12, 46, 80];
     const rows = [];
     rows.push('<row r="1" ht="22" customHeight="1">' + EXPORT_HEAD.map((h, c) => '<c r="' + colName(c) + '1" s="1" t="inlineStr"><is><t>' + xmlEsc(h) + '</t></is></c>').join('') + '</row>');
     list.forEach((it, i) => {
@@ -4758,14 +4863,14 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       const ts = gray ? 4 : 0;
       const itemNo = d.itemNo !== '' && d.itemNo != null && !isNaN(Number(d.itemNo)) ? '<c r="B' + r + '" s="' + ts + '"><v>' + Number(d.itemNo) + '</v></c>' : txt(1, d.itemNo, ts);
       rows.push('<row r="' + r + '">' + txt(0, d.id, ts) + itemNo + txt(2, d.action, ts) + txt(3, d.owner, ts) +
-        dt(4, d.dueISO, d.dueText, d.overdue ? 3 : gray ? 5 : 2) + txt(5, d.status, ts) + txt(6, d.category, ts) + txt(7, d.meeting, ts) + dt(8, d.mdateISO, d.mdateText, gray ? 5 : 2) +
-        txt(9, d.project, ts) + txt(10, d.notes, ts) + dt(11, d.closedISO, d.closedText, gray ? 5 : 2) + txt(12, d.latest, ts) + txt(13, d.history, ts) + '</row>');
+        dt(4, d.dueISO, d.dueText, d.overdue ? 3 : gray ? 5 : 2) + txt(5, d.status, ts) + txt(6, d.category, ts) + txt(7, d.meeting, ts) + dt(8, d.mdateISO, d.mdateText, gray ? 5 : 2) + dt(9, d.raisedISO, d.raisedText, gray ? 5 : 2) +
+        txt(10, d.project, ts) + txt(11, d.notes, ts) + dt(12, d.closedISO, d.closedText, gray ? 5 : 2) + txt(13, d.latest, ts) + txt(14, d.history, ts) + '</row>');
     });
     const last = list.length + 1;
     const sheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
       '<sheetViews><sheetView workbookViewId="0" showGridLines="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A2" sqref="A2"/></sheetView></sheetViews>' +
       '<sheetFormatPr defaultRowHeight="15"/><cols>' + widths.map((w, i) => '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + w + '" customWidth="1"/>').join('') + '</cols>' +
-      '<sheetData>' + rows.join('') + '</sheetData><autoFilter ref="A1:N' + last + '"/>' +
+      '<sheetData>' + rows.join('') + '</sheetData><autoFilter ref="A1:O' + last + '"/>' +
       '<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToHeight="0"/></worksheet>';
     const al = '<alignment vertical="top" wrapText="1"/>';
     const styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
@@ -4929,7 +5034,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         case 'due': { const o = [{ t: d.dueText || '\u2014', c: ink }]; if (d.overdue) o.push({ t: 'OVERDUE ' + d.overdueDays + 'd', f: B, s: 6.5, c: RED }); return o; }
         case 'status': { const o = [{ chip: true, t: d.status }], p = ownerProgress(it); if (p && !d.closed && p.done.length) wrapLines(cl(p.done.length + ' of ' + p.total + ' owners closed \u00b7 open: ' + nameList(p.open)), F, 6.2, w, 4).forEach(t => o.push({ t, s: 6.2, c: GRAY })); return o; }
         case 'category': return wrap(d.category || '\u2014').map(t => ({ t, c: d.category ? ink : SOFT }));
-        case 'meeting': { const o = wrap(d.meeting || 'Manual entry').map(t => ({ t, c: ink })); if (d.mdateText) o.push({ t: d.mdateText, s: 6.6, c: GRAY }); return o; }
+        case 'meeting': { const o = wrap(d.meeting || 'Manual entry').map(t => ({ t, c: ink })); o.push({ t: 'Raised ' + d.raisedText + (d.carried ? ' \u00b7 carried ' + d.carried + 'x' : ''), s: 6.6, c: GRAY }); return o; }
         case 'notes': return wrap(d.notes).map(t => ({ t, c: ink }));
         case 'latest': return wrap(d.latest).map(t => ({ t, c: d.closed ? GRAY : MID }));
         default: return [];
@@ -5144,6 +5249,15 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       case 'ws-save': weeklySetupSave(); break;
       case 'cal-upload-any': startUpload(null); break;
       case 'cal-upload': { const ev = calEvLookup(t.dataset.key); if (ev) startUpload(ctxForEvent(ev)); break; }
+      case 'cal-skip': { const ev = calEvLookup(t.dataset.key); if (ev) calSkip(ev); break; }
+      case 'cal-manual': { const ev = calEvLookup(t.dataset.key); if (ev) calManual(ev); break; }
+      case 'cal-pop-skip': { const ev = calEvLookup(calPopKey); if (ev) { calClosePop(); calSkip(ev); } break; }
+      case 'cal-pop-manual': { const ev = calEvLookup(calPopKey); if (ev) { calClosePop(); calManual(ev); } break; }
+      case 'cal-add-item': { const m = meetingById(t.dataset.mid); if (m) itemForm(null, { meetingId: m.id, project: m.project || '' }); break; }
+      case 'meet-additem': { const m = meetingById(t.closest('.mcard').dataset.mid); if (m) itemForm(null, { meetingId: m.id, project: m.project || '' }); break; }
+      case 'cal-unskip': { const c = state.cal.find(x => x.uid === t.dataset.uid); if (c) { const sn = calSnap([c]); c.cancelled = false; calLog(c.title, '\u201c' + c.title + '\u201d on ' + fmtShortD(c.date) + ' restored to the calendar'); calCommit('Restored \u201c' + c.title + '\u201d on ' + fmtShortD(c.date) + '.', () => { calRestore(sn, []); save(); renderAll(); toast('Undone.'); }); } break; }
+      case 'cal-attach': calAttach(t.dataset.mid); break;
+      case 'cal-pop-additem': { const ev = calEvLookup(calPopKey), m = ev && meetingById(ev.mid); if (m) { calClosePop(); itemForm(null, { meetingId: m.id, project: m.project || '' }); } break; }
       case 'cal-run': runSeries(t.dataset.sk, false); break;
       case 'cal-metrics': gotoMetrics(t.dataset.sk); break;
       case 'cal-pop-upload': { const ev = calEvLookup(calPopKey); if (ev) startUpload(ctxForEvent(ev)); break; }
@@ -5302,7 +5416,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   document.addEventListener('keydown', e => {
     if (msOpen && e.key === 'Escape') { closeMsPop(true); return; }
     if (viewsOpen && e.key === 'Escape') { viewsClose(true); return; }
-    if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.matches && e.target.matches('.mmrow, .hb[data-act], .rcl') && !e.defaultPrevented) { e.preventDefault(); e.target.click(); return; }
+    if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.matches && e.target.matches('.mmrow, .hb[data-act], .rcl, .orig[data-act]') && !e.defaultPrevented) { e.preventDefault(); e.target.click(); return; }
     if (prOpen && e.key === 'Escape') { prOpen = false; renderPresence(); const s = $('#prStack'); if (s) s.focus(); return; }
     if (e.target.closest && e.target.closest('.mdpop')) {
       if (e.key === 'Escape') { closeMdatePop(); return; }
@@ -5851,7 +5965,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       renderPresence();
     }
     window.addEventListener('pagehide', () => { if (prCh) { try { prCh.untrack(); } catch (e) { /* ignore */ } } });
-    return { manualSignOut: false, role: () => roleNow, isAdmin: () => roleNow === 'admin', rawAdmin: () => rawAdm, refreshRole, viewsOK: () => VIEWS_OK, flushRender, calOK: () => CAL_OK, calSynced: uid => SY.snapC.has(uid), startPresence, trackPresence, stopPresence, presenceList, presenceSince: () => prSince, ensureLib, init, hasSession, signIn, signOut, load, startLive, dirty, allocIds, pendingCount, pull, flushNow: () => flushLoop(), info, clearLocal, setSync, isReady: () => ready, ITEM_F, MEET_F };
+    return { manualSignOut: false, role: () => roleNow, isAdmin: () => roleNow === 'admin', rawAdmin: () => rawAdm, refreshRole, viewsOK: () => VIEWS_OK, flushRender, calOK: () => CAL_OK, calSynced: uid => SY.snapC.has(uid), meetSynced: id => SY.snapM.has(id), startPresence, trackPresence, stopPresence, presenceList, presenceSince: () => prSince, ensureLib, init, hasSession, signIn, signOut, load, startLive, dirty, allocIds, pendingCount, pull, flushNow: () => flushLoop(), info, clearLocal, setSync, isReady: () => ready, ITEM_F, MEET_F };
   })();
 
   /* ---------- sign-in / session ---------- */
