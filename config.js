@@ -16,12 +16,13 @@ window.TWCG_CONFIG = {
 
   // The e-mail of the ONE shared team user you create in Supabase (README, Step 2).
   // It never receives mail and people never type it - they only type the team password.
-  TEAM_EMAIL: "hswift@juneaucc.com",
+  // The ONE shared team login (everyone except the administrator signs in with this + the team password).
+  // It is a NEW Supabase user (README, step 1) - NOT hswift@juneaucc.com. It never receives mail; people never type it.
+  TEAM_EMAIL: "tracker-team@juneaucc.com",
 
-  // The tracker ADMINISTRATOR's own login (Harrison Swift). He signs in with this account and its OWN password, so
-  // nobody else can act as the administrator just by typing his name.  Leave it empty ("") until the administrator account
-  // has been created (README, step 2): while it is empty everyone signs in with the team password as before.
-  ADMIN_EMAIL: ""
+  // The administrator: Harrison Swift, signed in with his OWN login and his OWN password.
+  // Must be a different account from TEAM_EMAIL. Leave "" to run without an administrator.
+  ADMIN_EMAIL: "hswift@juneaucc.com"
 
   // Optional: if your company network blocks cdn.jsdelivr.net, save supabase.js
   // in this folder (README, Troubleshooting) and uncomment:
