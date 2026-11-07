@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="twcg-build" content="2026-11-07.61b0c66f">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
@@ -851,6 +852,66 @@ body.cal-moving,body.cal-moving *{cursor:grabbing!important;user-select:none!imp
 .dupnone{padding:18px 4px;color:var(--g1)}
 @media print{.lk{background:#fff!important;border-left:2pt solid #e1252b!important;color:#111!important}.lk-h,.lk-c{color:#c8161c!important}.lk-r,.lk-r b{color:#222!important}.lkbadge{background:#fff!important;color:#111!important;border-color:#8c9099!important}.lkhint,.tabadd{display:none!important}}
 
+/* ===== v16: "refresh to the latest version" notice + notifications from the administrator ===== */
+.updov{position:fixed;inset:0;z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.92);backdrop-filter:blur(6px)}
+.updov[hidden]{display:none!important}
+.updbox{position:relative;width:520px;max-width:100%;background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:30px 30px 22px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.85);overflow:hidden}
+.updbox::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:repeating-linear-gradient(-45deg,var(--red) 0 10px,#0a0a0b 10px 20px)}
+.updmark{width:56px;height:56px;margin:4px auto 12px;border-radius:50%;background:var(--red);color:#fff;font:700 30px/56px var(--fh);box-shadow:0 0 0 7px rgba(225,37,43,.2)}
+.updbox h2{margin:0 0 8px;font:700 19px var(--fh);letter-spacing:.08em;text-transform:uppercase;color:#fff}
+.updbox p{margin:0 0 10px;color:var(--g1);line-height:1.55;font-size:13.5px}
+.updnote{min-height:18px;color:#ffd0d0;font-size:12.5px!important}
+.updbtn{font-size:15px;padding:11px 28px;margin:4px 0}
+.updbtn:disabled{opacity:.75;cursor:default}
+.updver{margin:14px 0 0!important;color:var(--mut2)!important;font:11px var(--fm)!important;overflow-wrap:anywhere}
+body.upd-required{overflow:hidden}
+
+.annwrap{position:relative;display:flex;align-items:center;flex:none}
+.annwrap[hidden]{display:none!important}
+.bellbtn{position:relative;width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);background:transparent;color:#d5d7db;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.bellbtn:hover,.bellbtn[aria-expanded=true]{border-color:#8c9099;color:#fff;background:rgba(255,255,255,.07)}
+.bellbtn:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.bellbtn.has{color:#fff;border-color:var(--redline)}
+.bellbtn.imp svg{animation:bellring 2.6s ease-in-out infinite;transform-origin:50% 12%}
+@keyframes bellring{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-14deg)}92%{transform:rotate(12deg)}95%{transform:rotate(-7deg)}}
+@media (prefers-reduced-motion:reduce){.bellbtn.imp svg{animation:none}}
+.bellcnt{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;border-radius:9px;background:var(--red);color:#fff;font:700 10.5px/14px var(--fb);text-align:center;padding:0 4px;border:2px solid #050506;box-sizing:border-box}
+.bellcnt[hidden]{display:none}
+.annpop{position:absolute;top:calc(100% + 8px);z-index:66;width:400px;max-width:calc(100vw - 16px);max-height:min(78vh,620px);overflow:auto;background:var(--panel);border:1px solid var(--line2);border-radius:10px;box-shadow:0 14px 40px rgba(0,0,0,.75);text-align:left;color:var(--txt)}
+.annpop[hidden]{display:none}
+.annpop::before{content:"";display:block;height:3px;background:var(--red);position:sticky;top:0}
+.ann-h{display:flex;align-items:center;gap:10px;padding:11px 14px 6px}.ann-h b{font:700 11px var(--fh);letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.ann-hn{border:1px solid var(--redline);background:var(--redbg);color:#ffb3b3;border-radius:10px;padding:0 8px;font:700 10.5px var(--fb)}
+.ann-admin{padding:4px 14px 10px;border-bottom:1px solid var(--line)}.ann-admin .btn{width:100%;justify-content:center}.ann-admin p{margin:6px 2px 0}
+.ann-warn{padding:8px 10px;border:1px solid var(--redline);background:var(--redbg);border-radius:8px;color:#ffd0d0;font-size:12px;line-height:1.5}
+.ann-list{padding:4px 6px}.ann-none{margin:12px 10px;color:var(--mut);font-size:12.5px}
+.annitem{display:flex;gap:10px;align-items:flex-start;padding:9px 8px;border-radius:7px;border-bottom:1px solid #1d1f23}.annitem:last-child{border-bottom:0}
+.annitem.new{background:rgba(255,255,255,.04)}.annitem.imp{box-shadow:inset 3px 0 0 var(--red)}
+.anndot{flex:none;width:8px;height:8px;margin-top:6px;border-radius:50%;border:1px solid #5b5f67}.annitem.new .anndot{background:var(--red);border-color:var(--red);box-shadow:0 0 6px var(--red)}
+.annbody{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.annt{color:#fff;font-weight:700;overflow-wrap:anywhere}
+.annm{color:#e4e5e7;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.annm a{color:#fff;text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:2px}
+.annmeta{font-style:normal;color:var(--mut);font-size:11.5px}
+.anntag{flex:none;align-self:flex-start;padding:1px 8px;border-radius:9px;background:#2b2d33;color:#fff;font:700 9.5px var(--fh);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.annrow.imp .anntag,.annitem.imp .anntag{background:var(--red)}.anntag.sm{margin-right:4px}
+.annwd{flex:none;border:1px solid var(--line2);background:var(--panel2);color:#d5d7db;border-radius:6px;padding:2px 9px;font-size:11.5px;font-weight:600}.annwd:hover{border-color:var(--red);color:#fff}
+.ann-f{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 14px 11px;border-top:1px solid var(--line);background:#101113}
+
+.annbar{margin:0;padding:10px 22px 0;display:flex;flex-direction:column;gap:8px}
+.annbar[hidden]{display:none!important}
+.annrow{display:flex;gap:12px;align-items:flex-start;padding:10px 14px;border:1px solid var(--line2);border-left:4px solid #fff;border-radius:8px;background:#121315}
+.annrow.imp{border-color:var(--redline);border-left-color:var(--red);background:var(--redbg)}
+.annok{flex:none;align-self:center;padding:6px 16px}
+.annfoot{display:flex;gap:18px;justify-content:flex-end;flex-wrap:wrap;padding:0 4px}
+.annfoot .link{color:#d5d7db;font-size:12px}
+.anncount{align-self:flex-end;margin:3px 2px 0;color:var(--mut);font-size:11.5px;text-align:right}.anncount.over{color:#ff7b7b;font-weight:700}
+.annimp{display:flex;gap:22px;flex-wrap:wrap;padding:3px 0}.annimp label{display:flex;gap:7px;align-items:center;font-weight:400;color:var(--g1);font-size:13px;margin:0}.annimp em{font-style:normal;color:var(--mut);font-size:12px}
+.fl .annimp input[type=radio]{width:auto;padding:0;margin:0;background:none;border:0}
+.annprev{margin-top:12px}.annprev-h{margin-bottom:5px;font:700 10px var(--fh);letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+@media (max-width:640px){.annbar{padding:8px 12px 0}.annrow{flex-wrap:wrap}.annok{align-self:flex-start}}
+@media print{.annbar,.annwrap,.updov{display:none!important}}
+
 /* ===== Summary & Metrics tab ===== */
 #viewSummary{padding-top:20px}
 .sum-sub{margin:5px 0 0 14px;color:var(--mut);font-size:12.5px}
@@ -1171,6 +1232,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
   </div>
   <div class="top-actions">
     <button type="button" class="apprpill" id="apprPill" data-act="views-approvals" hidden>Approvals <b>0</b></button>
+    <div class="annwrap" id="annWrap" hidden><button type="button" class="bellbtn" id="annBell" data-act="ann-toggle" aria-haspopup="true" aria-expanded="false" aria-label="Notifications" title="Notifications"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a6 6 0 0 0-6 6v3.6L4.4 15.5A1 1 0 0 0 5.3 17h13.4a1 1 0 0 0 .9-1.5L18 12.6V9a6 6 0 0 0-6-6z"/><path fill="currentColor" d="M9.7 19a2.4 2.4 0 0 0 4.6 0z"/></svg><b class="bellcnt" id="annCnt" hidden>0</b></button><div class="annpop" id="annPop" hidden role="dialog" aria-label="Notifications"></div></div>
     <div class="presence" id="presence" hidden><button type="button" class="pr-stack" id="prStack" data-act="presence-toggle" aria-haspopup="true" aria-expanded="false" aria-label="People in the tracker"></button><div class="pr-pop" id="prPop" hidden role="dialog" aria-label="People in the tracker now"></div></div>
     <button class="syncpill" id="syncPill" data-s="off" data-act="sync-details" type="button"><i></i><span>Not connected</span></button>
     <button class="btn userbtn" id="userBtn" data-act="profile"></button>
@@ -1187,6 +1249,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
         <button data-act="print">Print this page</button>
         <hr>
         <button data-act="trash">Recently deleted <span class="cnt" id="trashN"></span></button>
+        <button data-act="ann-compose" id="moreAnn" hidden>Send a notification to everyone…</button>
         <button data-act="json">Download full backup (.json)</button>
         <button data-act="restore">Import backup (adds only)…</button>
         <hr>
@@ -1195,6 +1258,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
     </div>
   </div>
 </header>
+<div id="annBar" class="annbar" hidden aria-live="polite"></div>
 <div id="printHead" class="print-only" aria-hidden="true"></div>
 
 <main>
@@ -1255,7 +1319,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
   <section id="viewLog">
     <div class="tools">
       <input type="search" id="fSearch" placeholder="Search actions, owners, notes, updates…">
-      <select id="fStatus"></select><select id="fOwner"></select><select id="fProject"></select><div class="msel" id="fMeetingWrap"><button type="button" class="msbtn" id="fMeetingBtn" data-act="ms-toggle" aria-haspopup="true" aria-expanded="false" title="Choose one or more meetings"><span class="msl">All meetings</span><i class="caret">▾</i></button><div class="mspop" id="fMeetingPop" role="group" aria-label="Filter by meeting" hidden></div></div><select id="fCategory" title="Category / Type"></select><select id="fQuick"></select>
+      <select id="fStatus"></select><label class="chk" id="hideClosedLbl" title="Hide every closed item. Untick to show closed items again."><input type="checkbox" id="fHideClosed"> Hide closed items</label><select id="fOwner"></select><select id="fProject"></select><div class="msel" id="fMeetingWrap"><button type="button" class="msbtn" id="fMeetingBtn" data-act="ms-toggle" aria-haspopup="true" aria-expanded="false" title="Choose one or more meetings"><span class="msl">All meetings</span><i class="caret">▾</i></button><div class="mspop" id="fMeetingPop" role="group" aria-label="Filter by meeting" hidden></div></div><select id="fCategory" title="Category / Type"></select><select id="fQuick"></select>
       <label class="chk" title="Show only items flagged as Ongoing Activity (they need continual updates and have no due date)"><input type="checkbox" id="fOngoing"> Ongoing Activity</label>
       <button class="btn clearbtn" id="btnClearAll" data-act="clear-all-filters" title="Clear every filter, the search box and the grouping">Clear All Filters</button>
       <div class="vwrap" id="viewsWrap"><button type="button" class="vbtn" id="viewsBtn" data-act="views-toggle" aria-haspopup="true" aria-expanded="false" title="Saved views, shared with everyone on the project"><span class="vbl">Views</span><i class="caret">▾</i></button><div class="vpop" id="viewsPop" hidden role="dialog" aria-label="Saved views"></div></div>
@@ -1322,6 +1386,11 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
 <datalist id="catList"></datalist>
 <div id="modalRoot"></div>
 <div class="toast" id="toast"></div>
+<div id="updOverlay" class="updov" role="alertdialog" aria-modal="true" aria-labelledby="updTitle" aria-describedby="updDesc" hidden>
+  <div class="updbox"><div class="updmark" aria-hidden="true">↻</div><h2 id="updTitle">A new version of the tracker is ready</h2>
+    <p id="updDesc">The tracker has been updated. To make sure everyone is working from the same, latest version, please refresh now. Anything you were working on is saved first.</p>
+    <p class="updnote" id="updNote" role="status"></p><button type="button" class="btn primary updbtn" id="updBtn">↻ Refresh now</button><p class="updver" id="updVer"></p></div>
+</div>
 <div class="dropzone" id="dropZone">Drop meeting-minute PDFs to import</div>
 
 <script src="config.js"></script>
@@ -1543,7 +1612,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const ONGOING_RE = /^\s*(ongoing|continuous|continual)\b/i;
   const CATEGORY_SUGGESTIONS = ['RFI', 'Submittal', 'Permit', 'Inspection', 'Coordination', 'Meetings', 'Procurement', 'Schedule', 'Safety', 'Miscellaneous', 'Field', 'Closeout'];
   const H_FROM_ITEM = { created: 'add', update: 'update', status: 'status', close: 'close', reopen: 'reopen', ownerclose: 'ownerclose', ownerreopen: 'ownerreopen', edit: 'edit' };
-  let state = { items: [], meetings: [], history: [], cal: [], views: [], trash: { items: [], meetings: [] } };   // loaded from Supabase after sign-in
+  let state = { items: [], meetings: [], history: [], cal: [], views: [], ann: [], trash: { items: [], meetings: [] } };   // loaded from Supabase after sign-in
   let profile = null;        // { first, last, dept } - remembered per device (the password is checked by Supabase, never stored here)
   let profileDraft = null;   // name/department kept from an earlier sign-in that still needs the password
   let muteHistory = false;   // used while one action writes a single summary entry
@@ -1790,12 +1859,24 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     try { grp.forEach(o => { if (o !== it && o.status !== status) setStatus(o, status, 'Updated together with ' + it.id + ' (same item in another meeting)', date); }); }
     finally { muteHistory = mh; lkBusy = false; }
   }
-  function groupLatest(it, own) {   // the newest update on ANY copy shows as the item's latest update
-    const g = linkMap().groupOf(it); if (g.length < 2) return own;
-    let best = own;
-    g.forEach(o => { if (o !== it) (o.updates || []).forEach(x => { if (x.type === 'import' || x.type === 'created') return; if (!best || String(x.ts) > String(best.ts)) best = x; }); });
-    return best;
+  /* ---------- Latest Update column: only what a person typed ---------- */
+  const LU_STAT = '(?:Open|In Progress|On Hold|Closed)';
+  const LU_STATUS_RE = new RegExp('^(?:Closed|Reopened|Status): ' + LU_STAT + ' \\u2192 ' + LU_STAT + '(?:\\. ([\\s\\S]*))?$');
+  const LU_OWNER_RE = /^Closed for \u201c[^\u201d]*\u201d \u2014 (?:every owner has now closed their part|still open for [\s\S]*?)(?:\. ([\s\S]+))?$/;
+  const LU_SYSTEM_NOTES = [/^All owners have closed their part$/i, /^Reopened(?: for .*)?$/i, /^Status as recorded in minutes$/i, /^Updated together with \S+ \(same item in another meeting\)$/i, /^Status set to match the linked copies of \S+$/i];
+  function typedNoteOf(u) {   // the part of a history entry that a person typed ('' when the entry is only the software recording something)
+    const t = String((u && u.text) || '').trim(); if (!t) return '';
+    let note = '';
+    if (u.type === 'update') return t;                                                                    // typed in the Update box
+    if (u.type === 'status' || u.type === 'close' || u.type === 'reopen') { const m = LU_STATUS_RE.exec(t); note = m && m[1] ? m[1].trim() : ''; }   // "Status: A \u2192 B. <typed note>"
+    else if (u.type === 'ownerclose') { const m = LU_OWNER_RE.exec(t); note = m && m[1] ? m[1].trim() : ''; }                                      // "Closed for \u201cHS\u201d \u2014 ... . <typed note>"
+    else if (u.type === 'carry') note = t;
+    else return '';                                                                                         // import, created, edit, link, unlink, ownerreopen ...
+    if (!note) return '';
+    if (/^Carried into "/.test(note)) { const m = /(?:^|\. )Notes: ([\s\S]+)$/.exec(note); return m ? m[1].trim() : ''; }   // minutes uploaded for a later meeting: only the note written in them
+    return LU_SYSTEM_NOTES.some(r => r.test(note)) ? '' : note;
   }
+  const luKey = u => String(u.date || '') + '|' + String(u.ts || '');
   function trailForDetail(it) {   // newest first; for a linked item the trails of every copy are merged
     const g = linkMap().groupOf(it);
     if (g.length < 2) return (it.updates || []).slice().reverse().map(u => ({ u, from: '' }));
@@ -1983,9 +2064,10 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     it.updates.push({ uid: uuid(), ts: nextTs(it), date: date || todayISO(), type, text: text || '', by: actorLabel() });
     if (H_FROM_ITEM[type]) pushHistory(H_FROM_ITEM[type], { itemId: it.id, subject: trunc(it.action, 90), text: text || '' });
   }
-  function latestUpdate(it) {
-    const u = (it.updates || []).filter(x => x.type !== 'import' && x.type !== 'created');
-    return groupLatest(it, u.length ? u[u.length - 1] : null);
+  function latestUpdate(it) {   // { date, ts, by, type, text } of the newest typed update (on any linked copy), or null
+    const g = linkMap().groupOf(it); let best = null, bt = '';
+    g.forEach(o => (o.updates || []).forEach(u => { const tx = typedNoteOf(u); if (tx && (!best || luKey(u) > luKey(best))) { best = u; bt = tx; } }));
+    return best ? Object.assign({}, best, { text: bt }) : null;
   }
   function newItem(o) {
     const it = Object.assign({
@@ -2116,13 +2198,13 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   function closeModal() { modalLocked = false; $('#modalRoot').innerHTML = ''; }
 
   /* ---------- filtering / sorting ---------- */
-  function filtered() {
+  function filterRaw(st) {   // the log's filters with the status filter set to `st` (no sorting / combining)
     const q = ui.search.trim();
     const list = state.items.filter(it => {
       const doneHere = effClosed(it);   // in one owner's list an item that owner has closed counts as closed, even if the other owners still have it open
-      if (ui.status === 'active') { if (doneHere) return false; }
-      else if (ui.status === 'Closed') { if (!doneHere) return false; }
-      else if (ui.status !== 'all' && (it.status !== ui.status || doneHere)) return false;
+      if (st === 'active') { if (doneHere) return false; }
+      else if (st === 'Closed') { if (!doneHere) return false; }
+      else if (st !== 'all' && (it.status !== st || doneHere)) return false;
       if (ui.owner && ownerList(it.owner).every(o => o.key !== ui.owner)) return false;
       if (ui.project && (it.project || '') !== ui.project) return false;
       if (ui.meetings.size && !ui.meetings.has(it.meetingId ? String(it.meetingId) : MS_NONE)) return false;   // ticked meetings only (items with no meeting = "Manual entries")
@@ -2133,7 +2215,13 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       if (q && !queryMatches(itemHay(it), q)) return false;
       return true;
     });
-    return sortItems(collapseLinked(list));
+    return list;
+  }
+  function filtered() { return sortItems(collapseLinked(filterRaw(ui.status))); }
+  const hideClosedOn = () => ui.status !== 'all' && ui.status !== 'Closed';   // "Active (not closed)" or a single open status: closed items are not shown
+  function hiddenClosedCount() {   // closed items kept out of the list by the status filter (other filters still apply; linked copies count once)
+    if (!hideClosedOn()) return 0;
+    const keep = lkHidden, n = collapseLinked(filterRaw('Closed')).length; lkHidden = keep; return n;
   }
 
   function sortItems(list) {
@@ -2171,7 +2259,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     seriesReset(); linkReset();
     renderSubtitle(); renderInsights(); renderFilters(); renderBulk();
     $('#viewAcc').hidden = ui.view !== 'acc'; $('#viewCal').hidden = ui.view !== 'cal'; $('#viewSummary').hidden = ui.view !== 'summary'; $('#viewLog').hidden = ui.view !== 'log'; $('#viewMeet').hidden = ui.view !== 'meet'; $('#viewBic').hidden = ui.view !== 'bic'; $('#viewHist').hidden = ui.view !== 'hist'; $('#viewAccess').hidden = ui.view !== 'access';
-    renderUser(); renderPresence(); renderViewsBtn();
+    renderUser(); renderPresence(); renderViewsBtn(); renderAnn();
     $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.view === ui.view));
     $('#tabMeetCount').textContent = state.meetings.length;
     $('#tabLogCount').textContent = state.items.length;
@@ -2187,7 +2275,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const tn = document.getElementById('trashN'); if (tn) tn.textContent = (state.trash.items.length + state.trash.meetings.length) ? '(' + (state.trash.items.length + state.trash.meetings.length) + ')' : '';
   }
 
-  const BUILD_ID = '2026-11-08 link-duplicates';   // shown in the header so you can tell which version is live
+  const BUILD_ID = '2026-11-07.61b0c66f';   // stamped automatically from the file's contents: it changes whenever anything in this file changes
   function renderSubtitle() {
     const open = state.items.filter(i => !isClosed(i)).length;
     $('#subtitle').textContent = (state.items.length
@@ -2388,7 +2476,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     sel('#fQuick', ui.quick, [['', 'Any due date'], ['overdue', 'Overdue only'], ['soon', 'Due in 7 days']]);
     $('#fSearch').value !== ui.search && ($('#fSearch').value = ui.search);
     $('#fDensity').value = ui.density;
-    $('#fOngoing').checked = !!ui.ongoing; { const fc = $('#fCombine'); if (fc) fc.checked = !!ui.combine; }
+    $('#fOngoing').checked = !!ui.ongoing; { const fc = $('#fCombine'); if (fc) fc.checked = !!ui.combine; } { const hc = $('#fHideClosed'); if (hc) hc.checked = hideClosedOn(); }
     $('#catList').innerHTML = categorySuggestions().map(c => '<option value="' + esc(c) + '">').join('');
     const n = activeFilterCount(), cb = $('#btnClearAll');
     if (cb) { cb.textContent = 'Clear All Filters' + (n ? ' (' + n + ')' : ''); cb.classList.toggle('on', n > 0); }
@@ -2556,7 +2644,8 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     tb.style.width = tableWidth() + 'px'; tb.style.setProperty('--idw', colW('id') + 'px');
     tb.innerHTML = '<colgroup>' + cols.map(id => '<col data-col="' + id + '" style="width:' + colW(id) + 'px">').join('') + '</colgroup><thead>' + head + '</thead><tbody>' + body + '</tbody>';
     const osc = ui.owner ? ownerScope(ui.owner) : null;
-    $('#resultCount').innerHTML = esc(list.length + ' of ' + state.items.length + ' items shown') + (lkHidden ? ' <span class="lkhint">· ' + lkHidden + ' linked cop' + (lkHidden === 1 ? 'y' : 'ies') + ' combined into the rows above <button type="button" class="link" data-act="combine-toggle">Show every copy</button></span>' : '') + (osc ? ' <span class="scopehint" title="Closing an item that has other owners from this list closes it for ' + esc(osc.name) + ' only. To close it for everyone use the meeting view or the unfiltered log.">● ' + esc(osc.name) + '’s list: <b>Close</b> closes only ' + esc(osc.name) + '’s part of shared items</span>' : '');
+    const nHc = hiddenClosedCount();
+    $('#resultCount').innerHTML = esc(list.length + ' of ' + state.items.length + ' items shown') + (nHc ? ' <span class="lkhint">\u00b7 ' + nHc + ' closed item' + (nHc === 1 ? '' : 's') + ' hidden <button type="button" class="link" data-act="hide-closed-off">Show closed</button></span>' : '') + (lkHidden ? ' <span class="lkhint">· ' + lkHidden + ' linked cop' + (lkHidden === 1 ? 'y' : 'ies') + ' combined into the rows above <button type="button" class="link" data-act="combine-toggle">Show every copy</button></span>' : '') + (osc ? ' <span class="scopehint" title="Closing an item that has other owners from this list closes it for ' + esc(osc.name) + ' only. To close it for everyone use the meeting view or the unfiltered log.">● ' + esc(osc.name) + '’s list: <b>Close</b> closes only ' + esc(osc.name) + '’s part of shared items</span>' : '');
     renderColBtn(); renderMeetingStrip();
     updateDlMenu();
   }
@@ -3045,7 +3134,14 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
   window.addEventListener('resize', () => { if (prOpen) placePrPop(); });
 
-  function setLocked(v) { ['header.top', 'main'].forEach(s => { const el = $(s); if (el) el.inert = v; }); document.body.classList.toggle('gated', !!v); }
+  let lockedFlag = false, updLock = false;
+  function applyInert() {
+    const v = lockedFlag || updLock;
+    ['header.top', 'main', '#annBar'].forEach(s => { const el = $(s); if (el) el.inert = v; });
+    const mr = $('#modalRoot'); if (mr) mr.inert = updLock;
+    document.body.classList.toggle('gated', lockedFlag);
+  }
+  function setLocked(v) { lockedFlag = !!v; applyInert(); }
   function profileModal(forced) {
     const p = profile || profileDraft || { first: '', last: '', dept: '' };
     setLocked(!!forced);
@@ -5439,6 +5535,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     if (ui.mdate && !(e.target.closest && e.target.closest('.mdwrap'))) closeMdatePop();   // clicking anywhere else closes the date dropdown
     if (gsOpen && !(e.target.closest && e.target.closest('#gsWrap'))) gsClose();   // clicking anywhere else closes the search results
     if (prOpen && !(e.target.closest && e.target.closest('#presence'))) { prOpen = false; renderPresence(); }   // clicking anywhere else closes the "who is here" list
+    if (annOpen && !(e.target.closest && e.target.closest('#annWrap'))) { annOpen = false; renderAnn(); }   // clicking anywhere else closes the notifications list
     if (calPopKey && !(e.target.closest && e.target.closest('#calPop, .cev, [data-act="cal-info"]'))) calClosePop();
     if (viewsOpen && !(e.target.closest && e.target.closest('#viewsWrap'))) viewsClose();   // clicking anywhere else closes the saved-views list   // clicking anywhere else closes the meeting details card
     $$('.menu-pop.show').forEach(p => { if (!p.parentElement.contains(e.target)) p.classList.remove('show'); });
@@ -5607,6 +5704,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       case 'view-restore': viewRestore(t.dataset.uid); break;
       case 'mseries-toggle': { const id = t.closest('.mcard').dataset.mid; if (ui.meetDates.has(id)) ui.meetDates.delete(id); else ui.meetDates.add(id); renderMeetings(); setTimeout(() => { const nb = document.querySelector('.mcard[data-mid="' + CSS.escape(id) + '"] [data-act="mseries-toggle"]'); if (nb) nb.focus({ preventScroll: true }); }, 40); break; }   // after the sort box has re-ordered the cards
       case 'mseries-open': calOpenLog(t.dataset.mids.split(','), t.dataset.label); break;
+      case 'hide-closed-off': ui.status = 'all'; renderAll(); break;
       case 'combine-toggle': ui.combine = !ui.combine; saveUi(); renderAll(); break;
       case 'dup-find': dupDialog(); break;
       case 'dup-review': { const sec = t.closest('.dupc'), items = Array.from(sec.querySelectorAll('input[data-dupi]:checked')).map(x => itemByUid(x.dataset.dupi)).filter(Boolean); if (items.length < 2) toast('Tick at least two items to link.', 'warn'); else linkDialog(items); break; }
@@ -5617,6 +5715,13 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       case 'link-ungroup': { const o = itemByUid(t.dataset.uid); if (o) ungroupItems(o); break; }
       case 'link-main': { const o = itemByUid(t.dataset.uid); if (o) makeMain(o); break; }
       case 'link-show': { const o = itemByUid(t.dataset.uid); if (o) { ui.combine = false; saveUi(); focusItem(o.id); } break; }
+      case 'ann-toggle': annOpen = !annOpen; renderAnn(); break;
+      case 'ann-open': annOpen = true; renderAnn(); break;
+      case 'ann-read': annMarkRead([t.dataset.uid]); renderAnn(); break;
+      case 'ann-readall': annMarkRead(annUnread().map(a => a.uid)); renderAnn(); break;
+      case 'ann-compose': annCompose(); break;
+      case 'ann-send': annSend(); break;
+      case 'ann-withdraw': annWithdraw(t.dataset.uid); break;
       case 'a-sort': { const k = t.dataset.key; if (ui.aSort.key === k) ui.aSort.dir *= -1; else { ui.aSort.key = k; ui.aSort.dir = (k === 'user' || k === 'dept') ? 1 : -1; } renderAccess(); break; }
       case 'mtitle-edit': { const h = t.closest('.mcard').querySelector('.mtitle'); if (h) { h.focus(); const r = document.createRange(); r.selectNodeContents(h); const sl = window.getSelection(); sl.removeAllRanges(); sl.addRange(r); } break; }
       case 'bic-jump': { const sec = document.querySelector('.osec[data-key="' + CSS.escape(t.dataset.key) + '"]'); if (sec) { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); sec.classList.add('flashsec'); setTimeout(() => sec.classList.remove('flashsec'), 1600); } break; }
@@ -5661,6 +5766,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     if (t.id === 'fProject') { ui.project = t.value; renderAll(); return; }
     if (t.id === 'fGroup') { ui.group = t.value; renderTable(); renderFilters(); return; }
     if (t.id === 'fCategory') { ui.category = t.value; renderAll(); return; }
+    if (t.id === 'fHideClosed') { ui.status = t.checked ? 'active' : 'all'; renderAll(); return; }
     if (t.id === 'fOngoing') { ui.ongoing = t.checked; renderAll(); return; }
     if (t.id === 'fCombine') { ui.combine = t.checked; saveUi(); renderAll(); return; }
     if (t.id === 'fOngoingIn') { ['fDue', 'fDueTxt'].forEach(i => { const el = $('#' + i); if (el) el.disabled = t.checked; }); return; }
@@ -5708,6 +5814,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   });
 
   document.addEventListener('input', e => {
+    if (e.target && (e.target.id === 'annMsg' || e.target.id === 'annTitle' || e.target.name === 'annImp')) { annCompInput(); return; }
     if (e.target && (e.target.id === 'pFirst' || e.target.id === 'pLast') && $('#pPassLbl')) { const adm = adminOn() && isAdminName($('#pFirst').value, $('#pLast').value); $('#pPassLbl').textContent = adm ? 'Administrator password' : 'Password'; const pp = $('#pPass'); if (pp) pp.placeholder = adm ? 'Administrator password' : 'Team password'; }
     if (e.target.closest && e.target.closest('#mergeForm') && e.target.id !== 'mgWith') { mergeRecalc(); return; }
     if (e.target.id === 'mdIso') { if (ui.mdate) ui.mdate.iso = e.target.value; return; }
@@ -5752,6 +5859,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   document.addEventListener('keydown', e => {
     if (msOpen && e.key === 'Escape') { closeMsPop(true); return; }
     if (viewsOpen && e.key === 'Escape') { viewsClose(true); return; }
+    if (annOpen && e.key === 'Escape') { annOpen = false; renderAnn(); const bb = $('#annBell'); if (bb) bb.focus(); return; }
     if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.matches && e.target.matches('.mmrow, .hb[data-act], .rcl, .orig[data-act]') && !e.defaultPrevented) { e.preventDefault(); e.target.click(); return; }
     if (prOpen && e.key === 'Escape') { prOpen = false; renderPresence(); const s = $('#prStack'); if (s) s.focus(); return; }
     if (e.target.closest && e.target.closest('.mdpop')) {
@@ -5810,6 +5918,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     ['deletedAt', 'deleted_at', NZ, TS_DE], ['deletedBy', 'deleted_by', NZ, FROM_NZ]
   ];
   let WEEKLY_OK = false;   // becomes true once the database has the 'weekly' column (supabase_update_v3.sql)
+  let ANN_OK = false;      // becomes true once the database has the announcements table (supabase_update_v6.sql)
   let VIEWS_OK = false;    // becomes true once the database has the saved_views table (supabase_update_v5.sql)
   let CAL_OK = false;      // becomes true once the database has the calendar_events table (supabase_update_v4.sql)
   const MEET_F = [
@@ -5855,7 +5964,8 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const Live = (function () {
     let sb = null, ready = false, loadedOnce = false, flushing = false, rtOK = false, syncState = 'off', lastErr = null, lastOkAt = 0;
     let flushT = null, cacheT = null, pullT = null, pollT = null, retryMs = 0, renderPending = false, started = false;
-    let SY = { snapI: new Map(), snapM: new Map(), snapC: new Map(), snapV: new Map(), upd: new Set(), hist: new Set(), seen: { items: 0, mtg: 0, upd: 0, hist: 0, cal: 0, views: 0 } };
+    let SY = { snapI: new Map(), snapM: new Map(), snapC: new Map(), snapV: new Map(), upd: new Set(), hist: new Set(), seen: { items: 0, mtg: 0, upd: 0, hist: 0, cal: 0, views: 0, ann: 0 } };
+    let allowUnloadFlag = false;
     let lock = Promise.resolve();
     const exclusive = fn => { const run = lock.then(fn); lock = run.catch(() => { }); return run; };
 
@@ -5951,6 +6061,28 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       return ch;
     }
     function viewFromRow(r) { const v = { uid: r.uid, created: TS_DE(r.created_at) }; VIEW_F.forEach(f => { v[f[0]] = f[3](r[f[1]]); }); return v; }
+    function annFromRow(r) { return { uid: r.uid, title: r.title || '', message: r.message || '', importance: r.importance === 'important' ? 'important' : 'normal', createdBy: r.created_by || '', created: TS_DE(r.created_at), deletedAt: TS_DE(r.deleted_at) }; }
+    function mergeAnnRows(rows) {
+      let ch = false;
+      rows.forEach(r => { const a = annFromRow(r), i = state.ann.findIndex(x => x.uid === a.uid); if (i < 0) { state.ann.push(a); ch = true; } else if (JSON.stringify(state.ann[i]) !== JSON.stringify(a)) { state.ann[i] = a; ch = true; } });
+      return ch;
+    }
+    async function sendAnnouncement(row) {   // only the administrator's login is allowed to insert (the database enforces it)
+      if (!ANN_OK) return { ok: false, message: 'Notifications need the one-time database update (supabase_update_v6.sql).' };
+      try {
+        const r = await sb.from('announcements').insert(row);
+        if (r.error) return { ok: false, message: (r.error.code === '42501' || /row-level security|permission denied/i.test(r.error.message || '')) ? 'Only the administrator can send notifications.' : friendlyError(wrapErr(r.error)) };
+        return { ok: true };
+      } catch (e) { return { ok: false, message: friendlyError(e) }; }
+    }
+    async function withdrawAnnouncement(uid) {   // hides it (soft delete); the row stays in the database
+      try {
+        const r = await sb.from('announcements').update({ deleted_at: nowIso(), deleted_by: actorLabel(), updated_by: actorLabel() }).eq('uid', uid).select('uid');
+        if (r.error) return { ok: false, message: friendlyError(wrapErr(r.error)) };
+        if (!r.data || !r.data.length) return { ok: false, message: 'Only the administrator can withdraw a notification.' };
+        return { ok: true };
+      } catch (e) { return { ok: false, message: friendlyError(e) }; }
+    }
     function mergeViewRow(r) {
       let v = state.views.find(x => x.uid === r.uid);
       if (!v) { v = viewFromRow(r); state.views.push(v); SY.snapV.set(r.uid, snapFromServer(VIEW_F, r)); return true; }
@@ -6028,6 +6160,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       const mtg = await fetchAll('meetings', 'updated_at', since('mtg'));
       const cal = CAL_OK ? await fetchAll('calendar_events', 'updated_at', since('cal')) : [];
       const views = VIEWS_OK ? await fetchAll('saved_views', 'updated_at', since('views')) : [];
+      const anns = ANN_OK ? await fetchAll('announcements', 'updated_at', since('ann')) : [];
       if (full && itm.length === 0 && SY.snapI.size > 0) throw new Error('The server returned no items although this device holds synced data. Nothing was changed — check that you are signed in and that supabase_setup.sql was run.');
       let changed = false;
       mtg.forEach(r => { if (mergeMeetingRow(r)) changed = true; });
@@ -6036,12 +6169,14 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       if (mergeHistoryRows(hist)) changed = true;
       cal.forEach(r => { if (mergeCalRow(r)) changed = true; });
       views.forEach(r => { if (mergeViewRow(r)) changed = true; });
+      const annChanged = mergeAnnRows(anns); if (annChanged) changed = true;
       if (full && reconcile(mtg, itm)) changed = true;
       if (full && CAL_OK && reconcileCal(cal)) changed = true;
       if (full && VIEWS_OK && reconcileViews(views)) changed = true;
       SY.seen.items = maxStamp(itm, 'updated_at', SY.seen.items); SY.seen.mtg = maxStamp(mtg, 'updated_at', SY.seen.mtg);
-      SY.seen.upd = maxStamp(upd, 'created_at', SY.seen.upd); SY.seen.hist = maxStamp(hist, 'created_at', SY.seen.hist); SY.seen.cal = maxStamp(cal, 'updated_at', SY.seen.cal); SY.seen.views = maxStamp(views, 'updated_at', SY.seen.views);
+      SY.seen.upd = maxStamp(upd, 'created_at', SY.seen.upd); SY.seen.hist = maxStamp(hist, 'created_at', SY.seen.hist); SY.seen.cal = maxStamp(cal, 'updated_at', SY.seen.cal); SY.seen.views = maxStamp(views, 'updated_at', SY.seen.views); SY.seen.ann = maxStamp(anns, 'updated_at', SY.seen.ann);
       lastOkAt = Date.now();
+      if (annChanged) renderAnn();   // a new notification appears at once, even while someone is typing
       if (changed) { cacheSoon(); requestRender(); }
       return changed;
     }
@@ -6257,6 +6392,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       WEEKLY_OK = dbVer >= 3;   // version 2 databases keep working; only the Weekly Meeting? checkbox waits for the update
       CAL_OK = dbVer >= 4;      // version 3 databases keep working; scheduling upcoming meetings waits for the calendar update
       VIEWS_OK = dbVer >= 5;    // version 4 databases keep working; saved views wait for the v5 update
+      ANN_OK = dbVer >= 6;      // version 5 databases keep working; notifications wait for the v6 update
       if (WEEKLY_OK && !MEET_F.some(f => f[0] === 'weekly')) MEET_F.push(['weekly', 'weekly', v => !!v, v => !!v]);
       if (!loadedOnce) cacheLoad();
       await pull(true);
@@ -6267,7 +6403,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       if (started) return; started = true;
       try {
         const ch = sb.channel('twcg-live-' + Math.random().toString(36).slice(2, 8));
-        ['items', 'meetings', 'item_updates', 'history'].concat(CAL_OK ? ['calendar_events'] : []).concat(VIEWS_OK ? ['saved_views'] : []).forEach(t => ch.on('postgres_changes', { event: '*', schema: 'public', table: t }, () => schedulePull(250)));
+        ['items', 'meetings', 'item_updates', 'history'].concat(CAL_OK ? ['calendar_events'] : []).concat(VIEWS_OK ? ['saved_views'] : []).concat(ANN_OK ? ['announcements'] : []).forEach(t => ch.on('postgres_changes', { event: '*', schema: 'public', table: t }, () => schedulePull(250)));
         ch.subscribe(st => { rtOK = (st === 'SUBSCRIBED'); if (syncState === 'ok') setSync('ok'); });
       } catch (e) { rtOK = false; }
       const poll = () => { clearTimeout(pollT); pollT = setTimeout(() => { if (ready && document.visibilityState === 'visible' && navigator.onLine !== false) pull(false).catch(e => { lastErr = e; }); poll(); }, (rtOK ? 45 : Number(CFG.POLL_SECONDS) || 15) * 1000); };
@@ -6275,7 +6411,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && ready) { schedulePull(200); if (pendingCount()) scheduleFlush(300); } });
       window.addEventListener('online', () => { if (ready) { schedulePull(200); scheduleFlush(300); } });
       window.addEventListener('offline', () => setSync('offline'));
-      window.addEventListener('beforeunload', e => { if (ready && (flushing || pendingCount() > 0)) { e.preventDefault(); e.returnValue = ''; return ''; } });
+      window.addEventListener('beforeunload', e => { if (!allowUnloadFlag && ready && (flushing || pendingCount() > 0)) { e.preventDefault(); e.returnValue = ''; return ''; } });
     }
     /* ---------- presence: who is in the tracker right now (Supabase Realtime Presence; nothing is stored in the database) ---------- */
     let prCh = null, prKey = uuid(), prSince = new Date().toISOString();
@@ -6306,7 +6442,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       renderPresence();
     }
     window.addEventListener('pagehide', () => { if (prCh) { try { prCh.untrack(); } catch (e) { /* ignore */ } } });
-    return { manualSignOut: false, role: () => roleNow, isAdmin: () => roleNow === 'admin', rawAdmin: () => rawAdm, refreshRole, viewsOK: () => VIEWS_OK, flushRender, calOK: () => CAL_OK, calSynced: uid => SY.snapC.has(uid), meetSynced: id => SY.snapM.has(id), startPresence, trackPresence, stopPresence, presenceList, presenceSince: () => prSince, ensureLib, init, hasSession, signIn, signOut, load, startLive, dirty, allocIds, pendingCount, pull, flushNow: () => flushLoop(), info, clearLocal, setSync, isReady: () => ready, ITEM_F, MEET_F };
+    return { manualSignOut: false, annOK: () => ANN_OK, sendAnnouncement, withdrawAnnouncement, saveCacheNow: () => cacheSave(), allowUnload: () => { allowUnloadFlag = true; }, role: () => roleNow, isAdmin: () => roleNow === 'admin', rawAdmin: () => rawAdm, refreshRole, viewsOK: () => VIEWS_OK, flushRender, calOK: () => CAL_OK, calSynced: uid => SY.snapC.has(uid), meetSynced: id => SY.snapM.has(id), startPresence, trackPresence, stopPresence, presenceList, presenceSince: () => prSince, ensureLib, init, hasSession, signIn, signOut, load, startLive, dirty, allocIds, pendingCount, pull, flushNow: () => flushLoop(), info, clearLocal, setSync, isReady: () => ready, ITEM_F, MEET_F };
   })();
 
   /* ---------- sign-in / session ---------- */
@@ -6498,12 +6634,227 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       '<div class="mfoot"><button class="btn" data-act="modal-close">Close</button><button class="btn primary" data-act="sync-retry">Sync now</button></div>', { cls: 'narrow' });
   }
 
+  /* =====================================================================
+     NEW-VERSION CHECK  -  everybody works on the version that is published
+     Every minute (and whenever the tab comes back to the front) the page reads the build number from the first few KB of index.html on
+     the server - never the whole file. If it differs from the build this page was loaded with, a full-screen notice asks the person to
+     refresh. Their work is saved first: unsaved edits are sent, and an unposted update stays in its draft box.
+     The notice waits (up to 10 minutes) while an Add / Edit / import dialog is open, so typed-in text there is never thrown away.
+     ===================================================================== */
+  const BUILD_META_RE = /<meta\s+name=["']twcg-build["']\s+content=["']([^"']+)["']/i;
+  let updServer = '', updSince = 0, updShown = false, updBusy = false, updDeferT = null, updRefreshing = false, updLastCheck = 0, updDeferMs = 10 * 60 * 1000;
+  async function buildFromStream(reader) {   // finds the build number in the first chunks of a response, then stops reading
+    const dec = new TextDecoder(); let buf = '';
+    try {
+      for (let n = 0; n < 32 && buf.length < 65536; n++) {
+        const r = await reader.read(); if (r.done) break;
+        buf += dec.decode(r.value, { stream: true });
+        const m = BUILD_META_RE.exec(buf); if (m) return m[1];
+      }
+    } catch (e) { /* ignore */ } finally { try { reader.cancel(); } catch (e) { /* ignore */ } }
+    return '';
+  }
+  async function fetchServerBuild() {   // '' when it cannot be read (offline, error page, no tag): that never triggers the notice
+    if (!/^https?:$/.test(location.protocol)) return '';
+    const ctl = new AbortController(); let url = location.href.split('#')[0]; url += (url.indexOf('?') >= 0 ? '&' : '?') + '__v=' + Date.now();
+    try {
+      const r = await fetch(url, { cache: 'no-store', signal: ctl.signal, headers: { Range: 'bytes=0-16383' } });
+      if (!(r.ok || r.status === 206) || !r.body || !r.body.getReader) return '';
+      const b = await buildFromStream(r.body.getReader()); ctl.abort(); return b;
+    } catch (e) { return ''; }
+  }
+  async function checkVersion() {
+    if (updShown || updRefreshing) return;
+    if (updServer) { enforceUpdate(); return; }   // a new version is already known: just try to show the notice
+    if (updBusy || Date.now() - updLastCheck < 1500) return;
+    updBusy = true; updLastCheck = Date.now();
+    try { const b = await fetchServerBuild(); if (b && b !== BUILD_ID) { updServer = b; updSince = Date.now(); enforceUpdate(); } }
+    finally { updBusy = false; }
+  }
+  function enforceUpdate() {
+    if (updShown) return;
+    clearTimeout(updDeferT);
+    const dialog = document.querySelector('#modalRoot .modal:not(.lockmodal)');   // a dialog the person is filling in
+    if (dialog && Date.now() - updSince < updDeferMs) { updDeferT = setTimeout(enforceUpdate, 1000); return; }
+    showUpdateOverlay();
+  }
+  function showUpdateOverlay() {
+    const ov = $('#updOverlay'); if (!ov || updShown) return;
+    updShown = true;
+    try { const a = document.activeElement; if (a && a !== document.body && a.blur) a.blur(); } catch (e) { /* ignore */ }   // saves a cell that is being edited
+    $('#updVer').textContent = 'This page: ' + BUILD_ID + '   \u00b7   Latest: ' + updServer;
+    ov.hidden = false; document.body.classList.add('upd-required'); updLock = true; applyInert();
+    setTimeout(() => { try { Live.flushNow(); } catch (e) { /* ignore */ } }, 600);   // start sending any unsaved change right away
+    const b = $('#updBtn'); if (b) b.focus();
+  }
+  async function updWaitSaved(maxMs) {
+    const t0 = Date.now();
+    try { Live.flushNow(); } catch (e) { /* ignore */ }
+    while (Live.pendingCount() > 0 && Date.now() - t0 < maxMs) await new Promise(r => setTimeout(r, 200));
+    return Live.pendingCount();
+  }
+  async function doUpdateRefresh() {
+    if (updRefreshing) return; updRefreshing = true;
+    const b = $('#updBtn'), note = $('#updNote'); if (b) { b.disabled = true; b.textContent = 'Saving your work\u2026'; } if (note) note.textContent = '';
+    let left = 0; try { left = await updWaitSaved(8000); } catch (e) { /* carry on */ }
+    try { Live.saveCacheNow(); } catch (e) { /* ignore */ }
+    if (left > 0 && note) note.textContent = left + ' change' + (left === 1 ? '' : 's') + ' could not be sent yet (no connection?). They stay saved on this device and are sent automatically after the refresh.';
+    if (b) b.textContent = 'Loading the latest version\u2026';
+    try { sessionStorage.setItem('twcg-updated-to', updServer); } catch (e) { /* ignore */ }
+    try { Live.allowUnload(); } catch (e) { /* ignore */ }   // the browser must not ask "leave this page?"
+    setTimeout(() => { try { location.reload(); } catch (e) { updRefreshing = false; if (b) { b.disabled = false; b.textContent = '\u21bb Refresh now'; } } }, left > 0 ? 1800 : 250);
+  }
+  function startVersionWatch() {
+    try { const to = sessionStorage.getItem('twcg-updated-to'); if (to) { sessionStorage.removeItem('twcg-updated-to'); if (to === BUILD_ID) setTimeout(() => toast('The tracker was updated to the latest version.'), 1800); } } catch (e) { /* ignore */ }
+    const btn = $('#updBtn'); if (btn) btn.addEventListener('click', doUpdateRefresh);
+    document.addEventListener('keydown', e => {   // while the notice is up nothing else on the page can be reached from the keyboard
+      if (!updShown) return;
+      const b = $('#updBtn'); if (e.target === b && (e.key === 'Enter' || e.key === ' ')) return;
+      e.stopPropagation(); if (e.key === 'Tab' || e.key === 'Escape') { e.preventDefault(); if (b) b.focus(); }
+    }, true);
+    if (!/^https?:$/.test(location.protocol)) return;
+    const secs = Math.max(1, Number((window.TWCG_CONFIG || {}).UPDATE_CHECK_SECONDS) || 60);
+    setTimeout(checkVersion, 4000);
+    setInterval(() => { if (document.visibilityState === 'visible') checkVersion(); }, secs * 1000);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkVersion(); });
+    window.addEventListener('focus', checkVersion); window.addEventListener('online', checkVersion);
+  }
+
+  /* =====================================================================
+     NOTIFICATIONS FROM THE ADMINISTRATOR
+     The administrator (and only the administrator - the database refuses everyone else) can send a message to everyone who uses the
+     tracker: new updates, reminders, other information. Nobody has to reply.
+       - a bell in the header shows how many are unread; it opens the list of the last 30 days
+       - new ones also appear as a bar under the header until the person presses "Got it"
+       - "read" is remembered per person on that computer; people who are away see it the next time they open the tracker
+       - messages are stored in the database (supabase_update_v6.sql) and are only ever hidden ("withdrawn"), never erased
+     ===================================================================== */
+  const ANN_READ_KEY = 'twcg-ann-read-v1', ANN_NEW_DAYS = 14, ANN_LIST_DAYS = 30, ANN_MAX_TITLE = 80, ANN_MAX_MSG = 1000;
+  let annOpen = false, annSending = false;
+  const annUser = () => (profile ? actorName() : '').toLowerCase();
+  function annReadSet() { try { const all = JSON.parse(localStorage.getItem(ANN_READ_KEY) || '{}') || {}; return new Set(all[annUser()] || []); } catch (e) { return new Set(); } }
+  function annMarkRead(uids) {
+    try {
+      const all = JSON.parse(localStorage.getItem(ANN_READ_KEY) || '{}') || {}, k = annUser(), s = new Set(all[k] || []);
+      uids.forEach(u => s.add(u)); all[k] = Array.from(s).slice(-300); localStorage.setItem(ANN_READ_KEY, JSON.stringify(all));
+    } catch (e) { /* storage unavailable: the message simply shows again next time */ }
+  }
+  const annAgeDays = a => (Date.now() - Date.parse(a.created)) / 864e5;
+  const annVisible = () => state.ann.filter(a => !a.deletedAt && !isNaN(Date.parse(a.created)) && annAgeDays(a) <= ANN_LIST_DAYS).sort((x, y) => (x.created < y.created ? 1 : x.created > y.created ? -1 : 0));
+  function annUnread() {   // not read yet, not older than 14 days, and not written by the person looking at it
+    const read = annReadSet(), me = annUser();
+    return annVisible().filter(a => !read.has(a.uid) && annAgeDays(a) <= ANN_NEW_DAYS && String(a.createdBy || '').toLowerCase() !== me);
+  }
+  function annLinkify(escaped) {   // only http(s) addresses become links; the text was escaped first, so nothing typed can become markup
+    return escaped.replace(/https?:\/\/(?:(?!&(?:quot|#39|lt|gt);)[^\s])+/g, u => {
+      const clean = u.replace(/[.,;:!?)\]]+$/, ''), tail = u.slice(clean.length);
+      return '<a href="' + clean + '" target="_blank" rel="noopener noreferrer">' + clean + '</a>' + tail;
+    });
+  }
+  const annBodyHtml = a => (a.title ? '<b class="annt">' + esc(a.title) + '</b>' : '') + '<span class="annm">' + annLinkify(esc(a.message)) + '</span>';
+  const annMetaHtml = a => '<em class="annmeta">' + esc(a.createdBy || 'Administrator') + ' \u00b7 ' + esc(fmtDateTime(a.created)) + '</em>';
+  function annRowHtml(a) {   // one row of the bar under the header
+    const imp = a.importance === 'important';
+    return '<div class="annrow' + (imp ? ' imp' : '') + '" data-uid="' + esc(a.uid) + '" role="group" aria-label="' + (imp ? 'Important notification' : 'Notification') + '"><span class="anntag">' + (imp ? 'Important' : 'New') + '</span><div class="annbody">' + annBodyHtml(a) + annMetaHtml(a) + '</div>' +
+      '<button type="button" class="btn annok" data-act="ann-read" data-uid="' + esc(a.uid) + '">Got it</button></div>';
+  }
+  function annItemHtml(a, isNew, adm) {   // one row of the list in the bell panel
+    const imp = a.importance === 'important';
+    return '<div class="annitem' + (isNew ? ' new' : '') + (imp ? ' imp' : '') + '" data-uid="' + esc(a.uid) + '"><span class="anndot" title="' + (isNew ? 'Unread' : 'Read') + '"></span><div class="annbody">' + (imp ? '<span class="anntag sm">Important</span> ' : '') + annBodyHtml(a) + annMetaHtml(a) + '</div>' +
+      (adm ? '<button type="button" class="annwd" data-act="ann-withdraw" data-uid="' + esc(a.uid) + '" title="Withdraw this notification for everyone" aria-label="Withdraw this notification">Withdraw</button>' : '') + '</div>';
+  }
+  function annPanelHtml(unread) {
+    const list = annVisible(), un = new Set(unread.map(a => a.uid)), adm = Live.isAdmin(), ok = Live.annOK();
+    let html = '<div class="ann-h"><b>Notifications</b>' + (unread.length ? '<span class="ann-hn">' + unread.length + ' new</span>' : '') + '</div>';
+    if (adm) html += '<div class="ann-admin">' + (ok ? '<button type="button" class="btn primary" data-act="ann-compose">\uff0b Send a notification\u2026</button><p class="muted sm">Goes to everyone who uses the tracker. No reply needed.</p>' : '<div class="ann-warn">Notifications need a one-time database update. Run <code>supabase_update_v6.sql</code> in Supabase, then reload this page.</div>') + '</div>';
+    html += '<div class="ann-list">' + (ok ? (list.length ? list.map(a => annItemHtml(a, un.has(a.uid), adm)).join('') : '<p class="ann-none">No notifications in the last ' + ANN_LIST_DAYS + ' days.</p>') : '') + '</div>';
+    if (ok) html += '<div class="ann-f">' + (unread.length ? '<button type="button" class="link" data-act="ann-readall">Mark all as read</button>' : '<span class="muted">You are all caught up.</span>') + '<span class="muted sm">Last ' + ANN_LIST_DAYS + ' days</span></div>';
+    return html;
+  }
+  function renderAnn() {
+    const wrap = $('#annWrap'); if (!wrap) return;
+    const show = !!profile && (Live.annOK() || Live.isAdmin()), bar = $('#annBar'), more = $('#moreAnn');
+    if (more) more.hidden = !(profile && Live.isAdmin());
+    wrap.hidden = !show;
+    if (!show) { annOpen = false; if (bar) { bar.hidden = true; bar.innerHTML = ''; } return; }
+    const unread = Live.annOK() ? annUnread() : [], cnt = $('#annCnt'), bell = $('#annBell'), pop = $('#annPop');
+    cnt.hidden = !unread.length; cnt.textContent = unread.length > 9 ? '9+' : String(unread.length);
+    bell.setAttribute('aria-label', 'Notifications' + (unread.length ? ', ' + unread.length + ' unread' : '')); bell.setAttribute('aria-expanded', annOpen ? 'true' : 'false');
+    bell.classList.toggle('has', unread.length > 0); bell.classList.toggle('imp', unread.some(a => a.importance === 'important'));
+    if (bar) {
+      const order = unread.slice().sort((x, y) => (y.importance === 'important') - (x.importance === 'important') || (x.created < y.created ? 1 : -1)), shown = order.slice(0, 3), rest = order.length - shown.length;
+      if (!order.length) { bar.hidden = true; bar.innerHTML = ''; }
+      else {
+        bar.hidden = false;
+        bar.innerHTML = shown.map(annRowHtml).join('') + (order.length > 1 ? '<div class="annfoot">' + (rest > 0 ? '<button type="button" class="link" data-act="ann-open">+ ' + rest + ' more unread \u2014 open notifications</button>' : '') + '<button type="button" class="link" data-act="ann-readall">Dismiss all</button></div>' : '');
+      }
+    }
+    pop.hidden = !annOpen;
+    if (annOpen) { pop.innerHTML = annPanelHtml(unread); placeAnnPop(); }
+  }
+  function placeAnnPop() {   // keep the panel inside the window
+    const wrap = $('#annWrap'), pop = $('#annPop'); if (!wrap || !pop || pop.hidden) return;
+    const M = 8, vw = document.documentElement.clientWidth; pop.style.left = '0px'; pop.style.right = 'auto';
+    const wr = wrap.getBoundingClientRect(), w = pop.offsetWidth; let left = wr.left; if (left + w > vw - M) left = vw - M - w; if (left < M) left = M;
+    pop.style.left = (left - wr.left) + 'px';
+  }
+  window.addEventListener('resize', () => { if (annOpen) placeAnnPop(); });
+
+  /* ---------- the administrator writes and sends ---------- */
+  function annCompInput() {   // character counter + live preview inside the compose dialog
+    const m = $('#annMsg'); if (!m) return;
+    const msg = m.value, title = ($('#annTitle').value || '').trim(), imp = (document.querySelector('input[name=annImp]:checked') || {}).value === 'important';
+    const c = $('#annCount'); c.textContent = msg.length + ' / ' + ANN_MAX_MSG; c.classList.toggle('over', msg.length > ANN_MAX_MSG);
+    const ee = $('#annErr'); if (ee) ee.textContent = '';   // a message about an earlier attempt goes away as soon as the person edits
+    const p = $('#annPrev'); p.innerHTML = '<div class="annprev-h">Preview</div>' + (msg.trim() || title ? '<div class="annrow' + (imp ? ' imp' : '') + '"><span class="anntag">' + (imp ? 'Important' : 'New') + '</span><div class="annbody">' + annBodyHtml({ title, message: msg.trim() || '\u2026' }) + annMetaHtml({ createdBy: actorName(), created: new Date().toISOString() }) + '</div></div>' : '<p class="muted sm">Your message will look like this.</p>');
+  }
+  function annCompose() {
+    if (!profile || !Live.isAdmin()) return;
+    if (!Live.annOK()) { toast('Notifications need the one-time database update (supabase_update_v6.sql).', 'warn'); return; }
+    annOpen = false; renderAnn();
+    openModal('<h2>Send a notification</h2><p class="muted">Everyone who uses the tracker will see this \u2014 people who are away will see it the next time they open it. It does not need a reply.</p>' +
+      '<div id="annForm"><label class="fl"><span>Title <span class="muted">(optional)</span></span><input id="annTitle" type="text" maxlength="' + ANN_MAX_TITLE + '" placeholder="e.g. New update published" autocomplete="off"></label>' +
+      '<label class="fl">Message<textarea id="annMsg" rows="5" placeholder="Write what you want everyone to know\u2026"></textarea></label><div class="anncount" id="annCount">0 / ' + ANN_MAX_MSG + '</div>' +
+      '<div class="fl"><span>How it should appear</span><div class="annimp"><label><input type="radio" name="annImp" value="normal" checked> Normal</label><label><input type="radio" name="annImp" value="important"> Important <em>(highlighted in red)</em></label></div></div>' +
+      '<div class="annprev" id="annPrev"></div><div class="perr" id="annErr" role="alert"></div></div>' +
+      '<div class="mfoot"><button type="button" class="btn" data-act="modal-close">Cancel</button><button type="button" class="btn primary" id="annSendBtn" data-act="ann-send">Send to everyone</button></div>', { cls: 'dlmodal' });
+    annCompInput(); setTimeout(() => { const t = $('#annTitle'); if (t) t.focus(); }, 0);
+  }
+  async function annSend() {
+    if (annSending || !profile || !Live.isAdmin()) return;
+    const tEl = $('#annTitle'), mEl = $('#annMsg'); if (!tEl || !mEl) return;
+    const title = tEl.value.replace(/\s+/g, ' ').trim(), msg = mEl.value.replace(/\r\n/g, '\n').trim(), imp = (document.querySelector('input[name=annImp]:checked') || {}).value === 'important' ? 'important' : 'normal';
+    const err = m => { const e = $('#annErr'); if (e) e.textContent = m; };
+    if (!msg) { err('Write a message first.'); mEl.focus(); return; }
+    if (msg.length > ANN_MAX_MSG) { err('The message is ' + (msg.length - ANN_MAX_MSG) + ' character' + (msg.length - ANN_MAX_MSG === 1 ? '' : 's') + ' too long (limit ' + ANN_MAX_MSG + ').'); mEl.focus(); return; }
+    if (title.length > ANN_MAX_TITLE) { err('The title is too long (limit ' + ANN_MAX_TITLE + ' characters).'); tEl.focus(); return; }
+    annSending = true; err(''); const btn = $('#annSendBtn'); if (btn) { btn.disabled = true; btn.textContent = 'Sending\u2026'; }
+    const row = { uid: uuid(), title, message: msg, importance: imp, created_by: actorName(), updated_by: actorLabel() };
+    const r = await Live.sendAnnouncement(row);
+    annSending = false;
+    if (!r.ok) { const b2 = $('#annSendBtn'); if (b2) { b2.disabled = false; b2.textContent = 'Send to everyone'; } err(r.message + ' Nothing was sent.'); return; }
+    state.ann.push({ uid: row.uid, title, message: msg, importance: imp, createdBy: actorName(), created: new Date().toISOString(), deletedAt: '' });
+    annMarkRead([row.uid]);
+    pushHistory('admin', { subject: title || 'Notification', text: 'Sent a notification to everyone' + (imp === 'important' ? ' (Important)' : '') + ': \u201c' + trunc((title ? title + ' \u2014 ' : '') + msg, 160) + '\u201d' });
+    save(); if ($('#annForm')) closeModal(); renderAnn(); toast('Notification sent. Everyone using the tracker will see it within a few seconds.');
+  }
+  async function annWithdraw(uid) {
+    const a = state.ann.find(x => x.uid === uid); if (!a || !Live.isAdmin()) return;
+    if (!confirm('Withdraw this notification? It disappears for everyone.\n\n' + (a.title ? a.title + '\n' : '') + trunc(a.message, 160))) return;
+    const r = await Live.withdrawAnnouncement(uid);
+    if (!r.ok) { toast(r.message, 'warn'); return; }
+    a.deletedAt = new Date().toISOString();
+    pushHistory('admin', { subject: a.title || 'Notification', text: 'Withdrew a notification: \u201c' + trunc((a.title ? a.title + ' \u2014 ' : '') + a.message, 160) + '\u201d' });
+    save(); renderAnn(); toast('Notification withdrawn.');
+  }
+
   /* ---------- init ---------- */
   load();
   renderAll();
   if (embedded) { const eb = $('#embedBar'); if (eb) eb.hidden = false; }
   boot();
-  window.__twcg = { linkMap, dupClusters, idPrefixForTitle, nextPrefixedId, importIdPlan, setMetrics, trendWeeks, seriesIndex, ageBuckets, ownerSplit, perMeetingRows, closureRecords, leaderboard, closedFeed, closeInfo, meetingSelInfo, meetingLogScope, serKey, calNeedsMinutes, parseCfg, viewCfgNow, calAllEvents, occList, occDate, occIndexOf, normKey, calSeriesList, recurText, fillPrintHead, cleanPrintHead, state: () => state, Live, parseDate, TWCGParser, uuid, gsCompute, queryMatches, parseQuery };
+  startVersionWatch();
+  window.__twcg = { BUILD_ID, checkVersion, buildFromStream, setUpdDeferMs: ms => { updDeferMs = ms; }, annUnread, annVisible, annLinkify, hiddenClosedCount, typedNoteOf, latestUpdate, linkMap, dupClusters, idPrefixForTitle, nextPrefixedId, importIdPlan, setMetrics, trendWeeks, seriesIndex, ageBuckets, ownerSplit, perMeetingRows, closureRecords, leaderboard, closedFeed, closeInfo, meetingSelInfo, meetingLogScope, serKey, calNeedsMinutes, parseCfg, viewCfgNow, calAllEvents, occList, occDate, occIndexOf, normKey, calSeriesList, recurText, fillPrintHead, cleanPrintHead, state: () => state, Live, parseDate, TWCGParser, uuid, gsCompute, queryMatches, parseQuery };
 })();
 </script>
 </body>
