@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <title>TWCG – Action Item Tracking Log</title>
 <meta name="theme-color" content="#050506">
 <meta name="apple-mobile-web-app-title" content="TWCG Tracker">
@@ -796,6 +797,60 @@ body.cal-moving,body.cal-moving *{cursor:grabbing!important;user-select:none!imp
 .attrow{display:flex;gap:10px;align-items:flex-start;padding:7px 10px;border-bottom:1px solid #1d1f23;cursor:pointer}.attrow:last-child{border-bottom:0}.attrow:hover{background:var(--raise)}.attrow input{margin-top:3px}.attrow span{display:flex;flex-direction:column;min-width:0}.attrow b{color:#fff}.attrow em{font-style:normal;color:var(--mut);font-size:11.5px}
 @media print{.og-d{color:#0b0b0c!important}.og-m{color:#333!important}.og-c{color:#555!important}.og-n{background:#fff!important;color:#111!important;border-color:#8c9099!important}.orig:not(.man):hover{background:none}}
 
+/* ===== v12: weekly-meeting IDs, calendar order, recurring-series dates on the Meetings tab ===== */
+.impid{margin:6px 0 8px;padding:7px 12px;border-left:3px solid #fff;background:#17181b;border-radius:0 8px 8px 0;color:var(--g1);font-size:12.5px;line-height:1.5}.impid b{color:#fff;font-family:var(--fm)}.impid>span{display:inline-block;margin-right:6px;padding:0 7px;border-radius:8px;background:var(--red);color:#fff;font:700 9.5px var(--fh);letter-spacing:.12em}
+.caltoday{margin:18px 0 14px}
+.mseries{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;padding:8px 12px;border:1px dashed var(--line2);border-radius:8px;background:#0f1012}
+.mseries.open{border-style:solid;border-color:var(--redline)}
+.mser-lab{color:var(--mut);font-size:12.5px;min-width:0;overflow-wrap:anywhere}.mser-lab b{color:#fff;font-weight:600}
+.mser-btn{padding:5px 12px;font-size:12.5px}
+.mser-panel{margin-top:6px;border:1px solid var(--line);border-radius:8px;background:#0f1012;overflow:hidden}
+.mser-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:7px 12px;border-bottom:1px solid var(--line);font-size:12px}
+.mser-list{max-height:270px;overflow:auto}
+.mser-row{display:grid;grid-template-columns:minmax(190px,1.3fr) minmax(0,2fr) auto;gap:10px;align-items:center;padding:6px 12px;border-bottom:1px solid #1d1f23;font-size:12.5px}
+.mser-row:last-child{border-bottom:0}.mser-row.cur{background:rgba(225,37,43,.1);box-shadow:inset 3px 0 0 var(--red)}
+.mser-d b{color:#fff;font-weight:600}.mser-n{color:var(--mut)}.mser-n b{color:#fff}.mser-n .bad{color:#ff7b7b;font-weight:700}
+.mser-tag{display:inline-block;margin-left:6px;padding:0 7px;border-radius:9px;border:1px solid var(--redline);background:var(--redbg);color:#ffb3b3;font:700 9.5px var(--fh);letter-spacing:.08em;text-transform:uppercase}
+.mser-row .mini:disabled{opacity:.4;cursor:default}
+@media (max-width:760px){.mser-row{grid-template-columns:1fr auto}.mser-n{grid-column:1/-1;order:3}}
+@media (max-width:560px){#meetList{grid-template-columns:minmax(0,1fr)}.mcard{min-width:0}.mact{flex-wrap:wrap}}
+@media print{.mseries,.mser-panel,.impid{display:none!important}}
+
+/* ===== v13: Add Item beside Download; the same item in several meetings ===== */
+.tabs .tabadd{margin-left:auto;align-self:center;margin-bottom:4px}
+.tabs .tabadd + .menu{margin-left:8px}
+.lkbadge{display:inline-block;margin-left:6px;padding:0 6px;border-radius:9px;border:1px solid var(--line2);background:#17181b;color:#d5d7db;font:700 10px var(--fh);letter-spacing:.04em;vertical-align:middle;cursor:default;white-space:nowrap}
+.lkbadge.cp{border-color:var(--redline);background:var(--redbg);color:#ffb3b3}
+.lk{display:flex;flex-direction:column;gap:1px;margin-top:6px;padding:4px 8px;border-left:2px solid var(--red);background:#14151a;border-radius:0 6px 6px 0;cursor:pointer;font-size:11px;line-height:1.35}
+.lk:hover{background:var(--raise)}
+.lk-h{font:700 9.5px var(--fh);letter-spacing:.08em;text-transform:uppercase;color:#ff9a9a}
+.lk-r{color:var(--g1);overflow-wrap:anywhere}.lk-r b{color:#fff;font-family:var(--fm);font-weight:600}.lk-r.x{opacity:.65;text-decoration:line-through}
+.lk-c{color:#ffb3b3}.lk-c b{color:#fff}
+.lkhint{margin-left:10px;color:var(--mut)}.lkhint .link{color:#fff;margin-left:6px}
+.lkpanel{margin:0 0 12px;border:1px solid var(--redline);border-radius:8px;background:#100d0e;overflow:hidden}
+.lkpanel h4{margin:0;padding:7px 12px;background:var(--redbg);color:#fff;font:700 11px var(--fh);letter-spacing:.1em;text-transform:uppercase}
+.lktab{width:100%;border-collapse:collapse;font-size:12px}
+.lktab th{text-align:left;padding:5px 10px;font:700 9.5px var(--fh);letter-spacing:.12em;text-transform:uppercase;color:var(--mut);border-bottom:1px solid var(--line2)}
+.lktab td{padding:6px 10px;border-bottom:1px solid #1d1f23;vertical-align:top}.lktab tr:last-child td{border-bottom:0}.lktab tr.me td{background:rgba(255,255,255,.04)}
+.lktab td b{color:#fff;font-family:var(--fm)}.lktab em{display:block;font-style:normal;color:var(--mut);font-size:11px}
+.lk-main{display:inline-block;margin-left:4px;padding:0 6px;border-radius:8px;background:var(--red);color:#fff;font:700 9px var(--fh);letter-spacing:.1em}
+.lk-a{white-space:nowrap;text-align:right}.lk-a .mini{margin-left:4px}
+.lkpanel .sm{margin:0;padding:6px 12px 8px}
+.lkfrom{display:inline-block;margin-right:6px;padding:0 6px;border-radius:8px;border:1px solid var(--line2);background:#17181b;color:#d5d7db;font:700 10px var(--fm)}
+.lkdl{margin:12px 0 8px}
+.lkrow{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border:1px solid var(--line2);border-radius:8px;margin:6px 0;cursor:pointer;background:#0f1012}
+.lkrow:has(input:checked){border-color:var(--redline);background:var(--redbg)}
+.lkrow input{margin-top:3px}.lkr-main{display:none;padding:0 7px;border-radius:8px;background:var(--red);color:#fff;font:700 9.5px var(--fh);letter-spacing:.1em;margin-top:2px}
+.lkrow input:checked ~ .lkr-main{display:inline-block}
+.lkr-t{display:flex;flex-direction:column;min-width:0;flex:1}.lkr-t b{color:#fff;font-family:var(--fm)}.lkr-t em{font-style:normal;color:var(--mut);font-size:11.5px}
+.duplist{max-height:58vh;overflow:auto;margin:10px 0}
+.dupc{border:1px solid var(--line2);border-radius:8px;margin:0 0 10px;overflow:hidden}
+.dupc-h{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 12px;background:#17181b;flex-wrap:wrap}.dupc-h span{display:flex;gap:6px}
+.duprow{display:flex;gap:10px;padding:7px 12px;border-top:1px solid #1d1f23;cursor:pointer}.duprow:hover{background:var(--raise)}.duprow input{margin-top:3px}
+.duprow span{display:flex;flex-direction:column;min-width:0}.duprow b{color:#fff;font-family:var(--fm)}.duprow em{font-style:normal;color:var(--mut);font-size:11.5px}
+.dupnone{padding:18px 4px;color:var(--g1)}
+@media print{.lk{background:#fff!important;border-left:2pt solid #e1252b!important;color:#111!important}.lk-h,.lk-c{color:#c8161c!important}.lk-r,.lk-r b{color:#222!important}.lkbadge{background:#fff!important;color:#111!important;border-color:#8c9099!important}.lkhint,.tabadd{display:none!important}}
+
 /* ===== Summary & Metrics tab ===== */
 #viewSummary{padding-top:20px}
 .sum-sub{margin:5px 0 0 14px;color:var(--mut);font-size:12.5px}
@@ -1121,7 +1176,6 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
     <button class="btn userbtn" id="userBtn" data-act="profile"></button>
     <button class="btn tmplbtn" data-act="dl-template" title="Download the blank fillable action-item PDF that this tracker imports">⬇ Download Import Template</button>
     <button class="btn primary" data-act="import">⬆ Import Meeting Minutes (PDF)</button>
-    <button class="btn" data-act="add">+ Add Item</button>
     <div class="menu">
       <button class="btn" data-act="more">More ▾</button>
       <div class="menu-pop" id="moreMenu">
@@ -1159,6 +1213,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
     <button class="tab" data-act="tab" data-view="bic">Ball-In-Court Items <span id="tabBicCount">0</span></button>
     <button class="tab" data-act="tab" data-view="hist">History <span id="tabHistCount">0</span></button>
     <button class="tab" data-act="tab" data-view="access">User Access <span id="tabAccessCount">0</span></button>
+    <button class="btn tabadd" data-act="add" title="Add an action item by hand">+ Add Item</button>
     <div class="menu">
       <button class="btn dlbtn" data-act="menu" data-menu="dlMenu">⬇ Download ▾</button>
       <div class="menu-pop" id="dlMenu">
@@ -1204,6 +1259,8 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
       <label class="chk" title="Show only items flagged as Ongoing Activity (they need continual updates and have no due date)"><input type="checkbox" id="fOngoing"> Ongoing Activity</label>
       <button class="btn clearbtn" id="btnClearAll" data-act="clear-all-filters" title="Clear every filter, the search box and the grouping">Clear All Filters</button>
       <div class="vwrap" id="viewsWrap"><button type="button" class="vbtn" id="viewsBtn" data-act="views-toggle" aria-haspopup="true" aria-expanded="false" title="Saved views, shared with everyone on the project"><span class="vbl">Views</span><i class="caret">▾</i></button><div class="vpop" id="viewsPop" hidden role="dialog" aria-label="Saved views"></div></div>
+      <label class="chk" id="combineLbl" title="Show an item that appears in several meetings only once. Turn this off to see every copy."><input type="checkbox" id="fCombine" checked> Combine duplicates</label>
+      <button class="btn" id="dupBtn" data-act="dup-find" title="Look for items that were raised in more than one meeting">Find duplicates</button>
       <span class="spacer"></span>
       <select id="fGroup"></select>
       <select id="fDensity" title="Row density"><option value="compact">Compact rows</option><option value="normal">Normal rows</option><option value="comfortable">Comfortable rows</option></select>
@@ -1215,6 +1272,7 @@ code{background:#1f2024;border:1px solid var(--line2);border-radius:4px;padding:
       <button class="btn bulkedit" data-act="bulk-edit" title="Change the owner, due date, status, meeting, ID or category of every selected item at once">✎ Bulk edit…</button>
       <button class="btn dlsel" data-act="dl" data-fmt="pdf" data-scope="selected">⬇ PDF of selected</button>
       <button class="btn dlsel" data-act="dl" data-fmt="xlsx" data-scope="selected">⬇ Excel of selected</button>
+      <button class="btn" data-act="link-selected" title="Show the selected items (the same item raised in several meetings) as one row in the log">↔ Link as one item…</button>
       <button class="btn" data-act="bulk-close">Close selected…</button>
       <button class="btn danger" data-act="bulk-delete">Delete selected</button>
       <button class="link" data-act="bulk-clear">Clear selection</button>
@@ -1476,7 +1534,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const STORE = 'twcg-action-log-v1';
   const STATUSES = ['Open', 'In Progress', 'On Hold', 'Closed'];
   const STATUS_ORDER = { 'Open': 0, 'In Progress': 1, 'On Hold': 2, 'Closed': 3 };
-  const TYPE_LABEL = { import: 'Imported', update: 'Update', status: 'Status', close: 'Closed', reopen: 'Reopened', edit: 'Edited', created: 'Created', carry: 'Carry-over', ownerclose: 'Owner closed', ownerreopen: 'Owner reopened' };
+  const TYPE_LABEL = { import: 'Imported', update: 'Update', status: 'Status', close: 'Closed', reopen: 'Reopened', edit: 'Edited', created: 'Created', carry: 'Carry-over', ownerclose: 'Owner closed', ownerreopen: 'Owner reopened', link: 'Linked', unlink: 'Unlinked' };
 
   const PROFILE_KEY = 'twcg-live-profile-v1';
   const DEPTS = ['OPS', 'VDC', 'VDC Field', 'Precon', 'Risk'];
@@ -1494,7 +1552,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     view: 'log', search: '', status: 'active', owner: '', project: '', meetings: new Set(), quick: '',
     group: 'none', sort: { key: 'due', dir: 1 }, expanded: new Set(), selected: new Set(),
     density: 'normal', summary: true, category: '', ongoing: false, colw: {}, colorder: [], colhidden: [], drafts: {},
-    calView: 'month', calDate: '', calHeld: true, calSched: true, calProject: '', calSeries: '', activeView: null, sumSeries: '', accPeriod: '30', accCredit: 'owner', accN: 10,
+    calView: 'month', calDate: '', calHeld: true, calSched: true, calProject: '', calSeries: '', activeView: null, sumSeries: '', accPeriod: '30', accCredit: 'owner', accN: 10, meetDates: new Set(), combine: true,
     bSearch: '', bOwner: '', bSort: 'open',
     aSort: { key: 'login', dir: -1 }, mdate: null, mSearch: '', uSearch: '', hSearch: '', hType: '', hUser: '', hDept: '', hFrom: '', hTo: '', hLimit: 200
   };
@@ -1519,7 +1577,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         if (Array.isArray(p.colhidden)) ui.colhidden = p.colhidden.filter(x => typeof x === 'string');
         if (p.calView === 'month' || p.calView === 'week' || p.calView === 'agenda') ui.calView = p.calView;
         if (p.calHeld === false) ui.calHeld = false; if (p.calSched === false) ui.calSched = false;
-        if (typeof p.sumSeries === 'string') ui.sumSeries = p.sumSeries; if (['7', '30', '90', 'all'].indexOf(p.accPeriod) >= 0) ui.accPeriod = p.accPeriod; if (p.accCredit === 'closer') ui.accCredit = 'closer'; if (p.accN === 5) ui.accN = 5;
+        if (typeof p.sumSeries === 'string') ui.sumSeries = p.sumSeries; if (['7', '30', '90', 'all'].indexOf(p.accPeriod) >= 0) ui.accPeriod = p.accPeriod; if (p.accCredit === 'closer') ui.accCredit = 'closer'; if (p.accN === 5) ui.accN = 5; if (p.combine === false) ui.combine = false;
       }
     } catch (e) { /* ignore */ }
     loadDrafts();
@@ -1569,7 +1627,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     state.history.push(rec);
   }
 
-  function saveUi() { try { localStorage.setItem(STORE + '-ui', JSON.stringify({ density: ui.density, summary: ui.summary, colw: ui.colw, colorder: ui.colorder, colhidden: ui.colhidden, calView: ui.calView, calHeld: ui.calHeld, calSched: ui.calSched, sumSeries: ui.sumSeries, accPeriod: ui.accPeriod, accCredit: ui.accCredit, accN: ui.accN })); } catch (e) { } }
+  function saveUi() { try { localStorage.setItem(STORE + '-ui', JSON.stringify({ density: ui.density, summary: ui.summary, colw: ui.colw, colorder: ui.colorder, colhidden: ui.colhidden, calView: ui.calView, calHeld: ui.calHeld, calSched: ui.calSched, sumSeries: ui.sumSeries, accPeriod: ui.accPeriod, accCredit: ui.accCredit, accN: ui.accN, combine: ui.combine })); } catch (e) { } }
 
   /* ---------- dates ---------- */
   const MONTHS = { jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, april: 4, may: 5, jun: 6, june: 6, jul: 7, july: 7, aug: 8, august: 8, sep: 9, sept: 9, september: 9, oct: 10, october: 10, nov: 11, november: 11, dec: 12, december: 12 };
@@ -1632,6 +1690,240 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     return { label: '', cls: '' };
   }
   function idTaken(id, except) { const k = String(id).toLowerCase(); return allItems().some(x => x !== except && x.id.toLowerCase() === k); }
+  /* ---------- ID prefixes for the weekly meetings ----------
+     Items raised at one of these meetings are numbered  PREFIX-001, PREFIX-002 ...  with a running number per meeting series.
+     A meeting is recognised by its title (capitals, hyphens, "(2 of 3)", dates and "Meeting"/"Meetings" are ignored), including the
+     titles earlier minutes were uploaded under.  To add or rename one, edit this list (prefix, then the titles that belong to it). */
+  const WEEKLY_ID_PREFIXES = [
+    ['RISK', ['Risk Check-In Meeting', 'Risk Check in Meeting']],
+    ['IVDC', ['Internal VDC Coordination Meeting']],
+    ['DESIGN', ['Weekly Design Meeting']],
+    ['STAFF', ['Staff Meeting Action Items', 'Staff Meeting Items', 'Previous Staff Meeting Items', 'Previous Staff Meeting Action Items']],
+    ['MEPF', ['VDC MEP Coordination Meeting', 'VDC Coordination Meetings (Sub)']]
+  ];
+  const idTitleKey = t => String(t || '').toLowerCase().replace(/\b\d{4}-\d{2}-\d{2}\b/g, ' ').replace(/[\(\[]\s*\d+\s*(?:of|\/)\s*\d+\s*[\)\]]/g, ' ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\bmeetings?\b/g, ' ').replace(/\s+/g, ' ').trim();
+  const ID_PREFIX_BY_KEY = new Map(); WEEKLY_ID_PREFIXES.forEach(([px, titles]) => titles.forEach(t => ID_PREFIX_BY_KEY.set(idTitleKey(t), px)));
+  function idPrefixForTitle(title) {
+    const k = idTitleKey(title); if (!k) return '';
+    if (ID_PREFIX_BY_KEY.has(k)) return ID_PREFIX_BY_KEY.get(k);
+    try { const a = idTitleKey(serKey(title)); if (ID_PREFIX_BY_KEY.has(a)) return ID_PREFIX_BY_KEY.get(a); } catch (e) { /* the series list is not ready yet */ }   // a title linked to a weekly series
+    return '';
+  }
+  const idPrefixForMeeting = mid => { const m = mid ? meetingById(mid) : null; return m ? idPrefixForTitle(m.title) : ''; };
+  function idPrefixOfId(id) { const m = /^([A-Za-z]+)-\d+$/.exec(String(id || '')); const px = m ? m[1].toUpperCase() : ''; return WEEKLY_ID_PREFIXES.some(p => p[0] === px) ? px : ''; }
+  const idPad = n => String(n).padStart(3, '0');
+  function maxIdNumber(px) {   // the highest number already used with this prefix (deleted items count too, so a number is never reused)
+    const re = new RegExp('^' + px + '-(\\d+)$', 'i'); let max = 0;
+    allItems().forEach(i => { const m = re.exec(i.id); if (m) max = Math.max(max, +m[1]); });
+    return max;
+  }
+  const nextPrefixedId = px => px + '-' + idPad(maxIdNumber(px) + 1);
+  function importIdPrefix(p) { const ex = findMeeting(p.meeting, p.file); return idPrefixForTitle(ex ? ex.title : (p.meeting.title || String(p.file || '').replace(/\.pdf$/i, ''))); }
+  function importIdPlan() {   // what the review screen promises: for each PDF the prefix and the first / last ID its new items will get
+    const used = {}, out = [];
+    pending.forEach(p => {
+      const px = p.error ? '' : importIdPrefix(p); if (!px) { out.push(null); return; }
+      if (used[px] == null) used[px] = maxIdNumber(px);
+      const n = p.items.filter(i => i.mode === 'new').length; out.push({ px, n, first: used[px] + 1, last: used[px] + n }); used[px] += n;
+    });
+    return out;
+  }
+  function importIdText(pl) {
+    if (!pl) return '';
+    if (!pl.n) return 'No new items in this PDF \u2014 items carried over from earlier meetings keep their existing IDs.';
+    const a = pl.px + '-' + idPad(pl.first), z = pl.px + '-' + idPad(pl.last);
+    return 'New items will be numbered <b>' + a + '</b>' + (pl.n > 1 ? ' to <b>' + z + '</b>' : '') + '. Items carried over from earlier meetings keep their existing IDs.';
+  }
+  /* =====================================================================
+     SAME ITEM IN SEVERAL MEETINGS  (linked duplicates)
+     When one action item was raised in more than one meeting there is one record per meeting (so each meeting's own log and metrics stay
+     complete).  Those records can be LINKED: the Tracking Log then shows ONE row (the "main" item) that lists every meeting it appears in.
+       - nothing is deleted or merged: every copy keeps its own ID, meeting and history
+       - the link is stored as an append-only entry in the copy's own update trail ("link" / "unlink"), so it needs no database change and
+         two people linking at the same moment can never overwrite each other
+       - closing / reopening / changing the status of any copy updates all of them
+     ===================================================================== */
+  let lkMemo = null, lkHidden = 0, lkBusy = false;
+  const LK_REF = /\[ref ([0-9a-f]{8})\]/i;
+  const linkReset = () => { lkMemo = null; };
+  const itemByUid = uid => state.items.find(i => i.uid === uid) || null;
+  const lkMeetingLabel = o => { const m = meetingOf(o); return m ? m.title : 'Manual entry'; };
+  function linkMap() {
+    if (lkMemo) return lkMemo;
+    const by8 = new Map(), parent = new Map();
+    state.items.forEach(i => { const k = String(i.uid).slice(0, 8).toLowerCase(); let a = by8.get(k); if (!a) by8.set(k, a = []); a.push(i); });
+    const resolve = text => {
+      const m = LK_REF.exec(text || ''); if (!m) return null;
+      const c = by8.get(m[1].toLowerCase()) || []; if (c.length === 1) return c[0];
+      const idm = /same item as (\S+)/i.exec(text || ''); return idm ? (c.find(x => String(x.id).toLowerCase() === idm[1].toLowerCase()) || null) : null;   // two ids share the first 8 characters: fall back to the printed ID
+    };
+    state.items.forEach(it => {   // an item points at its main item if its LAST link / unlink entry is a link
+      let last = null;
+      (it.updates || []).forEach(u => { if ((u.type === 'link' || u.type === 'unlink') && (!last || String(u.ts) >= String(last.ts))) last = u; });
+      if (last && last.type === 'link') { const t = resolve(last.text); if (t && t !== it) parent.set(it, t); }   // a main item that was deleted / does not exist is ignored: the copy simply stands alone
+    });
+    const findRoot = it => {
+      const seen = []; let cur = it;
+      while (parent.has(cur) && seen.indexOf(cur) < 0) { seen.push(cur); cur = parent.get(cur); }
+      if (parent.has(cur)) { const cyc = seen.slice(seen.indexOf(cur)); cur = cyc.reduce((a, b) => (String(a.uid) < String(b.uid) ? a : b)); }   // two people linked in opposite directions: the lowest id wins, every device agrees
+      return cur;
+    };
+    const root = new Map(), kids = new Map();
+    state.items.forEach(it => { const r = findRoot(it); if (r !== it) { root.set(it, r); let a = kids.get(r); if (!a) kids.set(r, a = []); a.push(it); } });
+    kids.forEach(a => a.sort((x, y) => String(openedOn(x)).localeCompare(String(openedOn(y))) || String(x.id).localeCompare(String(y.id), undefined, { numeric: true })));
+    lkMemo = { any: kids.size > 0, rootOf: it => root.get(it) || it, isFollower: it => root.has(it), parentOf: it => parent.get(it) || null, kidsOf: it => kids.get(it) || [], groupOf: it => { const r = root.get(it) || it; return [r].concat(kids.get(r) || []); } };
+    return lkMemo;
+  }
+  function collapseLinked(list) {   // one row per group in the log (the main item; or the copy that matches the meeting filter)
+    lkHidden = 0;
+    if (!ui.combine) return list;
+    const lm = linkMap(); if (!lm.any) return list;
+    const groups = new Map(), out = [];
+    list.forEach(it => { const r = lm.rootOf(it); if (r === it && !lm.kidsOf(it).length) { out.push(it); return; } let g = groups.get(r); if (!g) groups.set(r, g = []); g.push(it); });
+    groups.forEach((g, r) => { out.push(g.find(x => x === r) || g[0]); lkHidden += g.length - 1; });
+    return out;
+  }
+  function propagateStatus(it, status, date) {   // a status change on any copy is applied to every copy of the same item
+    if (lkBusy) return;
+    const grp = linkMap().groupOf(it); if (grp.length < 2) return;
+    lkBusy = true; const mh = muteHistory; muteHistory = true;
+    try { grp.forEach(o => { if (o !== it && o.status !== status) setStatus(o, status, 'Updated together with ' + it.id + ' (same item in another meeting)', date); }); }
+    finally { muteHistory = mh; lkBusy = false; }
+  }
+  function groupLatest(it, own) {   // the newest update on ANY copy shows as the item's latest update
+    const g = linkMap().groupOf(it); if (g.length < 2) return own;
+    let best = own;
+    g.forEach(o => { if (o !== it) (o.updates || []).forEach(x => { if (x.type === 'import' || x.type === 'created') return; if (!best || String(x.ts) > String(best.ts)) best = x; }); });
+    return best;
+  }
+  function trailForDetail(it) {   // newest first; for a linked item the trails of every copy are merged
+    const g = linkMap().groupOf(it);
+    if (g.length < 2) return (it.updates || []).slice().reverse().map(u => ({ u, from: '' }));
+    const rows = []; g.forEach(o => (o.updates || []).forEach((u, i) => rows.push({ u, from: o === it ? '' : o.id, k: o === it ? 0 : 1, i })));
+    rows.sort((a, b) => (String(a.u.ts) < String(b.u.ts) ? -1 : String(a.u.ts) > String(b.u.ts) ? 1 : 0) || a.k - b.k || a.i - b.i);
+    return rows.reverse();
+  }
+  const linkedOthers = it => linkMap().groupOf(it).filter(x => x !== it);
+  function linkBadge(it) {
+    const lm = linkMap(), g = lm.groupOf(it).length; if (g < 2) return '';
+    return lm.isFollower(it) ? '<span class="lkbadge cp" title="This is a copy of ' + esc(lm.rootOf(it).id) + ' (the same item raised in another meeting)">copy</span>' : '<span class="lkbadge" title="The same item appears in ' + g + ' meetings">\u2194 ' + g + '</span>';
+  }
+  function linkedCellHtml(it) {   // under the Meeting column: where else this item appears
+    const lm = linkMap(), grp = lm.groupOf(it); if (grp.length < 2) return '';
+    const others = grp.filter(x => x !== it), root = lm.rootOf(it);
+    let html = '<div class="lk" data-act="toggle" title="The same item appears in ' + grp.length + ' meetings \u2014 click to see the linked copies"><span class="lk-h">\u2194 Same item in ' + grp.length + ' meetings</span>';
+    others.slice(0, 3).forEach(o => { const m = meetingOf(o); html += '<span class="lk-r' + (isClosed(o) ? ' x' : '') + '"><b>' + esc(o.id) + '</b> ' + esc(lkMeetingLabel(o)) + (m && m.dateISO ? ' \u00b7 ' + esc(fmtDate(m.dateISO)) : '') + '</span>'; });
+    if (others.length > 3) html += '<span class="lk-r muted">+ ' + (others.length - 3) + ' more</span>';
+    if (lm.isFollower(it)) html += '<span class="lk-c">This is a copy of <b>' + esc(root.id) + '</b></span>';
+    return html + '</div>';
+  }
+  function linkedPanelHtml(it) {   // in the expanded row: the copies, with Make main / Unlink
+    const lm = linkMap(), grp = lm.groupOf(it); if (grp.length < 2) return '';
+    const root = lm.rootOf(it);
+    return '<div class="lkpanel"><h4>\u2194 The same item in ' + grp.length + ' meetings</h4><table class="lktab"><thead><tr><th>ID</th><th>Meeting</th><th>Status</th><th>Owner</th><th></th></tr></thead><tbody>' + grp.map(o => {
+      const m = meetingOf(o), main = o === root;
+      return '<tr class="' + (o === it ? 'me' : '') + '"><td><b>' + esc(o.id) + '</b>' + (main ? ' <span class="lk-main">MAIN</span>' : '') + (o === it ? ' <span class="muted">(this row)</span>' : '') + '</td><td>' + esc(lkMeetingLabel(o)) + (m && m.dateISO ? '<em>' + esc(fmtDate(m.dateISO)) + '</em>' : '') + '</td><td>' + esc(o.status) + '</td><td>' + esc(o.owner || '\u2014') + '</td><td class="lk-a">' +
+        (o !== it ? '<button type="button" class="mini" data-act="link-show" data-uid="' + esc(o.uid) + '" title="Show this copy as its own row in the log">Show</button>' : '') +
+        (!main ? '<button type="button" class="mini" data-act="link-main" data-uid="' + esc(o.uid) + '" title="Make this copy the main item of the group">Make main</button><button type="button" class="mini" data-act="link-unlink" data-uid="' + esc(o.uid) + '" title="Stop treating this copy as the same item">Unlink</button>' : '<button type="button" class="mini" data-act="link-ungroup" data-uid="' + esc(o.uid) + '" title="Unlink every copy; each becomes its own item again">Unlink all</button>') + '</td></tr>';
+    }).join('') + '</tbody></table><p class="muted sm">Closing, reopening or changing the status of any copy changes all of them. Nothing is deleted when items are linked or unlinked.</p></div>';
+  }
+  function linkedExportText(it) {
+    const lm = linkMap(), grp = lm.groupOf(it); if (grp.length < 2) return '';
+    return lm.isFollower(it) ? 'Copy of ' + lm.rootOf(it).id : grp.filter(x => x !== it).map(o => o.id + ' (' + lkMeetingLabel(o) + ')').join('; ');
+  }
+  const linkedShortText = it => Array.from(new Set(linkedOthers(it).map(lkMeetingLabel))).join(', ');
+
+  /* ---------- linking, unlinking ---------- */
+  let lkDlg = null;
+  function linkDialog(items) {
+    const lm = linkMap(), set = new Set(); items.forEach(i => lm.groupOf(i).forEach(x => set.add(x)));
+    const all = Array.from(set);
+    if (all.length < 2) { toast('Pick at least two different items to link.', 'warn'); return; }
+    if (all.every(x => lm.rootOf(x) === lm.rootOf(all[0]))) { toast('Those items are already linked together.', 'warn'); return; }
+    all.sort((a, b) => String(openedOn(a)).localeCompare(String(openedOn(b))) || String(a.id).localeCompare(String(b.id), undefined, { numeric: true }));
+    const mains = all.filter(x => !lm.isFollower(x) && lm.kidsOf(x).length), def = mains[0] || all[0], sts = Array.from(new Set(all.map(x => x.status)));
+    lkDlg = { uids: all.map(x => x.uid) };
+    openModal('<h2>Link as one item</h2><p class="muted">The log will show <b>one row</b> for these ' + all.length + ' items, listing every meeting they appear in. Each one stays in its own meeting with its own ID and history \u2014 nothing is deleted. Choose which one is the <b>main</b> item (the row that is shown).</p>' +
+      '<div class="lkdl">' + all.map(o => '<label class="lkrow"><input type="radio" name="lkMain" value="' + esc(o.uid) + '"' + (o === def ? ' checked' : '') + '><span class="lkr-main">MAIN</span><span class="lkr-t"><b>' + esc(o.id) + '</b> ' + esc(trunc(o.action, 110)) + '<em>' + esc(lkMeetingLabel(o)) + ' \u00b7 raised ' + esc(fmtDate(openedOn(o))) + ' \u00b7 ' + esc(o.status) + ' \u00b7 ' + esc(o.owner || 'no owner') + '</em></span></label>').join('') + '</div>' +
+      (sts.length > 1 ? '<label class="fl">These copies have different statuses (' + sts.map(esc).join(', ') + '). After linking they will all be:<select id="lkStatus"><option value="">The main item\u2019s status</option>' + STATUSES.map(s => '<option>' + s + '</option>').join('') + '</select></label>' : '') +
+      '<div class="mfoot"><button type="button" class="btn" data-act="modal-close">Cancel</button><button type="button" class="btn primary" data-act="link-confirm">Link ' + all.length + ' items as one</button></div>', { cls: 'dlmodal' });
+  }
+  function linkConfirm() {
+    if (!lkDlg) { closeModal(); return; }
+    const sel = document.querySelector('input[name=lkMain]:checked'), main = sel ? itemByUid(sel.value) : null, members = lkDlg.uids.map(itemByUid).filter(Boolean), st = $('#lkStatus') ? $('#lkStatus').value : '';
+    lkDlg = null; closeModal();
+    if (main && members.length > 1) linkItems(members, main, st || main.status);
+  }
+  function linkItems(members, main, statusAfter) {
+    const lm = linkMap(), fresh = members.every(x => !lm.isFollower(x) && !lm.kidsOf(x).length), linked = [];
+    const mh = muteHistory; muteHistory = true; lkBusy = true;
+    try {
+      members.forEach(o => {
+        if (o === main) { if (lm.isFollower(o)) addLog(o, 'unlink', 'Unlinked from ' + lm.parentOf(o).id + ' \u2014 now the main item of the group'); return; }
+        addLog(o, 'link', 'Linked as the same item as ' + main.id + ' [ref ' + String(main.uid).slice(0, 8) + ']'); linked.push(o);
+      });
+      if (statusAfter) members.forEach(o => { if (o.status !== statusAfter) setStatus(o, statusAfter, 'Status set to match the linked copies of ' + main.id); });
+    } finally { muteHistory = mh; lkBusy = false; }
+    linkReset(); ui.selected.clear();
+    pushHistory('edit', { itemId: main.id, itemIds: members.map(x => x.id), subject: trunc(main.action, 90), text: 'Linked ' + members.length + ' copies of the same item (main ' + main.id + '): ' + members.map(x => x.id).join(', ') });
+    calCommit('Linked ' + members.length + ' items as one \u2014 the log shows ' + main.id + ' with its ' + (members.length - 1) + ' cop' + (members.length === 2 ? 'y' : 'ies') + '.', fresh ? () => {
+      linked.forEach(o => { const m2 = muteHistory; muteHistory = true; addLog(o, 'unlink', 'Unlinked from ' + main.id + ' (undo)'); muteHistory = m2; });
+      linkReset(); pushHistory('edit', { itemId: main.id, subject: trunc(main.action, 90), text: 'Link of ' + members.map(x => x.id).join(', ') + ' undone' }); save(); renderAll(); toast('Undone \u2014 the items are separate again.');
+    } : null);
+  }
+  function unlinkItem(it) {
+    const p = linkMap().parentOf(it); if (!p) return;
+    const mh = muteHistory; muteHistory = true; addLog(it, 'unlink', 'Unlinked from ' + p.id); muteHistory = mh; linkReset();
+    pushHistory('edit', { itemId: it.id, subject: trunc(it.action, 90), text: it.id + ' unlinked from ' + p.id + ' (no longer treated as the same item)' });
+    commit(it.id + ' is its own item again.');
+  }
+  function ungroupItems(root) {
+    const kids = linkMap().kidsOf(root).slice(); if (!kids.length) return;
+    const mh = muteHistory; muteHistory = true; kids.forEach(k => addLog(k, 'unlink', 'Unlinked from ' + root.id + ' (group dissolved)')); muteHistory = mh; linkReset();
+    pushHistory('edit', { itemId: root.id, itemIds: kids.map(k => k.id), subject: trunc(root.action, 90), text: 'Group dissolved: ' + [root.id].concat(kids.map(k => k.id)).join(', ') + ' are separate items again' });
+    commit('Unlinked \u2014 ' + (kids.length + 1) + ' separate items again.');
+  }
+  const makeMain = it => linkItems(linkMap().groupOf(it), it, '');
+
+  /* ---------- finding likely duplicates ---------- */
+  const DUP_KEY = 'twcg-dup-dismissed-v1';
+  const dupDismissed = () => { try { return new Set(JSON.parse(localStorage.getItem(DUP_KEY) || '[]')); } catch (e) { return new Set(); } };
+  const dupKeyOf = items => items.map(i => i.uid).sort().join('|');
+  function dupClusters() {   // items with (nearly) the same wording that were raised in DIFFERENT meetings and are not linked yet
+    const lm = linkMap(), dis = dupDismissed(), cand = state.items.filter(i => !i.deletedAt);
+    const toks = cand.map(i => tokens(i.action)), post = new Map(), idx = new Map(cand.map((i, k) => [i, k]));
+    toks.forEach((T, k) => T.forEach(w => { let a = post.get(w); if (!a) post.set(w, a = []); a.push(k); }));
+    const uf = cand.map((_, k) => k), find = k => { while (uf[k] !== k) { uf[k] = uf[uf[k]]; k = uf[k]; } return k; }, hit = new Set();
+    cand.forEach((a, ai) => {   // candidates come from each item's four RAREST words; the match itself is the exact word overlap (so common words still count)
+      const A = toks[ai]; if (A.size < 2) return;
+      const seenB = new Set();
+      Array.from(A).map(w => post.get(w)).sort((x, y) => x.length - y.length).slice(0, 4).forEach(p => {
+        if (p.length > 600) return;
+        p.forEach(bk => {
+          if (bk <= ai || seenB.has(bk)) return; seenB.add(bk);
+          const b = cand[bk]; if ((a.meetingId || '') === (b.meetingId || '') || lm.rootOf(a) === lm.rootOf(b)) return;
+          const B = toks[bk]; let n = 0; A.forEach(w => { if (B.has(w)) n++; });
+          if (n >= 2 && n / (A.size + B.size - n) >= 0.75) { uf[find(bk)] = find(ai); hit.add(ai); hit.add(bk); }
+        });
+      });
+    });
+    const by = new Map(); hit.forEach(k => { const r = find(k); let a = by.get(r); if (!a) by.set(r, a = []); a.push(cand[k]); });
+    const out = [];
+    by.forEach(c => {
+      if (new Set(c.map(i => i.meetingId || '')).size < 2 || new Set(c.map(i => lm.rootOf(i).uid)).size < 2 || c.every(isClosed) || dis.has(dupKeyOf(c))) return;
+      c.sort((x, y) => String(openedOn(x)).localeCompare(String(openedOn(y))) || String(x.id).localeCompare(String(y.id), undefined, { numeric: true })); out.push(c);
+    });
+    return out.sort((x, y) => String(openedOn(y[y.length - 1])).localeCompare(String(openedOn(x[x.length - 1]))));
+  }
+  let dupList = [];
+  function dupDialog() {
+    dupList = dupClusters();
+    const body = dupList.length ? dupList.slice(0, 40).map((c, k) => '<section class="dupc" data-ci="' + k + '"><div class="dupc-h"><b>' + c.length + ' items with matching wording in ' + new Set(c.map(i => i.meetingId || '')).size + ' meetings</b><span><button type="button" class="btn primary" data-act="dup-review" data-ci="' + k + '">Review &amp; link\u2026</button><button type="button" class="btn" data-act="dup-dismiss" data-ci="' + k + '" title="Stop suggesting this group on this computer">Not duplicates</button></span></div>' +
+      c.map(i => '<label class="duprow"><input type="checkbox" data-dupi="' + esc(i.uid) + '" checked><span><b>' + esc(i.id) + '</b> ' + esc(trunc(i.action, 120)) + '<em>' + esc(lkMeetingLabel(i)) + ' \u00b7 raised ' + esc(fmtDate(openedOn(i))) + ' \u00b7 ' + esc(i.status) + ' \u00b7 ' + esc(i.owner || 'no owner') + '</em></span></label>').join('') + '</section>').join('') + (dupList.length > 40 ? '<p class="muted">Showing the first 40 groups.</p>' : '')
+      : '<p class="dupnone"><b>No likely duplicates found.</b> Items are compared by wording across different meetings. You can still link items yourself: tick them in the log and press \u201cLink as one item\u201d.</p>';
+    openModal('<h2>Find duplicates</h2><p class="muted">These items have (almost) the same wording but were raised in <b>different meetings</b>. Untick any that are not really the same item, then review and link them. Linking never deletes anything.</p><div class="duplist">' + body + '</div><div class="mfoot"><button type="button" class="btn" data-act="modal-close">Close</button></div>', { cls: 'dlmodal wide' });
+  }
+
   let idPool = [];   // IDs reserved from the database (so two people never get the same number)
   function localIds(n) {   // fallback numbering when the database cannot be asked
     let max = 0; const used = allItems().map(i => i.id).concat(idPool);
@@ -1693,7 +1985,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
   function latestUpdate(it) {
     const u = (it.updates || []).filter(x => x.type !== 'import' && x.type !== 'created');
-    return u.length ? u[u.length - 1] : null;
+    return groupLatest(it, u.length ? u[u.length - 1] : null);
   }
   function newItem(o) {
     const it = Object.assign({
@@ -1784,7 +2076,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const lastClose = (it.updates || []).slice().reverse().find(u => u.type === 'ownerclose');
     it.status = 'Closed'; it.closedDate = todayISO();
     it.updates.push({ uid: uuid(), ts: nextTs(it), date: todayISO(), type: 'close', text: 'Closed: Open \u2192 Closed. All owners have closed their part', by: lastClose && lastClose.by ? lastClose.by : actorLabel() });
-    if (!remote) pushHistory('close', { itemId: it.id, subject: trunc(it.action, 90), text: 'Closed: every owner has closed their part' });
+    if (!remote) { pushHistory('close', { itemId: it.id, subject: trunc(it.action, 90), text: 'Closed: every owner has closed their part' }); propagateStatus(it, 'Closed'); }
     return true;
   }
   function statusChange(it, status, note, date, scope) {   // every place that sets a status goes through here
@@ -1801,6 +2093,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     if (status === 'Closed') { it.closedDate = date || todayISO(); type = 'close'; }
     else if (old === 'Closed') { it.closedDate = ''; type = 'reopen'; }
     addLog(it, type, (status === 'Closed' ? 'Closed' : old === 'Closed' ? 'Reopened' : 'Status') + ': ' + old + ' → ' + status + (note ? '. ' + note : ''), date);
+    propagateStatus(it, status, date);
   }
 
   /* ---------- toast ---------- */
@@ -1840,7 +2133,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       if (q && !queryMatches(itemHay(it), q)) return false;
       return true;
     });
-    return sortItems(list);
+    return sortItems(collapseLinked(list));
   }
 
   function sortItems(list) {
@@ -1875,7 +2168,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
 
   /* ---------- rendering ---------- */
   function renderAll() {
-    seriesReset();
+    seriesReset(); linkReset();
     renderSubtitle(); renderInsights(); renderFilters(); renderBulk();
     $('#viewAcc').hidden = ui.view !== 'acc'; $('#viewCal').hidden = ui.view !== 'cal'; $('#viewSummary').hidden = ui.view !== 'summary'; $('#viewLog').hidden = ui.view !== 'log'; $('#viewMeet').hidden = ui.view !== 'meet'; $('#viewBic').hidden = ui.view !== 'bic'; $('#viewHist').hidden = ui.view !== 'hist'; $('#viewAccess').hidden = ui.view !== 'access';
     renderUser(); renderPresence(); renderViewsBtn();
@@ -1894,11 +2187,12 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const tn = document.getElementById('trashN'); if (tn) tn.textContent = (state.trash.items.length + state.trash.meetings.length) ? '(' + (state.trash.items.length + state.trash.meetings.length) + ')' : '';
   }
 
+  const BUILD_ID = '2026-11-08 link-duplicates';   // shown in the header so you can tell which version is live
   function renderSubtitle() {
     const open = state.items.filter(i => !isClosed(i)).length;
-    $('#subtitle').textContent = state.items.length
+    $('#subtitle').textContent = (state.items.length
       ? open + ' active of ' + state.items.length + ' items · ' + state.meetings.length + ' meeting' + (state.meetings.length === 1 ? '' : 's') + ' imported'
-      : 'Import meeting-minute PDFs to build the log';
+      : 'Import meeting-minute PDFs to build the log') + ' · build ' + BUILD_ID;
   }
 
   /* ---------- meeting checklist filter ---------- */
@@ -2094,7 +2388,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     sel('#fQuick', ui.quick, [['', 'Any due date'], ['overdue', 'Overdue only'], ['soon', 'Due in 7 days']]);
     $('#fSearch').value !== ui.search && ($('#fSearch').value = ui.search);
     $('#fDensity').value = ui.density;
-    $('#fOngoing').checked = !!ui.ongoing;
+    $('#fOngoing').checked = !!ui.ongoing; { const fc = $('#fCombine'); if (fc) fc.checked = !!ui.combine; }
     $('#catList').innerHTML = categorySuggestions().map(c => '<option value="' + esc(c) + '">').join('');
     const n = activeFilterCount(), cb = $('#btnClearAll');
     if (cb) { cb.textContent = 'Clear All Filters' + (n ? ' (' + n + ')' : ''); cb.classList.toggle('on', n > 0); }
@@ -2208,7 +2502,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const hasDraft = it => !!(ui.drafts[it.uid] && ui.drafts[it.uid].text);
   const CELLS = {
     sel: it => '<td class="c-sel"><input type="checkbox" data-act="select" aria-label="Select ' + esc(it.id) + '" ' + (ui.selected.has(it.id) ? 'checked' : '') + '></td>',
-    id: (it, x) => '<td class="c-id"><button class="exp" data-act="toggle" title="Show history / post an update" aria-label="Show history and post an update">' + (x.open ? '▾' : '▸') + '</button><span class="idt" contenteditable="plaintext-only" spellcheck="false" data-editid="1" data-single="1" title="Click to edit this ID">' + esc(it.id) + '</span></td>',
+    id: (it, x) => '<td class="c-id"><button class="exp" data-act="toggle" title="Show history / post an update" aria-label="Show history and post an update">' + (x.open ? '▾' : '▸') + '</button><span class="idt" contenteditable="plaintext-only" spellcheck="false" data-editid="1" data-single="1" title="Click to edit this ID">' + esc(it.id) + '</span>' + linkBadge(it) + '</td>',
     itemNo: it => '<td class="c-itemNo">' + esc(it.itemNo) + '</td>',
     action: it => '<td class="c-action"><div class="ce" contenteditable="plaintext-only" spellcheck="true" data-edit="action">' + esc(it.action) + '</div></td>',
     owner: it => '<td class="c-owner"><div class="ce" contenteditable="plaintext-only" spellcheck="true" data-edit="owner" data-single="1">' + esc(it.owner) + '</div></td>',
@@ -2220,7 +2514,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       '<label class="ongoing-chk" title="Ongoing activity: needs continual updates, no due date"><input type="checkbox" data-act="ongoing" ' + (it.ongoing ? 'checked' : '') + '> Ongoing</label></div></td>',
     status: it => '<td class="c-status"><select class="stsel st-' + it.status.replace(/\s/g, '') + '" data-act="status">' + STATUSES.map(s => '<option' + (s === it.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>' + ownProgHtml(it) + '</td>',
     category: it => '<td class="c-category"><input class="catIn" type="text" list="catList" maxlength="40" data-act="category" value="' + esc(it.category) + '" placeholder="— none —" spellcheck="false" aria-label="Category / Type"></td>',
-    meeting: (it, x) => '<td class="c-meeting">' + (x.m ? esc(x.m.title) : '<span class="muted">Manual entry</span>') + '</td>',
+    meeting: (it, x) => '<td class="c-meeting">' + (x.m ? esc(x.m.title) : '<span class="muted">Manual entry</span>') + linkedCellHtml(it) + '</td>',
     mdate: (it, x) => '<td class="c-mdate">' + (x.m ? esc(meetDate(x.m)) : '') + '</td>',
     raised: it => '<td class="c-raised">' + originCell(it) + '</td>',
     project: it => '<td class="c-project"><div class="ce" contenteditable="plaintext-only" spellcheck="true" data-edit="project" data-single="1">' + esc(it.project) + '</div></td>',
@@ -2262,7 +2556,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     tb.style.width = tableWidth() + 'px'; tb.style.setProperty('--idw', colW('id') + 'px');
     tb.innerHTML = '<colgroup>' + cols.map(id => '<col data-col="' + id + '" style="width:' + colW(id) + 'px">').join('') + '</colgroup><thead>' + head + '</thead><tbody>' + body + '</tbody>';
     const osc = ui.owner ? ownerScope(ui.owner) : null;
-    $('#resultCount').innerHTML = esc(list.length + ' of ' + state.items.length + ' items shown') + (osc ? ' <span class="scopehint" title="Closing an item that has other owners from this list closes it for ' + esc(osc.name) + ' only. To close it for everyone use the meeting view or the unfiltered log.">● ' + esc(osc.name) + '’s list: <b>Close</b> closes only ' + esc(osc.name) + '’s part of shared items</span>' : '');
+    $('#resultCount').innerHTML = esc(list.length + ' of ' + state.items.length + ' items shown') + (lkHidden ? ' <span class="lkhint">· ' + lkHidden + ' linked cop' + (lkHidden === 1 ? 'y' : 'ies') + ' combined into the rows above <button type="button" class="link" data-act="combine-toggle">Show every copy</button></span>' : '') + (osc ? ' <span class="scopehint" title="Closing an item that has other owners from this list closes it for ' + esc(osc.name) + ' only. To close it for everyone use the meeting view or the unfiltered log.">● ' + esc(osc.name) + '’s list: <b>Close</b> closes only ' + esc(osc.name) + '’s part of shared items</span>' : '');
     renderColBtn(); renderMeetingStrip();
     updateDlMenu();
   }
@@ -2284,10 +2578,10 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
   function detailHtml(it, ncols) {
     const n = ncols || visCols().length, dr = ui.drafts[it.uid] || {};
-    const hist = (it.updates || []).slice().reverse().map(u => '<li><span class="hd">' + fmtDate(u.date) + '</span><span class="chip t-' + u.type + '">' + (TYPE_LABEL[u.type] || u.type) + '</span><span class="ht">' + esc(u.text) + (u.by ? ' <em>— ' + esc(u.by) + '</em>' : '') + '</span></li>').join('') || '<li class="muted">No history yet.</li>';
+    const hist = trailForDetail(it).map(({ u, from }) => '<li><span class="hd">' + fmtDate(u.date) + '</span><span class="chip t-' + u.type + '">' + (TYPE_LABEL[u.type] || u.type) + '</span>' + (from ? '<span class="lkfrom" title="Recorded on the linked copy ' + esc(from) + '">' + esc(from) + '</span>' : '') + '<span class="ht">' + esc(u.text) + (u.by ? ' <em>— ' + esc(u.by) + '</em>' : '') + '</span></li>').join('') || '<li class="muted">No history yet.</li>';
     return '<tr class="detail" data-id="' + esc(it.id) + '"><td></td><td colspan="' + (n - 1) + '"><div class="dwrap">' +
       '<button class="dclose" data-act="close-detail" title="Hide this panel (an unposted update is kept)" aria-label="Hide this panel"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>' +
-      '<div class="dleft">' + originHtml(it) + '<h4>History</h4><ul class="hist">' + hist + '</ul></div>' +
+      '<div class="dleft">' + originHtml(it) + linkedPanelHtml(it) + '<h4>History</h4><ul class="hist">' + hist + '</ul></div>' +
       '<div class="dright"><h4>Post an update <span class="draftmark"' + (dr.text ? '' : ' hidden') + '>✎ draft kept until posted</span></h4>' +
       '<textarea class="upText" rows="3" placeholder="What changed? e.g. RFI answered, submittal approved, waiting on vendor…">\n' + esc(dr.text || '') + '</textarea>' +
       '<div class="frow"><label>Status <select class="upStatus">' + STATUSES.map(s => '<option' + (s === (dr.st || it.status) ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></label>' +
@@ -2552,7 +2846,30 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       (WEEKLY_OK ? '' : '<div class="mdwarn">Needs the one-time database update (supabase_update_v3.sql) before this can be saved.</div>') +
       '<div class="mdfoot"><button class="link" data-act="mdate-clear">Clear date</button><span class="spacer"></span><button class="btn" data-act="mdate-cancel">Cancel</button><button class="btn primary" data-act="mdate-save">Save</button></div></div>';
   }
+  /* ---------- Meetings tab: jump to any date of a recurring series ---------- */
+  let msdCache = new Map();   // series key -> { s, rows, dates }  (rebuilt on every draw of the Meetings tab)
+  function mseriesInfo(m) {
+    const s = seriesIndex().get(serKey(m.title)); if (!s || !isRepeatingSeries(s)) return null;
+    let c = msdCache.get(s.sk);
+    if (!c) { const rows = perMeetingRows(s, 100000); c = { s, rows, dates: rows.map(r => r.date).sort() }; msdCache.set(s.sk, c); }
+    return c;
+  }
+  function mseriesHtml(m) {
+    const c = mseriesInfo(m); if (!c) return '';
+    const open = ui.meetDates.has(m.id), total = c.dates.length, pos = ISO_OK(m.dateISO) ? c.dates.indexOf(m.dateISO) + 1 : 0, title = c.s.title;
+    let html = '<div class="mseries' + (open ? ' open' : '') + '"><span class="mser-lab">\u21bb Recurring series \u00b7 <b>' + esc(title) + '</b>' + (pos ? ' \u00b7 meeting ' + pos + ' of ' + total : ' \u00b7 ' + total + ' dated meeting' + (total === 1 ? '' : 's')) + '</span>' +
+      '<button type="button" class="btn mser-btn" data-act="mseries-toggle" aria-expanded="' + open + '" aria-controls="msd-' + esc(m.id) + '" title="List every meeting date in this series and open that date\u2019s action items">' + (open ? '\u25be Hide dates' : '\u25b8 Action items by date (' + total + ')') + '</button></div>';
+    if (!open) return html;
+    const allIds = c.s.held.map(x => x.id);
+    html += '<div class="mser-panel" id="msd-' + esc(m.id) + '"><div class="mser-top"><span class="muted">Pick a meeting date to open that date\u2019s action item log</span>' +
+      '<button type="button" class="mini" data-act="mseries-open" data-mids="' + esc(allIds.join(',')) + '" data-label="all ' + allIds.length + ' \u201c' + esc(title) + '\u201d meetings">Every date together \u2192</button></div><div class="mser-list">' +
+      c.rows.map(r => '<div class="mser-row' + (r.date === m.dateISO ? ' cur' : '') + '"><span class="mser-d"><b>' + esc(fmtLong(r.date)) + '</b>' + (r.parts > 1 ? ' <span class="muted">\u00b7 ' + r.parts + ' parts</span>' : '') + (r.date === m.dateISO ? ' <span class="mser-tag">This meeting</span>' : '') + '</span>' +
+        '<span class="mser-n">' + r.n + ' item' + (r.n === 1 ? '' : 's') + (r.n ? ' \u00b7 <b>' + r.open + '</b> open' + (r.over ? ' \u00b7 <span class="bad">' + r.over + ' overdue</span>' : '') + ' \u00b7 ' + r.closed + ' closed' : '') + '</span>' +
+        '<button type="button" class="mini" data-act="mseries-open" data-mids="' + esc(r.mids.join(',')) + '" data-label="' + esc(title + ' \u2014 ' + fmtDate(r.date)) + '"' + (r.n ? '' : ' disabled title="No action items were recorded for this date"') + '>Open items</button></div>').join('') + '</div></div>';
+    return html;
+  }
   function renderMeetings() {
+    msdCache = new Map();
     const box = $('#meetList');
     if (!state.meetings.length) { renderSearchBar('#mSearchBar', '', 0, 0, ''); box.innerHTML = '<div class="empty-big"><h3>No meetings imported yet</h3><p>Imported meeting minutes will be listed here with their general notes.</p></div>'; return; }
     const mlist = ui.mSearch ? state.meetings.filter(m => queryMatches(meetHay(m), ui.mSearch)) : state.meetings;
@@ -2569,7 +2886,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         '<div class="mmeta">' + dbtn + (m.project ? ' · ' + esc(m.project) : '') + (m.preparedBy ? ' · Prepared by ' + esc(m.preparedBy) : '') + '</div>' +
         (m.source ? '<p class="muted">Source: ' + esc(m.source) + '</p>' : '') + '</div><div class="mstats"><b>' + its.length + '</b> items<br><span>' + act + ' active · ' + (its.length - act) + ' closed</span></div></div>' +
         '<label class="mlabel">General meeting notes</label><textarea class="mnotes" data-act="mnotes" rows="3" placeholder="No general notes recorded.">' + esc(m.notes) + '</textarea>' +
-        '<div class="mact"><button class="btn" data-act="meet-filter">View items in log</button><button class="btn" data-act="meet-upload" title="Upload another minutes PDF for this meeting">\u2b06 Upload minutes</button><button class="btn" data-act="meet-additem" title="Type an action item straight into this meeting">\uff0b Add item</button><button class="btn" data-act="meet-merge"' + (state.meetings.length < 2 ? ' disabled title="There is no other meeting to merge with"' : ' title="Combine this meeting with another one"') + '>Merge Meeting</button><button class="btn danger" data-act="meet-delete">Delete meeting &amp; its items</button></div></article>';
+        '<div class="mact"><button class="btn" data-act="meet-filter">View items in log</button><button class="btn" data-act="meet-upload" title="Upload another minutes PDF for this meeting">\u2b06 Upload minutes</button><button class="btn" data-act="meet-additem" title="Type an action item straight into this meeting">\uff0b Add item</button><button class="btn" data-act="meet-merge"' + (state.meetings.length < 2 ? ' disabled title="There is no other meeting to merge with"' : ' title="Combine this meeting with another one"') + '>Merge Meeting</button><button class="btn danger" data-act="meet-delete">Delete meeting &amp; its items</button></div>' + mseriesHtml(m) + '</article>';
     }).join('');
   }
 
@@ -3247,7 +3564,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     calEvMap.clear(); all.forEach(e => calEvMap.set(e.key, e));
     const body = ui.calView === 'week' ? calWeekHtml(r, evs) : ui.calView === 'agenda' ? calAgendaHtml(r, evs) : calMonthHtml(r, evs);
     const held = all.filter(e => e.kind === 'held').length, sch = all.filter(e => e.kind === 'sched').length, un = state.meetings.filter(m => !ISO_OK(m.dateISO)).length;
-    wrap.innerHTML = calTodayHtml() + calToolbar(r) + '<div class="calmain"><div class="calcol">' + body + '<p class="cal-foot">' + (ui.calView === 'week' ? 'This week' : 'This month') + ': <b>' + held + '</b> held \u00b7 <b>' + sch + '</b> scheduled' + (un ? ' \u00b7 <b>' + un + '</b> meeting' + (un === 1 ? '' : 's') + ' without a date (see the side panel)' : '') + '</p></div>' + calSideHtml() + '</div>';
+    wrap.innerHTML = calToolbar(r) + '<div class="calmain"><div class="calcol">' + body + '<p class="cal-foot">' + (ui.calView === 'week' ? 'This week' : 'This month') + ': <b>' + held + '</b> held \u00b7 <b>' + sch + '</b> scheduled' + (un ? ' \u00b7 <b>' + un + '</b> meeting' + (un === 1 ? '' : 's') + ' without a date (see the side panel)' : '') + '</p></div>' + calSideHtml() + '</div>' + calTodayHtml();   // the meeting / upload lines sit under the calendar
     if (calPopKey && !calEvMap.has(calPopKey)) calClosePop();
   }
 
@@ -3910,6 +4227,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     let html = '';
     if (p.ctx) html += '<div class="impctx"><span>Uploading minutes for <b>' + esc(p.ctx.title || 'this meeting') + '</b>' + (p.ctx.date ? ' \u00b7 ' + esc(fmtLong(p.ctx.date)) : '') + '</span>' +
       (p.ctxWarn ? '<span class="impwarn">The PDF says <b>' + esc(p.meeting.date) + '</b>. <button type="button" class="link" data-act="imp-usectx" data-pi="' + esc(String(pending.indexOf(p))) + '">Use the calendar date</button></span>' : '') + '</div>';
+    { const pl = importIdPlan()[pending.indexOf(p)]; if (pl) html += '<div class="impid" data-impid="' + pending.indexOf(p) + '"><span>ID</span> ' + importIdText(pl) + '</div>'; }
     const s = p.meeting.title ? seriesIndex().get(serKey(p.meeting.title)) : null;
     if (s && isRepeatingSeries(s)) html += '<div class="impser">Part of the series <b>' + esc(s.title) + '</b> \u00b7 ' + s.held.length + ' meeting' + (s.held.length === 1 ? '' : 's') + ' uploaded so far' + (s.items.filter(i => !isClosed(i)).length ? ' \u00b7 ' + s.items.filter(i => !isClosed(i)).length + ' open items carried in this series' : '') + '</div>';
     return html;
@@ -4467,7 +4785,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
 
   async function saveItemForm(id) {
-    if (!id) { idPool = []; const raw = ($('#fId') ? $('#fId').value : '').replace(/\s+/g, ' ').trim(); if (!raw) idPool = await Live.allocIds(1); }
+    if (!id) { idPool = []; const raw = ($('#fId') ? $('#fId').value : '').replace(/\s+/g, ' ').trim(); if (!raw && !idPrefixForMeeting($('#fMeet') ? $('#fMeet').value : '')) idPool = await Live.allocIds(1); }
     saveItemFormNow(id);
   }
   function saveItemFormNow(id) {
@@ -4495,6 +4813,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       if (status !== statusBefore) statusChange(it, status, '', undefined, closeScope(null));
     } else {
       if (idRaw) { const err = idError(idRaw, null); if (err) { toast(err, 'warn'); return; } o.id = idRaw; }
+      else { const px = idPrefixForMeeting(o.meetingId); if (px) o.id = nextPrefixedId(px); }
       const it = newItem(Object.assign(o, ong ? { ongoing: true, dueISO: '', dueRaw: '' } : { dueISO: dIso || parseDate(dTxt), dueRaw: dIso ? fmtDate(dIso) : dTxt }));
       it.itemNo = '';
       { const mt = it.meetingId ? meetingById(it.meetingId) : null, md = mt && ISO_OK(mt.dateISO) && mt.dateISO <= todayISO() ? mt.dateISO : '';
@@ -4506,6 +4825,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
 
   function focusItem(id, ownerKey) {
+    { const f0 = byId(id); if (f0 && ui.combine && linkMap().isFollower(f0)) id = linkMap().rootOf(f0).id; }   // a hidden copy opens as its main item
     ui.view = 'log'; ui.status = 'all'; ui.quick = ''; ui.search = ''; ui.owner = ownerKey && ownerKey !== 'unassigned' ? ownerKey : ''; ui.project = ''; ui.meetings.clear(); ui.category = ''; ui.ongoing = false;
     ui.expanded.add(id); renderAll();
     const tr = document.querySelector('tr.r[data-id="' + CSS.escape(id) + '"]');
@@ -4618,11 +4938,12 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   function updateImpSummary() {
     let n = 0, u = 0; pending.forEach(p => (p.items || []).forEach(it => { if (it.mode === 'new') n++; else if (it.mode === 'update') u++; }));
     const el = $('#impSummary'); if (el) el.textContent = n + ' new · ' + u + ' updates';
+    const plan = importIdPlan(); $$('.impid[data-impid]').forEach(d => { const pl = plan[+d.dataset.impid]; if (pl) d.innerHTML = '<span>ID</span> ' + importIdText(pl); });
   }
 
   async function confirmImport() {
     const btn = $('[data-act=confirm-import]'); if (btn) { btn.disabled = true; btn.textContent = 'Importing…'; }
-    const need = pending.reduce((n, p) => n + (p.error ? 0 : p.items.filter(i => i.mode === 'new').length), 0);
+    const need = pending.reduce((n, p) => n + (p.error || importIdPrefix(p) ? 0 : p.items.filter(i => i.mode === 'new').length), 0);
     idPool = need ? await Live.allocIds(need) : [];
     confirmImportNow();
   }
@@ -4656,7 +4977,9 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
           updated++; sum.nUpd++; sum.ids.push(it.id);
         } else {
           const ogoNew = ONGOING_RE.test(r.dueRaw || '');
-          const it = newItem({ meetingId: m ? m.id : null, itemNo: r.itemNo, action: r.action, owner: r.owner, dueRaw: ogoNew ? '' : r.dueRaw, ongoing: ogoNew, category: canonCategory(p.meeting.category || ''), notes: r.notes, project: p.meeting.project || '' });
+          const o2 = { meetingId: m ? m.id : null, itemNo: r.itemNo, action: r.action, owner: r.owner, dueRaw: ogoNew ? '' : r.dueRaw, ongoing: ogoNew, category: canonCategory(p.meeting.category || ''), notes: r.notes, project: p.meeting.project || '' };
+          const px = m ? idPrefixForTitle(m.title) : ''; if (px) o2.id = nextPrefixedId(px);   // RISK-007, STAFF-012 ...
+          const it = newItem(o2);
           addLog(it, 'import', 'Imported from "' + mLabel + '"', dateForLog);
           state.items.push(it);
           if (r.status !== 'Open') { setStatus(it, r.status, 'Status as recorded in minutes', dateForLog); }
@@ -4696,7 +5019,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   function buildTsv(list) {
     const cell = v => String(v == null ? '' : v).replace(/[\t\r\n]+/g, ' ').trim();
     const lines = [EXPORT_HEAD.join('\t')];
-    list.forEach(it => { const d = rowData(it); lines.push([d.id, d.itemNo, d.action, d.owner, d.dueText, d.status, d.category, d.meeting, d.mdateText, d.raisedText, d.project, d.notes, d.closedText, d.latest, d.history.replace(/\n/g, ' | ')].map(cell).join('\t')); });
+    list.forEach(it => { const d = rowData(it); lines.push([d.id, d.itemNo, d.action, d.owner, d.dueText, d.status, d.category, d.meeting, d.mdateText, d.raisedText, d.linkedText, d.project, d.notes, d.closedText, d.latest, d.history.replace(/\n/g, ' | ')].map(cell).join('\t')); });
     return lines.join('\r\n');
   }
   async function copyText(text) {
@@ -4833,17 +5156,17 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       id: it.id, itemNo: it.itemNo, action: it.action, owner: it.owner || '', dueISO: it.ongoing ? '' : (it.dueISO || ''), dueText: it.ongoing ? 'Ongoing' : (it.dueISO ? fmtDate(it.dueISO) : (it.dueRaw || '')),
       status: it.status, category: it.category || '', ongoing: !!it.ongoing, overdue: isOverdue(it), overdueDays: isOverdue(it) ? daysBetween(it.dueISO, todayISO()) : 0, closed: isClosed(it),
       meeting: m ? m.title : '', mdateISO: m && !m.weekly ? (m.dateISO || '') : '', mdateText: m ? meetDate(m) : '',
-      raisedISO: openedOn(it), raisedText: fmtDate(openedOn(it)), carried: (it.updates || []).filter(u => u.type === 'carry').length,
+      raisedISO: openedOn(it), raisedText: fmtDate(openedOn(it)), linkedText: linkedExportText(it), linkedShort: linkedShortText(it), carried: (it.updates || []).filter(u => u.type === 'carry').length,
       project: it.project || '', notes: it.notes || '', closedISO: it.closedDate || '', closedText: it.closedDate ? fmtDate(it.closedDate) : '',
       latest: lu ? fmtDate(lu.date) + ': ' + lu.text : '',
       history: (it.updates || []).map(u => fmtDate(u.date) + ' [' + (TYPE_LABEL[u.type] || u.type) + '] ' + u.text + (u.by ? ' — ' + u.by : '')).join('\n')
     };
   }
-  const EXPORT_HEAD = ['ID', 'Item #', 'Action Item', 'Owner', 'Due Date', 'Status', 'Category / Type', 'Meeting', 'Meeting Date', 'Date Raised', 'Project / Location', 'Notes / Deliverable', 'Date Closed', 'Latest Update', 'Update History'];
+  const EXPORT_HEAD = ['ID', 'Item #', 'Action Item', 'Owner', 'Due Date', 'Status', 'Category / Type', 'Meeting', 'Meeting Date', 'Date Raised', 'Same Item In', 'Project / Location', 'Notes / Deliverable', 'Date Closed', 'Latest Update', 'Update History'];
 
   function buildCsv(list) {
     const lines = [EXPORT_HEAD.map(csvCell).join(',')];
-    list.forEach(it => { const d = rowData(it); lines.push([d.id, d.itemNo, d.action, d.owner, d.dueText, d.status, d.category, d.meeting, d.mdateText, d.raisedText, d.project, d.notes, d.closedText, d.latest, d.history.replace(/\n/g, ' | ')].map(csvCell).join(',')); });
+    list.forEach(it => { const d = rowData(it); lines.push([d.id, d.itemNo, d.action, d.owner, d.dueText, d.status, d.category, d.meeting, d.mdateText, d.raisedText, d.linkedText, d.project, d.notes, d.closedText, d.latest, d.history.replace(/\n/g, ' | ')].map(csvCell).join(',')); });
     return '\uFEFF' + lines.join('\r\n');
   }
 
@@ -4853,7 +5176,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const excelSerial = iso => { const p = iso.split('-').map(Number); return Math.round((Date.UTC(p[0], p[1] - 1, p[2]) - Date.UTC(1899, 11, 30)) / 86400000); };
   async function buildXlsx(list) {
     if (typeof JSZip === 'undefined') throw new Error('Excel builder is not available.');
-    const widths = [13, 7, 58, 20, 12, 13, 18, 32, 12, 12, 26, 42, 12, 46, 80];
+    const widths = [13, 7, 58, 20, 12, 13, 18, 32, 12, 12, 30, 26, 42, 12, 46, 80];
     const rows = [];
     rows.push('<row r="1" ht="22" customHeight="1">' + EXPORT_HEAD.map((h, c) => '<c r="' + colName(c) + '1" s="1" t="inlineStr"><is><t>' + xmlEsc(h) + '</t></is></c>').join('') + '</row>');
     list.forEach((it, i) => {
@@ -4864,13 +5187,13 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       const itemNo = d.itemNo !== '' && d.itemNo != null && !isNaN(Number(d.itemNo)) ? '<c r="B' + r + '" s="' + ts + '"><v>' + Number(d.itemNo) + '</v></c>' : txt(1, d.itemNo, ts);
       rows.push('<row r="' + r + '">' + txt(0, d.id, ts) + itemNo + txt(2, d.action, ts) + txt(3, d.owner, ts) +
         dt(4, d.dueISO, d.dueText, d.overdue ? 3 : gray ? 5 : 2) + txt(5, d.status, ts) + txt(6, d.category, ts) + txt(7, d.meeting, ts) + dt(8, d.mdateISO, d.mdateText, gray ? 5 : 2) + dt(9, d.raisedISO, d.raisedText, gray ? 5 : 2) +
-        txt(10, d.project, ts) + txt(11, d.notes, ts) + dt(12, d.closedISO, d.closedText, gray ? 5 : 2) + txt(13, d.latest, ts) + txt(14, d.history, ts) + '</row>');
+        txt(10, d.linkedText, ts) + txt(11, d.project, ts) + txt(12, d.notes, ts) + dt(13, d.closedISO, d.closedText, gray ? 5 : 2) + txt(14, d.latest, ts) + txt(15, d.history, ts) + '</row>');
     });
     const last = list.length + 1;
     const sheet = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
       '<sheetViews><sheetView workbookViewId="0" showGridLines="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A2" sqref="A2"/></sheetView></sheetViews>' +
       '<sheetFormatPr defaultRowHeight="15"/><cols>' + widths.map((w, i) => '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + w + '" customWidth="1"/>').join('') + '</cols>' +
-      '<sheetData>' + rows.join('') + '</sheetData><autoFilter ref="A1:O' + last + '"/>' +
+      '<sheetData>' + rows.join('') + '</sheetData><autoFilter ref="A1:P' + last + '"/>' +
       '<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToHeight="0"/></worksheet>';
     const al = '<alignment vertical="top" wrapText="1"/>';
     const styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
@@ -5034,7 +5357,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         case 'due': { const o = [{ t: d.dueText || '\u2014', c: ink }]; if (d.overdue) o.push({ t: 'OVERDUE ' + d.overdueDays + 'd', f: B, s: 6.5, c: RED }); return o; }
         case 'status': { const o = [{ chip: true, t: d.status }], p = ownerProgress(it); if (p && !d.closed && p.done.length) wrapLines(cl(p.done.length + ' of ' + p.total + ' owners closed \u00b7 open: ' + nameList(p.open)), F, 6.2, w, 4).forEach(t => o.push({ t, s: 6.2, c: GRAY })); return o; }
         case 'category': return wrap(d.category || '\u2014').map(t => ({ t, c: d.category ? ink : SOFT }));
-        case 'meeting': { const o = wrap(d.meeting || 'Manual entry').map(t => ({ t, c: ink })); o.push({ t: 'Raised ' + d.raisedText + (d.carried ? ' \u00b7 carried ' + d.carried + 'x' : ''), s: 6.6, c: GRAY }); return o; }
+        case 'meeting': { const o = wrap(d.meeting || 'Manual entry').map(t => ({ t, c: ink })); o.push({ t: 'Raised ' + d.raisedText + (d.carried ? ' \u00b7 carried ' + d.carried + 'x' : ''), s: 6.6, c: GRAY }); if (d.linkedShort) wrapLines(cl('Also in: ' + d.linkedShort), F, 6.4, w, 4).forEach(t => o.push({ t, s: 6.4, c: GRAY })); return o; }
         case 'notes': return wrap(d.notes).map(t => ({ t, c: ink }));
         case 'latest': return wrap(d.latest).map(t => ({ t, c: d.closed ? GRAY : MID }));
         default: return [];
@@ -5190,7 +5513,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       case 'reopen': { const it = byId(id), sc = closeScope(t); reopenFor(it, sc); commit(it.id + ' reopened' + (scopeFor(it, sc) ? ' for ' + sc.name : '') + '.'); break; }
       case 'edit': itemForm(byId(id)); break;
       case 'save-item': saveItemForm(t.dataset.id); break;
-      case 'delete': { const it = byId(id); if (it && confirm('Move ' + it.id + ' to “Recently deleted”?\n\n' + it.action + '\n\nNothing is erased — you can restore it later from the More menu.')) { pushHistory('delete', { itemId: it.id, subject: trunc(it.action, 90), text: 'Deleted item (status ' + it.status + ', owner ' + (it.owner || '—') + ') — can be restored' }); softDeleteItems([it]); commit('Moved to Recently deleted.'); } break; }
+      case 'delete': { const it = byId(id); if (it && confirm('Move ' + it.id + ' to “Recently deleted”?\n\n' + it.action + (linkedOthers(it).length ? '\n\nThis item is linked to ' + linkedOthers(it).length + ' cop' + (linkedOthers(it).length === 1 ? 'y' : 'ies') + ' in other meetings (' + linkedOthers(it).map(o => o.id).join(', ') + '). They are NOT deleted and will appear as separate items.' : '') + '\n\nNothing is erased — you can restore it later from the More menu.')) { pushHistory('delete', { itemId: it.id, subject: trunc(it.action, 90), text: 'Deleted item (status ' + it.status + ', owner ' + (it.owner || '—') + ') — can be restored' }); softDeleteItems([it]); commit('Moved to Recently deleted.'); } break; }
       case 'bulk-delete': { const sel = state.items.filter(x => ui.selected.has(x.id)); if (sel.length && confirm('Move ' + sel.length + ' selected item(s) to “Recently deleted”? You can restore them later.')) { const ts = new Date().toISOString(); sel.forEach(it => pushHistory('delete', { itemId: it.id, subject: trunc(it.action, 90), text: 'Deleted item (status ' + it.status + ', owner ' + (it.owner || '—') + ') — can be restored' })); softDeleteItems(sel, ts); ui.selected.clear(); commit(sel.length + ' item(s) moved to Recently deleted.'); } break; }
       case 'bulk-clear': ui.selected.clear(); renderAll(); break;
       case 'bulk-edit': openBulkEdit(); break;
@@ -5282,6 +5605,18 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       case 'view-approve': viewApprove(t.dataset.uid); break;
       case 'view-deny': viewDeny(t.dataset.uid); break;
       case 'view-restore': viewRestore(t.dataset.uid); break;
+      case 'mseries-toggle': { const id = t.closest('.mcard').dataset.mid; if (ui.meetDates.has(id)) ui.meetDates.delete(id); else ui.meetDates.add(id); renderMeetings(); setTimeout(() => { const nb = document.querySelector('.mcard[data-mid="' + CSS.escape(id) + '"] [data-act="mseries-toggle"]'); if (nb) nb.focus({ preventScroll: true }); }, 40); break; }   // after the sort box has re-ordered the cards
+      case 'mseries-open': calOpenLog(t.dataset.mids.split(','), t.dataset.label); break;
+      case 'combine-toggle': ui.combine = !ui.combine; saveUi(); renderAll(); break;
+      case 'dup-find': dupDialog(); break;
+      case 'dup-review': { const sec = t.closest('.dupc'), items = Array.from(sec.querySelectorAll('input[data-dupi]:checked')).map(x => itemByUid(x.dataset.dupi)).filter(Boolean); if (items.length < 2) toast('Tick at least two items to link.', 'warn'); else linkDialog(items); break; }
+      case 'dup-dismiss': { const c = dupList[+t.dataset.ci]; if (c) { try { const s = dupDismissed(); s.add(dupKeyOf(c)); localStorage.setItem(DUP_KEY, JSON.stringify(Array.from(s))); } catch (e) { /* storage unavailable */ } dupDialog(); } break; }
+      case 'link-selected': { const items = Array.from(ui.selected).map(byId).filter(Boolean); if (items.length < 2) toast('Tick at least two items in the log first.', 'warn'); else linkDialog(items); break; }
+      case 'link-confirm': linkConfirm(); break;
+      case 'link-unlink': { const o = itemByUid(t.dataset.uid); if (o) unlinkItem(o); break; }
+      case 'link-ungroup': { const o = itemByUid(t.dataset.uid); if (o) ungroupItems(o); break; }
+      case 'link-main': { const o = itemByUid(t.dataset.uid); if (o) makeMain(o); break; }
+      case 'link-show': { const o = itemByUid(t.dataset.uid); if (o) { ui.combine = false; saveUi(); focusItem(o.id); } break; }
       case 'a-sort': { const k = t.dataset.key; if (ui.aSort.key === k) ui.aSort.dir *= -1; else { ui.aSort.key = k; ui.aSort.dir = (k === 'user' || k === 'dept') ? 1 : -1; } renderAccess(); break; }
       case 'mtitle-edit': { const h = t.closest('.mcard').querySelector('.mtitle'); if (h) { h.focus(); const r = document.createRange(); r.selectNodeContents(h); const sl = window.getSelection(); sl.removeAllRanges(); sl.addRange(r); } break; }
       case 'bic-jump': { const sec = document.querySelector('.osec[data-key="' + CSS.escape(t.dataset.key) + '"]'); if (sec) { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); sec.classList.add('flashsec'); setTimeout(() => sec.classList.remove('flashsec'), 1600); } break; }
@@ -5327,6 +5662,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     if (t.id === 'fGroup') { ui.group = t.value; renderTable(); renderFilters(); return; }
     if (t.id === 'fCategory') { ui.category = t.value; renderAll(); return; }
     if (t.id === 'fOngoing') { ui.ongoing = t.checked; renderAll(); return; }
+    if (t.id === 'fCombine') { ui.combine = t.checked; saveUi(); renderAll(); return; }
     if (t.id === 'fOngoingIn') { ['fDue', 'fDueTxt'].forEach(i => { const el = $('#' + i); if (el) el.disabled = t.checked; }); return; }
     if (t.closest && t.closest('#bulkForm')) { bulkRecalc(); return; }
     if (t.classList && (t.classList.contains('upStatus') || t.classList.contains('upDate'))) { const d = t.closest('.detail'); if (d) syncDraft(d); return; }
@@ -5734,6 +6070,11 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const calRow = c => Object.assign(serOf(CAL_F, c), { uid: c.uid, created_at: c.created || nowIso(), updated_by: actorLabel() });
     const viewRow = v => Object.assign(serOf(VIEW_F, v), { uid: v.uid, created_at: v.created || nowIso(), updated_by: actorLabel() });
     const meetRow = m => Object.assign(serOf(MEET_F, m), { uid: m.id, created_at: m.created || m.imported || nowIso(), updated_by: actorLabel() });
+    async function nextFreePrefixed(px) {   // next number after everything this device AND the database know
+      let max = maxIdNumber(px); const re = new RegExp('^' + px + '-(\\d+)$', 'i');
+      try { const r = await sb.from('items').select('item_id').ilike('item_id', px + '-%').range(0, 4999); if (!r.error && Array.isArray(r.data)) r.data.forEach(x => { const m = re.exec(x.item_id); if (m) max = Math.max(max, +m[1]); }); } catch (e) { /* use what this device knows */ }
+      return px + '-' + idPad(max + 1);
+    }
     async function insertOne(table, o, F, buildRow, snapMap, key) {
       for (let attempt = 0; attempt < 5; attempt++) {
         const row = buildRow(o), r = await sb.from(table).insert(row);
@@ -5745,7 +6086,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
         if (ex.data && ex.data.length) { snapMap.set(key(o), snapFromServer(F, ex.data[0])); return; }
         if (table === 'saved_views') { o.name = uniqueViewName(o.name); toast('Another view already uses that name \u2014 saved as \u201c' + o.name + '\u201d.', 'warn'); requestRender(); continue; }
         if (table === 'items') {   // someone else used this ID first — take the next free one
-          const nid = (await allocIds(1))[0], old = o.id; o.id = nid;
+          const pxo = idPrefixOfId(o.id), nid = pxo ? await nextFreePrefixed(pxo) : (await allocIds(1))[0], old = o.id; o.id = nid;
           if (ui.selected.delete(old)) ui.selected.add(nid); if (ui.expanded.delete(old)) ui.expanded.add(nid);
           toast('ID ' + old + ' was just taken by another user — this item is now ' + nid + '.', 'warn'); requestRender(); continue;
         }
@@ -6162,7 +6503,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   renderAll();
   if (embedded) { const eb = $('#embedBar'); if (eb) eb.hidden = false; }
   boot();
-  window.__twcg = { setMetrics, trendWeeks, seriesIndex, ageBuckets, ownerSplit, perMeetingRows, closureRecords, leaderboard, closedFeed, closeInfo, meetingSelInfo, meetingLogScope, serKey, calNeedsMinutes, parseCfg, viewCfgNow, calAllEvents, occList, occDate, occIndexOf, normKey, calSeriesList, recurText, fillPrintHead, cleanPrintHead, state: () => state, Live, parseDate, TWCGParser, uuid, gsCompute, queryMatches, parseQuery };
+  window.__twcg = { linkMap, dupClusters, idPrefixForTitle, nextPrefixedId, importIdPlan, setMetrics, trendWeeks, seriesIndex, ageBuckets, ownerSplit, perMeetingRows, closureRecords, leaderboard, closedFeed, closeInfo, meetingSelInfo, meetingLogScope, serKey, calNeedsMinutes, parseCfg, viewCfgNow, calAllEvents, occList, occDate, occIndexOf, normKey, calSeriesList, recurText, fillPrintHead, cleanPrintHead, state: () => state, Live, parseDate, TWCGParser, uuid, gsCompute, queryMatches, parseQuery };
 })();
 </script>
 </body>
