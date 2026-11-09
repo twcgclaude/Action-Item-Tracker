@@ -3536,8 +3536,9 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     calStatsMemo = m; return m;
   }
   function calAllEvents(a, b) {
-    const today = todayISO(), stats = calStats(), out = [], heldAt = new Map();
+    const today = todayISO(), stats = calStats(), out = [], heldAt = new Map(), coverAt = new Map();
     state.meetings.forEach(m => {
+      { const sk0 = serKey(m.title); minutesDates(m).forEach(d => { if (!coverAt.has(sk0 + '|' + d)) coverAt.set(sk0 + '|' + d, m); }); }   // dates whose minutes are inside this meeting (an ongoing meeting holds many weeks)
       if (!ISO_OK(m.dateISO)) return;
       const sk = serKey(m.title); heldAt.set(sk + '|' + m.dateISO, m);
       if (m.dateISO < a || m.dateISO > b) return;
@@ -3552,7 +3553,8 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       const push = (src, date, orig, ovUid) => {
         const sk = serKeyCal(src);
         if (heldAt.has(sk + '|' + date)) return;   // the minutes for this date have been imported: the held meeting is shown instead
-        out.push({ key: ovUid ? 'o:' + ovUid : 'c:' + M.uid + ':' + date, kind: 'sched', date, time: src.time || '', endTime: src.endTime || '', title: src.title || 'Meeting', uid: M.uid, ovUid: ovUid || '', orig, series: isSeries, moved: date !== orig, master: M, sk, project: src.project || '', location: src.location || '', notes: src.notes || '', noMinutes: date < today });
+        const cov = coverAt.get(sk + '|' + date);   // the minutes for this date are inside another (e.g. ongoing) meeting: keep the date on the calendar, but not as needs-minutes
+        out.push({ key: ovUid ? 'o:' + ovUid : 'c:' + M.uid + ':' + date, kind: 'sched', date, time: src.time || '', endTime: src.endTime || '', title: src.title || 'Meeting', uid: M.uid, ovUid: ovUid || '', orig, series: isSeries, moved: date !== orig, master: M, sk, project: src.project || '', location: src.location || '', notes: src.notes || '', noMinutes: date < today && !cov, covered: cov ? cov.id : '' });
       };
       occList(M, a, b).forEach(o => { if (mo.has(o.date)) return; push(M, o.date, o.date, ''); });
       mo.forEach(O => { if (O.cancelled || O.date < a || O.date > b) return; push(O, O.date, O.origDate, O.uid); });
@@ -3589,7 +3591,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   /* ---------- drawing ---------- */
   function calTip(ev) {
     if (ev.kind === 'held') return 'Held meeting \u2014 ' + ev.title + '\n' + fmtLong(ev.date) + '\n' + ev.n + ' action item' + (ev.n === 1 ? '' : 's') + (ev.n ? ' (' + ev.open + ' open)' : '') + '\nClick to open its action items \u00b7 drag to change its date';
-    return (ev.noMinutes ? 'Scheduled \u2014 no minutes imported yet \u2014 ' : 'Scheduled \u2014 ') + ev.title + '\n' + fmtLong(ev.date) + (ev.time ? ' \u00b7 ' + fmtTime(ev.time) + (ev.endTime ? ' \u2013 ' + fmtTime(ev.endTime) : '') : '') + (ev.series ? '\n' + recurText(ev.master) : '') + '\nClick for details \u00b7 drag to move';
+    return (ev.noMinutes ? 'Scheduled \u2014 no minutes imported yet \u2014 ' : ev.covered ? 'Scheduled \u2014 minutes uploaded \u2014 ' : 'Scheduled \u2014 ') + ev.title + '\n' + fmtLong(ev.date) + (ev.time ? ' \u00b7 ' + fmtTime(ev.time) + (ev.endTime ? ' \u2013 ' + fmtTime(ev.endTime) : '') : '') + (ev.series ? '\n' + recurText(ev.master) : '') + '\nClick for details \u00b7 drag to move';
   }
   function calChip(ev, o) {
     o = o || {}; const held = ev.kind === 'held';
@@ -3685,7 +3687,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const p = $('#calPop'); if (!p) return;
     calPopKey = ev.key; const held = ev.kind === 'held', color = seriesColor(ev.sk), M = ev.master;
     let html = '<button type="button" class="cpx" data-act="cal-pop-close" aria-label="Close">\u2715</button><div class="cp-tag" style="--c:' + color + '"><i class="cdot" style="background:' + color + '"></i>' +
-      (held ? (ev.future ? 'Upcoming \u2014 in the log' : 'Held') : ev.noMinutes ? 'Scheduled \u2014 no minutes yet' : 'Scheduled') + (ev.series || ev.weekly ? ' \u00b7 \u21bb ' + (ev.weekly ? 'Weekly meeting' : 'Series') : '') + '</div><h3>' + esc(ev.title) + '</h3>' +
+      (held ? (ev.future ? 'Upcoming \u2014 in the log' : 'Held') : ev.noMinutes ? 'Scheduled \u2014 no minutes yet' : ev.covered ? 'Scheduled \u2014 minutes uploaded' : 'Scheduled') + (ev.series || ev.weekly ? ' \u00b7 \u21bb ' + (ev.weekly ? 'Weekly meeting' : 'Series') : '') + '</div><h3>' + esc(ev.title) + '</h3>' +
       '<div class="cp-row">' + esc(fmtLong(ev.date)) + (ev.time ? ' \u00b7 ' + esc(fmtTime(ev.time)) + (ev.endTime ? ' \u2013 ' + esc(fmtTime(ev.endTime)) : '') : '') + '</div>' +
       ((ev.project || ev.location) ? '<div class="cp-row muted">' + esc([ev.project, ev.location].filter(Boolean).join(' \u00b7 ')) + '</div>' : '');
     if (held) html += '<div class="cp-row"><b>' + ev.n + '</b> action item' + (ev.n === 1 ? '' : 's') + (ev.n ? ' \u00b7 <b>' + ev.open + '</b> open \u00b7 ' + (ev.n - ev.open) + ' closed' : '') + '</div>';
@@ -3965,16 +3967,36 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   const SERIES_SPLIT = /\s*\|\s*/;
   function serAlias() {
     if (serMemo) return serMemo;
-    const a = new Map();
+    const a = new Map(), fam = new Map();
     state.cal.forEach(c => {
       if (c.deletedAt || c.seriesUid || c.recurrence === 'none') return;   // only a repeating meeting defines a series
       const canon = normKey(c.title); if (!canon) return;
       a.set(canon, canon);
       String(c.linkTitle || '').split(SERIES_SPLIT).forEach(t => { const k = normKey(t); if (k) a.set(k, canon); });
+      const px0 = ID_PREFIX_BY_KEY.get(idTitleKey(c.title)); if (px0 && !fam.has(px0)) fam.set(px0, canon);
     });
+    // minutes uploaded under another name of the same weekly meeting ("Staff Meeting Action Items" / "Staff Meeting Items" / "Previous Staff Meeting Items" ...,
+    // the titles listed together in WEEKLY_ID_PREFIXES) belong to the weekly meeting that is on the calendar, even if nobody linked the titles by hand
+    state.meetings.forEach(m => { const k = normKey(m.title); if (!k || a.has(k)) return; const px = ID_PREFIX_BY_KEY.get(idTitleKey(m.title)); if (px && fam.has(px)) a.set(k, fam.get(px)); });
     serMemo = a; return a;
   }
   const serKey = title => { const k = normKey(title); return serAlias().get(k) || k; };
+  /* every date whose minutes are in a meeting: its own date, plus any date written in its sources
+     (a PDF called "... - 11.09.2026.pdf", or the note "Entered manually (11/09/2026)" that the calendar adds) */
+  const MIN_DATE_RE = /(?:^|[^\d])(\d{4}-\d{2}-\d{2}|\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{4})(?!\d)/g;
+  function minutesDates(m) {
+    const out = new Set(); if (!m) return out;
+    if (ISO_OK(m.dateISO)) out.add(m.dateISO);
+    String(m.source || '').split(/\s*;\s*/).forEach(sr => { let x; MIN_DATE_RE.lastIndex = 0; while ((x = MIN_DATE_RE.exec(sr))) { const d = parseDate(x[1]); if (ISO_OK(d)) out.add(d); } });
+    return out;
+  }
+  function calLinkTitle(M, title) {   // let the calendar's repeating meeting M also own minutes uploaded under another title; true when the title is (now) linked
+    if (!M || M.recurrence === 'none') return false;
+    const t = baseTitle(title); if (!t) return false;
+    const cur = String(M.linkTitle || '').split(SERIES_SPLIT).map(x => x.trim()).filter(Boolean);
+    if (normKey(t) === normKey(M.title) || cur.some(x => normKey(x) === normKey(t))) return true;
+    cur.push(t); M.linkTitle = cur.join(' | '); seriesReset(); return true;
+  }
   const serKeyCal = c => serKey(String(c.linkTitle || '').split(SERIES_SPLIT)[0] || c.title);
   function seriesReset() { serMemo = null; serIdxMemo = null; }
   function seriesIndex() {
@@ -4323,6 +4345,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     let html = '';
     if (p.ctx) html += '<div class="impctx"><span>Uploading minutes for <b>' + esc(p.ctx.title || 'this meeting') + '</b>' + (p.ctx.date ? ' \u00b7 ' + esc(fmtLong(p.ctx.date)) : '') + '</span>' +
       (p.ctxWarn ? '<span class="impwarn">The PDF says <b>' + esc(p.meeting.date) + '</b>. <button type="button" class="link" data-act="imp-usectx" data-pi="' + esc(String(pending.indexOf(p))) + '">Use the calendar date</button></span>' : '') + '</div>';
+    if (p.ctx && p.ctx.sk && p.meeting.title && serKey(p.meeting.title) !== p.ctx.sk) html += '<div class="impser">\u201c' + esc(baseTitle(p.meeting.title)) + '\u201d is named differently from the calendar meeting <b>' + esc(p.ctx.title || '') + '</b>. It will be linked to that series when you import, so the calendar counts these minutes as uploaded.</div>';
     { const pl = importIdPlan()[pending.indexOf(p)]; if (pl) html += '<div class="impid" data-impid="' + pending.indexOf(p) + '"><span>ID</span> ' + importIdText(pl) + '</div>'; }
     const s = p.meeting.title ? seriesIndex().get(serKey(p.meeting.title)) : null;
     if (s && isRepeatingSeries(s)) html += '<div class="impser">Part of the series <b>' + esc(s.title) + '</b> \u00b7 ' + s.held.length + ' meeting' + (s.held.length === 1 ? '' : 's') + ' uploaded so far' + (s.items.filter(i => !isClosed(i)).length ? ' \u00b7 ' + s.items.filter(i => !isClosed(i)).length + ' open items carried in this series' : '') + '</div>';
@@ -4332,28 +4355,30 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   /* ---------- the daily panel ---------- */
   function calNeedsMinutes() {   // past meetings (last 14 days) with no minutes, plus meetings that finished earlier today
     const t = todayISO(), now = nowHM();
-    const past = calAllEvents(addDays(t, -14), addDays(t, -1)).filter(e => e.kind === 'sched');
-    const today = calAllEvents(t, t).filter(e => e.kind === 'sched' && e.time && now >= (e.endTime || addMin(e.time, 60)));
+    const past = calAllEvents(addDays(t, -14), addDays(t, -1)).filter(e => e.kind === 'sched' && !e.covered);
+    const today = calAllEvents(t, t).filter(e => e.kind === 'sched' && !e.covered && e.time && now >= (e.endTime || addMin(e.time, 60)));
     return past.concat(today);
   }
   const calStarted = ev => { const now = nowHM(), today = todayISO(); return ev.date < today || (ev.date === today && (!ev.time || now >= ev.time)); };   // has this meeting begun (or passed)?
   function dailyRowHtml(e, mode) {
     calTodayMap.set(e.key, e);
-    const held = e.kind === 'held', s = seriesIndex().get(e.sk), hasHeld = !!(s && s.held.length), now = nowHM(), today = todayISO();
+    const held = e.kind === 'held', s = seriesIndex().get(e.sk), hasHeld = !!(s && s.held.length), now = nowHM(), today = todayISO(), cov = !held && e.covered ? meetingById(e.covered) : null;
     const endT = e.endTime || addMin(e.time, 60), mm = held ? meetingById(e.mid) : null, manual = !!(mm && /entered manually/i.test(mm.source || ''));
     let stateTxt, cls = '';
     if (held) { stateTxt = (manual ? 'Minutes entered manually' : 'Minutes uploaded') + ' \u00b7 ' + e.n + ' item' + (e.n === 1 ? '' : 's') + (e.n ? ' (' + e.open + ' open)' : ''); cls = 'ok'; }
+    else if (cov) { stateTxt = 'Minutes uploaded \u00b7 in \u201c' + baseTitle(cov.title) + '\u201d'; cls = 'ok'; }
     else if (e.date < today) { stateTxt = 'No minutes uploaded yet'; cls = 'bad'; }
     else if (e.date === today && e.time && endT && now >= endT) { stateTxt = 'Meeting finished \u2014 upload the minutes'; cls = 'bad'; }
     else if (e.date === today && e.time && now >= e.time) { stateTxt = 'In progress'; cls = 'live'; }
     else stateTxt = e.date === today ? 'Later today' : 'Upcoming';
-    const need = !held && (e.date < today || (e.date === today && e.time && now >= endT)), started = calStarted(e);
+    const need = !held && !cov && (e.date < today || (e.date === today && e.time && now >= endT)), started = calStarted(e);
     const when = (mode !== 'today' ? fmtShortD(e.date) + (e.time ? ' \u00b7 ' : '') : '') + (e.time ? fmtTime(e.time) + (e.endTime ? '\u2013' + fmtTime(e.endTime) : '') : '');
     const open = hasHeld ? s.items.filter(i => !isClosed(i)).length : 0;
     return '<div class="dly ' + cls + '" data-key="' + esc(e.key) + '"><span class="dly-t">' + esc(when || '\u2014') + '</span><span class="dly-m"><b>' + esc(e.title) + '</b><em>' + esc(stateTxt) + (!held && hasHeld ? ' \u00b7 ' + open + ' open item' + (open === 1 ? '' : 's') + ' in the series' : '') + '</em></span><span class="dly-a">' +
       (held ? '<button type="button" class="btn" data-act="cal-open" data-key="' + esc(e.key) + '">Open items</button>' + (manual ? '<button type="button" class="btn primary" data-act="cal-add-item" data-mid="' + esc(e.mid) + '" title="Type an action item straight into this meeting">\uff0b Add item</button>' : '') + '<button type="button" class="btn" data-act="cal-upload" data-key="' + esc(e.key) + '" title="Upload another PDF for this meeting">\u2b06 Add minutes</button>'
+        : cov ? '<button type="button" class="btn" data-act="cal-cover-open" data-key="' + esc(e.key) + '">Open items</button>' + (/entered manually/i.test(cov.source || '') ? '<button type="button" class="btn primary" data-act="cal-add-item" data-mid="' + esc(cov.id) + '" title="Type an action item straight into this meeting">\uff0b Add item</button>' : '') + '<button type="button" class="btn" data-act="cal-upload" data-key="' + esc(e.key) + '" title="Upload another PDF for this meeting">\u2b06 Add minutes</button>'
         : '<button type="button" class="btn ' + (need ? 'primary' : '') + '" data-act="cal-upload" data-key="' + esc(e.key) + '">\u2b06 Upload minutes</button>' +
-          (started ? '<button type="button" class="btn manbtn" data-act="cal-manual" data-key="' + esc(e.key) + '" title="The minutes were typed into the tracker by hand \u2014 no PDF to upload. Marks this meeting as held so you can add its items.">\u2713 Entered manually</button>' : '') +
+          (started ? '<button type="button" class="btn manbtn" data-act="cal-manual" data-key="' + esc(e.key) + '" title="The minutes were typed into the tracker by hand \u2014 no PDF to upload. Marks this meeting as held so you can add its items.">\u2713 Entered manually</button><button type="button" class="btn manbtn" data-act="cal-cover" data-key="' + esc(e.key) + '" title="The minutes for this date are already in the tracker (for example inside an ongoing meeting) \u2014 pick that meeting so this date stops asking for minutes">Minutes already uploaded?</button>' : '') +
           '<button type="button" class="btn skipbtn" data-act="cal-skip" data-key="' + esc(e.key) + '" title="' + (started ? 'This meeting did not happen \u2014 remove it from \u201cNeeds minutes\u201d' : 'Cancel this meeting') + '" aria-label="' + (started ? 'Meeting did not happen' : 'Cancel this meeting') + '">\u2715 ' + (started ? 'Didn\u2019t meet' : 'Cancel') + '</button>') +
       (hasHeld ? '<button type="button" class="btn" data-act="cal-run" data-sk="' + esc(e.sk) + '" title="Open this meeting\u2019s open items, grouped by owner">Run meeting</button><button type="button" class="btn" data-act="cal-metrics" data-sk="' + esc(e.sk) + '">Metrics</button>' : '') + '</span></div>';
   }
@@ -4375,7 +4400,7 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
     const s = seriesIndex().get(ev.sk), hasHeld = !!(s && s.held.length), sched = ev.kind === 'sched', started = calStarted(ev);
     const mm = ev.kind === 'held' ? meetingById(ev.mid) : null, manualM = !!(mm && /entered manually/i.test(mm.source || ''));
     return '<div class="cp-acts ext">' + (manualM ? '<button type="button" class="btn primary" data-act="cal-pop-additem">\uff0b Add item</button>' : '') + '<button type="button" class="btn" data-act="cal-pop-upload">\u2b06 ' + (ev.kind === 'held' ? 'Add minutes to this meeting' : 'Upload minutes for this meeting') + '</button>' +
-      (sched && started ? '<button type="button" class="btn manbtn" data-act="cal-pop-manual">\u2713 Minutes entered manually</button>' : '') +
+      (sched && started && !ev.covered ? '<button type="button" class="btn manbtn" data-act="cal-pop-manual">\u2713 Minutes entered manually</button><button type="button" class="btn manbtn" data-act="cal-pop-cover">Minutes already uploaded?</button>' : '') +
       (hasHeld ? '<button type="button" class="btn" data-act="cal-pop-run">Run meeting (open items)</button><button type="button" class="btn" data-act="cal-pop-metrics">Metrics</button>' : '') + '</div>';
   }
 
@@ -4396,6 +4421,15 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
   }
   function calManual(ev) {
     if (!ev || ev.kind === 'held') return;
+    const iso = ev.date;
+    if (state.meetings.some(x => ISO_OK(x.dateISO) && x.dateISO === iso && serKey(x.title) === ev.sk)) { toast('Minutes already exist for that meeting.', 'warn'); return; }
+    if (ev.covered) { toast('The minutes for that date are already in \u201c' + ((meetingById(ev.covered) || {}).title || 'another meeting') + '\u201d.', 'warn'); return; }
+    const c = calCoverCandidates(ev);
+    if (c.ser.length || c.sim.length) { calCoverDialog(ev, 'manual'); return; }   // part of a series that already has minutes: ask where these belong instead of silently adding a meeting
+    calManualNew(ev);
+  }
+  function calManualNew(ev) {   // a separate (dated) meeting record for this occurrence
+    if (!ev || ev.kind === 'held') return;
     const title = seriesTitleOf(ev), iso = ev.date, now = new Date().toISOString();
     if (state.meetings.some(x => ISO_OK(x.dateISO) && x.dateISO === iso && serKey(x.title) === ev.sk)) { toast('Minutes already exist for that meeting.', 'warn'); return; }
     const m = { id: uuid(), deletedAt: '', deletedBy: '', created: now, title, date: fmtDate(iso), dateISO: iso, project: ev.project || '', preparedBy: actorName(), notes: '', source: 'Entered manually', imported: now };
@@ -4409,6 +4443,55 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       seriesReset(); pushHistory('meeting', { subject: title, text: 'Calendar: manual-minutes mark for ' + fmtDate(iso) + ' undone' }); save(); renderAll(); toast('Undone.');
     });
     calOfferAttach(m);
+  }
+  /* ---- "Minutes already uploaded?" / "Entered manually" for a meeting whose minutes live inside an existing (e.g. ongoing) meeting ---- */
+  let calCoverEv = null;
+  function calCoverCandidates(ev) {
+    const title = seriesTitleOf(ev), ser = [], sim = [], oth = [];
+    const srt = (a, b) => (b.weekly ? 1 : 0) - (a.weekly ? 1 : 0) || String(b.dateISO || '').localeCompare(String(a.dateISO || '')) || String(a.title).localeCompare(String(b.title), undefined, { numeric: true });
+    state.meetings.forEach(m => { if (serKey(m.title) === ev.sk) ser.push(m); else if (similarity(baseTitle(m.title), title) >= 0.5) sim.push(m); else oth.push(m); });
+    return { ser: ser.sort(srt), sim: sim.sort(srt), oth: oth.sort(srt) };
+  }
+  function calCoverDialog(ev, mode) {
+    if (!ev) return;
+    const c = calCoverCandidates(ev), manual = mode === 'manual', title = seriesTitleOf(ev), st = calStats();
+    const pool = c.ser.concat(c.sim), pre = pool.find(m => m.weekly) || pool[0] || c.oth[0] || null;
+    if (!pre) { toast('There are no meetings in the tracker yet \u2014 upload the minutes instead.', 'warn'); return; }
+    calCoverEv = ev;
+    const when = m => (m.weekly ? 'Ongoing' : m.dateISO ? fmtDate(m.dateISO) : (m.date || 'No date'));
+    const opt = m => '<option value="' + esc(m.id) + '"' + (m === pre ? ' selected' : '') + '>' + esc(m.title + ' \u00b7 ' + when(m) + ' \u00b7 ' + ((st.get(m.id) || {}).n || 0) + ' items') + '</option>';
+    const grp = (label, arr) => arr.length ? '<optgroup label="' + label + '">' + arr.map(opt).join('') + '</optgroup>' : '';
+    const sel = '<select id="cpMeet" class="cpmeet" style="width:100%;margin:6px 0 12px">' + grp('This meeting series', c.ser) + grp('Similar titles', c.sim) + grp('Other meetings', c.oth) + '</select>';
+    const defNew = manual && !(pre && pre.weekly && pool.indexOf(pre) >= 0);
+    let body;
+    if (manual) body = '<label class="attrow"><input type="radio" name="cpick" value="old"' + (defNew ? '' : ' checked') + '><span><b>Add to an existing meeting</b><em>For an ongoing meeting: no new meeting is created \u2014 this date is recorded as covered by the meeting you pick.</em></span></label>' + sel +
+      '<label class="attrow"><input type="radio" name="cpick" value="new"' + (defNew ? ' checked' : '') + '><span><b>Create a separate meeting for this date</b><em>A new \u201c' + esc(title) + '\u201d meeting dated ' + esc(fmtDate(ev.date)) + ' (for meetings that are kept one per week).</em></span></label>';
+    else body = '<p class="muted">Pick the meeting that already holds the minutes. Nothing is uploaded or duplicated \u2014 the calendar just stops asking for these minutes.</p>' + sel;
+    openModal('<h2>' + (manual ? 'Minutes entered manually' : 'Minutes already uploaded?') + '</h2><p class="muted"><b>' + esc(title) + '</b> \u00b7 ' + esc(fmtLong(ev.date)) + '</p>' + body +
+      '<div class="mfoot"><button type="button" class="btn" data-act="modal-close">Cancel</button><button type="button" class="btn primary" data-act="cal-cover-ok" data-mode="' + (manual ? 'manual' : 'uploaded') + '">' + (manual ? 'Save' : 'Mark as uploaded') + '</button></div>', { cls: 'dlmodal' });
+  }
+  function calCoverGo(mode) {
+    const ev = calCoverEv; if (!ev) { closeModal(); return; }
+    const pick = document.querySelector('#modalRoot input[name=cpick]:checked');
+    if (mode === 'manual' && pick && pick.value === 'new') { closeModal(); calManualNew(ev); return; }
+    const sel = $('#cpMeet'), m = sel ? meetingById(sel.value) : null;
+    if (!m) { toast('Pick a meeting first.', 'warn'); return; }
+    closeModal(); calCoverApply(ev, m, mode);
+  }
+  function calCoverApply(ev, m, mode) {
+    const iso = ev.date, M = ev.master, manual = mode === 'manual', srcBefore = m.source || '', snaps = M ? calSnap([M]) : [];
+    if (serKey(m.title) !== ev.sk) calLinkTitle(M, m.title);   // the meeting joins the calendar's series (earlier minutes under another title)
+    if (serKey(m.title) !== ev.sk) { calRestore(snaps, []); seriesReset(); toast('That meeting\u2019s title could not be linked to this series (it is a one-off calendar entry). Make it a repeating meeting first, or use Upload minutes.', 'warn'); return; }
+    const linked = !snaps.length ? false : snaps[0].f.linkTitle !== M.linkTitle;
+    if (!minutesDates(m).has(iso)) m.source = srcBefore + (srcBefore ? '; ' : '') + (manual ? 'Entered manually' : 'Minutes already uploaded') + ' (' + fmtDate(iso) + ')';
+    seriesReset();
+    const lbl = '\u201c' + baseTitle(m.title) + '\u201d', short = fmtShortD(iso);
+    pushHistory('meeting', { subject: m.title, text: 'Calendar: minutes for ' + fmtDate(iso) + ' recorded in ' + lbl + (manual ? ' (entered manually \u2014 no new meeting created)' : ' (already uploaded)') + (linked ? '; title linked to the recurring series' : '') });
+    calCommit('\u201c' + seriesTitleOf(ev) + '\u201d (' + short + ') is covered by ' + lbl + (manual ? '. Use \uff0b Add item on that meeting to type its items in.' : '.'), () => {
+      m.source = srcBefore; calRestore(snaps, []); seriesReset();
+      pushHistory('meeting', { subject: m.title, text: 'Calendar: minutes mark for ' + fmtDate(iso) + ' undone' }); save(); renderAll(); toast('Undone.');
+    });
+    if (manual) calOfferAttach(Object.assign({}, m, { dateISO: iso }));
   }
   function calAttachCandidates(m) { return state.items.filter(i => !i.meetingId && !i.deletedAt && ISO_OK(openedOn(i)) && openedOn(i) >= m.dateISO && openedOn(i) <= todayISO()).slice(0, 60); }
   function calOfferAttach(m) {
@@ -5051,11 +5134,12 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       if (p.error) return;
       const sum = { file: p.file, nNew: 0, nUpd: 0, ids: [], meeting: '' };
       const active = p.items.filter(i => i.mode !== 'skip');
-      let m = findMeeting(p.meeting, p.file);
+      let m = findMeeting(p.meeting, p.file); const wasThere = !!m;
       if (!m && (active.length || p.meeting.notes)) {
         m = { id: uuid(), deletedAt: '', deletedBy: '', created: new Date().toISOString(), title: p.meeting.title || p.file.replace(/\.pdf$/i, ''), date: p.meeting.date || '', dateISO: parseDate(p.meeting.date) || '', project: p.meeting.project || '', preparedBy: p.meeting.preparedBy || '', notes: p.meeting.notes || '', source: p.file, imported: new Date().toISOString() };
         state.meetings.push(m);
       } else if (m && p.meeting.notes && !m.notes) m.notes = p.meeting.notes;
+      if (m && wasThere && p.file && srcList(m.source).indexOf(p.file) < 0) m.source = (m.source ? m.source + '; ' : '') + p.file;   // an existing meeting now also lists this PDF
       const mLabel = m ? (m.title + (m.dateISO ? ' (' + fmtDate(m.dateISO) + ')' : '')) : p.file;
       const dateForLog = m && m.dateISO ? m.dateISO : todayISO();
       sum.meeting = mLabel;
@@ -5082,9 +5166,15 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
           added++; sum.nNew++; sum.ids.push(it.id);
         }
       });
+      if (m && p.ctx && p.ctx.sk) {   // uploaded from a calendar date: make sure the calendar recognises these minutes (title may differ from the calendar's name)
+        seriesReset(); const sr = seriesIndex().get(p.ctx.sk);
+        if (sr && sr.recur && serKey(m.title) !== p.ctx.sk && calLinkTitle(sr.recur, m.title)) sum.linked = sr.title;
+        seriesReset();
+      }
       summaries.push(sum);
     });
     muteHistory = false;
+    summaries.filter(sm => sm.linked).forEach(sm => pushHistory('meeting', { subject: sm.meeting, text: 'Calendar: title linked to the recurring series \u201c' + sm.linked + '\u201d so these minutes count for it' }));
     summaries.forEach(sm => pushHistory('upload', { subject: sm.file, itemIds: sm.ids, text: 'Imported “' + sm.meeting + '”: ' + sm.nNew + ' new item' + (sm.nNew === 1 ? '' : 's') + (sm.nUpd ? ', ' + sm.nUpd + ' existing item' + (sm.nUpd === 1 ? '' : 's') + ' updated (carry-over)' : '') }));
     pending = []; closeModal(); ui.view = 'log'; ui.status = 'active'; commit('Imported ' + added + ' new item' + (added === 1 ? '' : 's') + (updated ? ' and updated ' + updated : '') + '.');
   }
@@ -5671,6 +5761,10 @@ if (typeof module !== 'undefined') module.exports = TWCGParser;
       case 'cal-upload': { const ev = calEvLookup(t.dataset.key); if (ev) startUpload(ctxForEvent(ev)); break; }
       case 'cal-skip': { const ev = calEvLookup(t.dataset.key); if (ev) calSkip(ev); break; }
       case 'cal-manual': { const ev = calEvLookup(t.dataset.key); if (ev) calManual(ev); break; }
+      case 'cal-cover': { const ev = calEvLookup(t.dataset.key); if (ev) calCoverDialog(ev, 'uploaded'); break; }
+      case 'cal-pop-cover': { const ev = calEvLookup(calPopKey); if (ev) { calClosePop(); calCoverDialog(ev, 'uploaded'); } break; }
+      case 'cal-cover-ok': calCoverGo(t.dataset.mode); break;
+      case 'cal-cover-open': { const ev = calEvLookup(t.dataset.key), m = ev && ev.covered ? meetingById(ev.covered) : null; if (m) calOpenLog([m.id], '\u201c' + m.title + '\u201d'); break; }
       case 'cal-pop-skip': { const ev = calEvLookup(calPopKey); if (ev) { calClosePop(); calSkip(ev); } break; }
       case 'cal-pop-manual': { const ev = calEvLookup(calPopKey); if (ev) { calClosePop(); calManual(ev); } break; }
       case 'cal-add-item': { const m = meetingById(t.dataset.mid); if (m) itemForm(null, { meetingId: m.id, project: m.project || '' }); break; }
